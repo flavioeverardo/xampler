@@ -104,45 +104,16 @@ The sampling options of `xampler` are shown next:
 
 ## Examples
 
-To solve parity constraints within an ASP program, lets consider an example program `examples/test.lp` with six parity constraints:
+To sample answer sets, lets consider an example program `examples/test.lp`. 
 ```
 $ cat examples/test.lp 
 { p(1;2;3) }.
 { q(1,(2;3)); q(2,1); q(3,1) }.
-
-&odd{ (X+10)-2 : p(X), q(X,Y) }.
-&even{ Y : q(X,Y), Y<3 }.
-&even{ 1,2 : not q(1,2) }.
-&odd{ X: p(X) }.
-&odd{ X,Y: q(X,Y) }.
-&odd{ X : p(X), X!=2 }.
-#show p/1.
-#show q/2.
-
-$ python -m xorro examples/test.lp 0
-xampler version 1.0
-Reading from examples/test.lp
-Solving...
-Answer: 1
-p(3) q(1,2) q(1,3) q(3,1)
-Answer: 2
-p(3) q(1,2) q(2,1) q(3,1)
-Answer: 3
-p(1) q(1,2) q(1,3) q(2,1)
-Answer: 4
-p(1) q(1,2) q(1,3) q(3,1)
-Answer: 5
-p(1) q(1,2) q(2,1) q(3,1)
-SATISFIABLE
-
-Models       : 5
-Calls        : 1
-Time         : 0.006s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
-CPU Time     : 0.006s
 ```
 
-To enable the sampling features, let use the same program without the parity constraints shown above. The sampling features allows `xampler` propose random XOR constraints and compute representative answer sets from the search space.
+The sampling features allows `xampler` propose random XOR constraints and compute representative answer sets from the search space.
 An example is shown below:
+
 ```
 $ python -m xampler examples/test.lp 2 --sampling --s=4 --q=0.5
 xampler version 1.0
@@ -191,6 +162,44 @@ From the eight answer sets remaining after solving the program with the XOR cons
 
 The sampling feature of `xampler` asks for all the remaining models after applying XOR constraints. If the requested models by the user are less than the remaining models, `xampler` will pick randomly n answer sets.
 To show only the sampled answers use the clingo option `--outf=3`.
+
+
+`xampler` also allows to solve parity constraints without sampling, lets consider the same example program coupled with six parity constraints `examples/test_xors.lp`:
+```
+$ cat examples/test_xors.lp 
+{ p(1;2;3) }.
+{ q(1,(2;3)); q(2,1); q(3,1) }.
+
+&odd{ (X+10)-2 : p(X), q(X,Y) }.
+&even{ Y : q(X,Y), Y<3 }.
+&even{ 1,2 : not q(1,2) }.
+&odd{ X: p(X) }.
+&odd{ X,Y: q(X,Y) }.
+&odd{ X : p(X), X!=2 }.
+#show p/1.
+#show q/2.
+
+$ python -m xorro examples/test.lp 0
+xampler version 1.0
+Reading from examples/test.lp
+Solving...
+Answer: 1
+p(3) q(1,2) q(1,3) q(3,1)
+Answer: 2
+p(3) q(1,2) q(2,1) q(3,1)
+Answer: 3
+p(1) q(1,2) q(1,3) q(2,1)
+Answer: 4
+p(1) q(1,2) q(1,3) q(3,1)
+Answer: 5
+p(1) q(1,2) q(2,1) q(3,1)
+SATISFIABLE
+
+Models       : 5
+Calls        : 1
+Time         : 0.006s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.006s
+```
 
 
 ## Contributors
