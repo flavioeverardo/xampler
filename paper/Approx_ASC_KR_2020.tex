@@ -14,6 +14,13 @@
 \setlength{\pdfpagewidth}{8.5in}  % DO NOT CHANGE THIS
 \setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
 %\nocopyright
+
+% added by Ankit
+\usepackage{xspace}
+\def\approxmc{\textsf{ApproxMC}\xspace}
+\def\approxasc{\textsf{ApproxASC}\xspace}
+\def\asp{\textsf{\#ASP}\xspace}
+
 %PDF Info Is REQUIRED.
 % For /Author, add all authors within the parentheses, separated by commas. No accents or commands.
 % For /Title, add Title in Mixed Case. No accents or commands. Retain the parentheses.
@@ -95,20 +102,20 @@
 \maketitle
 
 \begin{abstract}
-
-Answer Set Programming (ASP) is a powerful modelling formalism that is very
-efficient for solving combinatorial problems XXX
-
-(\#ASP) XXX
+(\asp) XXX
 \end{abstract}
 
+\section{TODOS} \label{sec:todos}
+\begin{enumerate}
+	\item Ankit: 
+	    \begin{enumerate}
+	    	\item Adapt the basic \approxmc algorithm to \asp.
+	    	\item Collect all the relevant literature on the Counting Answer sets. Approx or Exact. 
+	    \end{enumerate}
+\end{enumerate}
+
 \section{Introduction} \label{sec:introduction}
-
-Counting the models of a given propositional theory, or simply, model counting, is a well studied problem.   XXX
-
-In many applications of model counting, such as in probabilistic reasoning,
-the exact model count may not be critically important, and approximate counts
-are sufficient. XXX
+ XXX
 %
 %ApproxMC~\cite{DBLP:conf/cp/ChakrabortyMV13}
 
