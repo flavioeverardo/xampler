@@ -125,30 +125,21 @@
 \end{enumerate}
 
 \section{Introduction} \label{sec:introduction}
- Parity constraints constitute the
- %basic building blocks
- foundations
- of reasoning modes like sampling or (approximate) model counting \cite{meel18a},
- as well as circuit verification and cryptography~\cite{laitinen14a}.
+ Parity constraints constitute the foundations of reasoning modes like sampling or (approximate) model counting \cite{DBLP:journals/corr/abs-1806-02239}, as well as circuit verification and cryptography \cite{DBLP:conf/laitinen2014extending}.
  %
- With most of their applications
- %Although their application and computational treatment are very active research topics (cf.~\cite{gosase07a,gohosase07b,chmeva13a,chmeva13b})
- %  plain unit propagation \cite{laitinen2012conflict},
- %to complete parity reasoning using Gaussian elimination \cite{soos2009extending} \cite{soos2010enhanced} \cite{laitinen2012extending} \cite{laitinen2013simulating}.).
- in the neighboring area of Satisfiability Testing (SAT)%~\cite{SATHandbook})
- ~\cite{meel18a},
+ With most of their applications in the neighboring area of Satisfiability Testing (SAT) \cite{DBLP:journals/corr/abs-1806-02239},
  almost no attention has so far been paid to their integration into Answer Set Programming (ASP).%~\cite{kalepesc16a}.
  
  Previous efforts represented parity constraints into ASP in three ways,
  via the \texttt{\#count} aggregate coupled with a modulo-two operation as used or sampling in the initial prototype of \xorro{} from 2009\footnote{https://sourceforge.net/p/potassco/code/HEAD/tree/branches/xorro},
- as lists, as shown in \emph{harvey}~\cite{groeto17a},
+ as lists, as shown in \emph{harvey}~\cite{DBLP:conf/lpnmr/GresslerOT17},
  and as the (discontinued) aggregates \texttt{\#even} and \texttt{\#odd} from \gringo{} series 3 via meta-encodings.
  %
  Unlike these approaches, several SAT solvers feature rather sophisticated treatments of parity constraints.
- For instance, most popularly the award-winning solver \cryptominisat~\cite{sonoca09a}, which pursues a hybrid approach,
+ For instance, most popularly the award-winning solver \cryptominisat~\cite{DBLP:conf/sat/SoosNC09}, which pursues a hybrid approach,
  addressing parity constraints separately with Gauss-Jordan Elimination (GJE).
  
- To this end, we present the next generation of \xorro,~\cite{evjakasc19a}
+ To this end, we present the next generation of \xorro,~\cite{DBLP:conf/lpnmr/EverardoJKS19}
  implementing six alternatives to handle parity constraints into ASP,
  benefiting from the advanced interfaces of \clingo{},
  and the sophisticated solving techniques developed in SAT.
@@ -230,11 +221,11 @@
  %However, the eager counting and list approaches stay behind for sampling purposes when solving high-density constraints without any preprocessing as in the previous \xorro{} and \emph{harvey} implementations.
  
  %
-%
-%ApproxMC~\cite{DBLP:conf/cp/ChakrabortyMV13}
+
+ApproxMC~\cite{DBLP:conf/cp/ChakrabortyMV13}
 
 
-%\bibliographystyle{aaai}
-%\bibliography{Kr2020}
+\bibliographystyle{aaai}
+\bibliography{Kr2020}
 
 \end{document}
