@@ -153,7 +153,7 @@
  
  %
  % ------------------------------------------------------------------------------
- %\lstinputlisting[basicstyle=\small\ttfamily]{listings/xor_constraints_ex1.lp}
+ \lstinputlisting[basicstyle=\small\ttfamily]{listings/xor_constraints_ex1.lp}
  % ------------------------------------------------------------------------------
  %
  That is, \xorro{} extends the input language of \clingo{} by
@@ -190,7 +190,9 @@
  Table~ \ref{table:xorro_approaches}, shows the six implementations to handle parity constraints.
  The first three corresponds to the eager, and the last three to the lazy approaches. 
  
- \begin{table}
+ \begin{table*}[t]
+% 	\centering
+\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
  	%\vspace{-5mm}
  	\begin{tabular}{ l|l }
  		Approach  & Description  \\
@@ -203,9 +205,8 @@
  		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
  		
  	\end{tabular}
- 	\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
- 	\vspace{-7mm}
- \end{table}
+ %	\vspace{-7mm}
+\end{table*}
  %
  Finally, we empirically evaluate the different approaches in view of their impact on solving performance,
  while varying the number and size of parity constraints compared against \clingo{} solving time.
