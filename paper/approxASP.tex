@@ -1,9 +1,8 @@
-\newpage
 \section{ApproxASP}
 
 \textbf{ApproxMC Algorithm into ASP}
 
-\begin{algorithm}[H]
+\begin{algorithm}[h]
 \textbf{ApproxASP($P$,$\epsilon$, $\delta$)} \;
 \SetAlgoLined
 \KwResult{Approximate number of answer sets}
@@ -30,17 +29,17 @@
 \end{algorithm}
 
 
-\begin{algorithm}[H]
+\begin{algorithm}
 \textbf{return} $\lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$
 \caption{ComputeThreshold($\epsilon$)}
 \end{algorithm}
 
-\begin{algorithm}[H]
+\begin{algorithm}
 \textbf{return} $\lceil 35 \log_2 (3/\delta) \rceil$
 \caption{ComputeIterCount($\delta$)}
 \end{algorithm}
 
-\begin{algorithm}[H]
+\begin{algorithm}
 /* Assume $z_1 , ..., z_n $ are the varaibles of $F$ */ \\
 $ l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
 $ i \gets l - 1$ \\
