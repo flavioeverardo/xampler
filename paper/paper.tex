@@ -1,6 +1,7 @@
 %% $Id:  $
 %% $HeadURL:  $
 \documentclass[runningheads]{llncs}%[fleqn]{new_tlp}
+%\documentclass[b5paper,11pt,onecolumn,twoside,UTF8]{article}
 
 \usepackage{microtype}
 \usepackage[utf8]{inputenc}
@@ -10,6 +11,9 @@
 \usepackage{listings}
 \lstset{numbers=left,numberblanklines=false,breaklines=true,basicstyle=\ttfamily}
 \lstset{xleftmargin=2\parindent,aboveskip=\smallskipamount,belowskip=\smallskipamount,captionpos=b}
+\usepackage[ruled,vlined]{algorithm2e}
+\SetKwComment{Comment}{$\triangleright$\ }{}
+
 
 %
 % \usepackage{times,helvet,courier}
@@ -38,6 +42,7 @@
 %\input{abstract}
 
 \input{introduction}
+\input{approxASP}
 %\input{background}
 %\input{parity}
 %\input{aggregates}
