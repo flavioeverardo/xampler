@@ -49,12 +49,13 @@ $ i \gets l - 1$ \\
  Choose $h$ at random from $H_{xor}(n, i - l, 3)$ \\
  Choose $\alpha$ at random from $\{0,1\}^{i-l}$ \\
  $S \gets Xampler(F \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}  
+ }
  
  \eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
  {\textbf{return} $\bot$}
  {\textbf{return} $|S|$ $\cdot 2^{i-l}$}
  
- }
+ 
 
 \caption{ApproxASPCore($F, pivot$)}
 \end{algorithm}
