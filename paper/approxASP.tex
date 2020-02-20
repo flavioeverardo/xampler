@@ -8,10 +8,10 @@
 \KwResult{Approximate number of answer sets}
  $counter \gets 0$ ; $C \gets emptyList$\;
  $pivot \gets  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
- $S \gets Xampler(P, pivot + 1)$ \Comment*[r]{Solve pivot+1 AS}  
- \eIf{ |$S$| $\leq pivot$}
+ $S \gets Xampler(P, pivot + 1)$ // {Solve pivot+1 AS}  \;
+ \eIf{ $|S|$ $\leq pivot$}
  { % Open If
- \textbf{return} |$S$| \Comment*[r]{Exact count} 
+ \textbf{return} $|S|$ \Comment*[r]{Exact count} 
  } % Close If
  { % Open Else
  $t \gets $ \textbf{ComputeIterCount($\delta$)} 
@@ -50,9 +50,9 @@ $ i \gets l - 1$ \\
  Choose $\alpha$ at random from $\{0,1\}^{i-l}$ \\
  $S \gets Xampler(P \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}  
  
- \eIf{ |$S$| $> pivot$ or |$S$| = 0}
+ \eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
  {\textbf{return} $\bot$}
- {\textbf{return} |$S$| $\cdot 2^{i-l}$}
+ {\textbf{return} $|S|$ $\cdot 2^{i-l}$}
  
  }
 
