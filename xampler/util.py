@@ -3,9 +3,11 @@ from itertools import *
 from functools import *
 import sys
 from textwrap import dedent as _dedent
-from math import log
+from math import log, exp
 from random import randint, sample
-
+import xxhash
+import os
+from numpy import median as _median
 
 def attrdef(m, a, b):
     return getattr(m, a if hasattr(m, a) else b)
@@ -135,3 +137,27 @@ def generate_random_xors(prg, files, s, q):
         file_.write(xors)
         file_.close()
     return xors
+
+def compute_threshold(tolerance):
+    return 3 * exp(1/2) * (1 + (1/tolerance)**2 )
+
+def compute_itercount(confidence):
+    return 35 * log(3/confidence,2)
+
+def get_l(pivot):
+    return log(pivot,2) -1
+
+def build_theory_atom(constraint, parity):
+    terms = " ; ".join(str(x)+":"+str(x) for x in sorted(constraint))
+    out_str  = "&%s{ %s }.\n"%(get_str_parity(parity), terms)
+    return out_str
+
+def get_xor(variables):
+    n = len(variables)
+    size = randint(2, n/2)
+    xors = ""
+    xors = build_theory_atom(sorted(sample(variables, size)), randint(0,1))
+    return xors
+
+def get_median(l):
+    return _median(l)
