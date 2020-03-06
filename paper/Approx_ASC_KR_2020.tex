@@ -127,15 +127,22 @@
   \item Adapt the basic \approxmc algorithm to \asp.
   \item Collect all the relevant literature on the Counting Answer sets. Approx or Exact.
   \item Write the hashing basics. 
-  \item Focus on number of calls to a bounded counter (Xorro).
-  \item Improving the Xorro with improved XOR handling.
+  \item Focus on number of calls to the bounded counter (Xorro).
+  \item Update Xorro with improved XOR handling.
   \end{enumerate}
 \end{enumerate}
 
 
 \input{introduction}
-\input{approxASP}
 
+
+\section{Hashing and Xor's} 
+\label{sec:hashing}
+\textbf{Basic Que}: How to Partition the $Sol(\phi)$ (solution set) into roughly equal small cells without knowing the distribution of the solution? \\
+Ans: Universal hashing.
+
+In addition we need different input to be hashed independently.
+\input{approxASP}
 ApproxMC~\cite{DBLP:conf/cp/ChakrabortyMV13}
 
 
