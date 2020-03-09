@@ -20,6 +20,7 @@
 \def\approxmc{\textsf{ApproxMC}\xspace}
 \def\approxasc{\textsf{ApproxASC}\xspace}
 \def\asp{\textsf{\#ASP}\xspace}
+\newtheorem{definition}{Definition}
 
 % Copied from Flavio draft
 \usepackage{url}
@@ -138,10 +139,54 @@
 
 \section{Hashing and Xor's} 
 \label{sec:hashing}
-\textbf{Basic Que}: How to Partition the $Sol(\phi)$ (solution set) into roughly equal small cells without knowing the distribution of the solution? \\
-Ans: Universal hashing.
+Apriori we do not know the distribution of the solution set; $Sol(\phi)$. 
+%
+How to perform a good hashing? i.e.,  partition the $Sol(\phi)$ into cells with a roughly equal number of solutions?
+%
+\textbf{Universal hashing} comes to our rescue. 
+%
+%To partition the $Sol(\phi)$ into roughly equal small cells without knowing the distribution of the solution we use universal hashing. 
+The idea is: pick a function randomly from a family of hash functions. This guarantees a low number of collisions in expectation irrespective of how data is chosen. By choosing a random hash function from a family, we randomize over arbitrary input distribution.
+%
 
-In addition we need different input to be hashed independently.
+\begin{definition}
+A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal family if, 
+
+\[ \forall x,y\in U,~x\neq y:~~\Pr _{h\in H}[h(x)=h(y)]\leq {\frac {1}{m}} \]
+
+\end{definition}
+
+For guarantees this is not enough, we not only need every input to be hash uniformly but also hashed independently. We need a family of $k$-wise independent hash functions,
+%
+%$H(n, m, k)$: 
+%Need Family of $k$-wise independent hash functions mapping $\{0, 1\}^{U}$
+% $\to$ $\{0, 1\}^{m}$ such that every $k$ elements are mapped independently.
+ formally, 
+ % i.e.,  A random hash function $h$ is $k$-independent iffor all choices of distinct $x_1$,…,$x_k$ the values $h(x_1)$,…,$h(x_k)$ are independent.
+ \begin{definition}
+ 	Let $\mathcal{H}=\{h: U \to [m]\}$ be a family of hash functions. For any distinct $x_1$, . . . , $x_k \in U$ and any $y_1$, ..., $y_k \in [m]$ we have the following guarantee.
+ 	
+ 	$~~\Pr_{h\in H}
+ 	[h(x_1) = y_1 \land ... \land h(x_k) = y_k] = \frac {1}
+ {m^
+ 	k}$
+ \end{definition}
+ 
+ Higher the $k$, stronger will be the guarantee on a range of the size of cells. To encode $k$-wise independence we will require polynomial of degree $k$ - $1$. But higher the $k$, harder it will be to solve the formula with these constraints. So we just restrict ourselves to 3-wise independent.
+
+
+The canonical construction of a $k$-wise independent family is based on polynomials
+of degree $k$ - $1$. Let $p \geq |U|$ be prime. Picking random $a_0,...,a_{k - 1} \in \{0, . . . , p$-$ 1\}$,
+the hash function is defined by:
+\[ h(x) = ( ( a_{k-1} x^ {k - 1} + ... + a_1 x + a_0) \,\, mod \,\, p) \,\, mod \,\,  m\]
+
+
+For $p \gg	 m$, the hash function is statistically close to $k$-wise independent.
+
+The 2-wise independent hash will be: 
+
+\[ h(x) = (((a_1 x + a_0) \,\, mod \,\, p) \,\, mod \,\, m ) \]
+
 \input{approxASP}
 ApproxMC~\cite{DBLP:conf/cp/ChakrabortyMV13}
 
