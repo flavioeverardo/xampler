@@ -141,12 +141,12 @@
 \label{sec:hashing}
 Apriori we do not know the distribution of the solution set; $Sol(\phi)$. 
 %
-How to perform a good hashing? i.e.,  partition the $Sol(\phi)$ into cells with a roughly equal number of solutions?
+How to perform a good hashing if we have no knowledge of the distribution of solutions? i.e., how to partition the $Sol(\phi)$ into cells with a roughly equal number of solutions?
 %
-\textbf{Universal hashing} comes to our rescue. 
+\textbf{Universal hashing}~\cite{DBLP:conf/stoc/CarterW77} comes to our rescue. 
 %
 %To partition the $Sol(\phi)$ into roughly equal small cells without knowing the distribution of the solution we use universal hashing. 
-The idea is: pick a function randomly from a family of hash functions. This guarantees a low number of collisions in expectation irrespective of how data is chosen. By choosing a random hash function from a family, we randomize over arbitrary input distribution.
+The idea is: pick a function randomly from a family of hash functions.  By choosing a random hash function from a family, we randomize over arbitrary input distribution. This guarantees a low number of collisions in expectation irrespective of how data is chosen.
 %
 
 \begin{definition}
@@ -156,7 +156,7 @@ A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal fami
 
 \end{definition}
 
-For guarantees this is not enough, we not only need every input to be hash uniformly but also hashed independently. We need a family of $k$-wise independent hash functions,
+For model counting with high guarantees this is not enough, we not only need every input to be hash uniformly but also hashed independently. We need a family of $k$-wise independent hash functions~\cite{DBLP:conf/focs/WegmanC79},
 %
 %$H(n, m, k)$: 
 %Need Family of $k$-wise independent hash functions mapping $\{0, 1\}^{U}$
@@ -181,7 +181,7 @@ Technical definition generally used for the $k$-wise independent:
  	k}$
  \end{definition}
  
- Higher the $k$, stronger will be the guarantee on a range of the size of cells. To encode $k$-wise independence we will require polynomial of degree $k$ - $1$. But higher the $k$, harder it will be to solve the formula with these constraints. So we just restrict ourselves to 3-wise independent.
+ Higher the $k$, stronger will be the guarantee on a range of the size of cells. To encode $k$-wise independence we will require polynomial of degree $k$ - $1$. But higher the $k$, harder it will be to solve the formula with these constraints. Due to this trade-off we just use 3-wise independent. If we use $k$-wise independence, all cells will be  small and we will get a \textbf{uniform generation}. With $3$-wise independence we achieve: \emph{a random cell is small with high probabablity}, also called \textbf{almost-uniform generation}.
 
 
 The canonical construction of a $k$-wise independent family is based on polynomials
@@ -192,7 +192,7 @@ the hash function is defined by:
 
 For $p \gg	 m$, the hash function is statistically close to $k$-wise independent.
 
-The 2-wise independent hash will be: 
+The 2-wise independent hash is: 
 
 \[ h(x) = (((a_1 x + a_0) \,\, mod \,\, p) \,\, mod \,\, m ) \]
 
