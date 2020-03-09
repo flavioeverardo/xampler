@@ -162,6 +162,15 @@ For guarantees this is not enough, we not only need every input to be hash unifo
 %Need Family of $k$-wise independent hash functions mapping $\{0, 1\}^{U}$
 % $\to$ $\{0, 1\}^{m}$ such that every $k$ elements are mapped independently.
  formally, 
+ a family $\mathcal{H} = {h : U \to [m]}$ of hash functions
+ is $k$-wise independent if:
+ \begin{enumerate}
+ 	\item For any distinct keys $x_1, ..., x_k \in U$, the hash codes
+ 	$h(x_1), ..., h(x_k)$ are independent random variables.
+ 	\item For any fixed $x$, $h(x)$ is uniformly distributed in [m].
+ \end{enumerate}
+
+Technical definition generally used for the $k$-wise independent:
  % i.e.,  A random hash function $h$ is $k$-independent iffor all choices of distinct $x_1$,…,$x_k$ the values $h(x_1)$,…,$h(x_k)$ are independent.
  \begin{definition}
  	Let $\mathcal{H}=\{h: U \to [m]\}$ be a family of hash functions. For any distinct $x_1$, . . . , $x_k \in U$ and any $y_1$, ..., $y_k \in [m]$ we have the following guarantee.
