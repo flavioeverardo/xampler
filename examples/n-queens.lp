@@ -1,5 +1,5 @@
 %% n-Queens encoding
-#const n = 9.
+#const n = 11.
 
 %% Optimized encoding from Running Clingo web example
 { q(I,1..n) } == 1 :- I = 1..n.

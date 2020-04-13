@@ -3,11 +3,13 @@ from itertools import *
 from functools import *
 import sys
 from textwrap import dedent as _dedent
-from math import log, exp
+from math import log, e
 from random import randint, sample
 import xxhash
 import os
-from numpy import median as _median
+import numpy as np 
+import random
+import time
 
 def attrdef(m, a, b):
     return getattr(m, a if hasattr(m, a) else b)
@@ -139,10 +141,10 @@ def generate_random_xors(prg, files, s, q):
     return xors
 
 def compute_threshold(tolerance):
-    return 3 * exp(1/2) * (1 + (1/tolerance)**2 )
+    return 3 * e**(1/2.0) * (1 + (1/tolerance))**2 #3 * exp(1/2) * (1 + (1/tolerance)**2 )
 
 def compute_itercount(confidence):
-    return 35 * log(3/confidence,2)
+    return 35 * (log(3/confidence,2))
 
 def get_l(pivot):
     return log(pivot,2) -1
@@ -152,12 +154,24 @@ def build_theory_atom(constraint, parity):
     out_str  = "&%s{ %s }.\n"%(get_str_parity(parity), terms)
     return out_str
 
-def get_xor(variables):
+def get_xor(variables, m):
     n = len(variables)
-    size = randint(2, n/2)
+    if m == 0:
+        m = 2
+    a_list = np.zeros(n, dtype=int)
+    a_list[:m] = 1
+    np.random.shuffle(a_list)
+    selected_vars = []
+    for i in range(n):
+        if a_list[i] == 1:
+            selected_vars.append(variables[i])
     xors = ""
-    xors = build_theory_atom(sorted(sample(variables, size)), randint(0,1))
+    xors = build_theory_atom(sorted(selected_vars), randint(0,1))
     return xors
 
 def get_median(l):
-    return _median(l)
+    if l:
+        return np.median(l)
+    else:
+        return False
+    
