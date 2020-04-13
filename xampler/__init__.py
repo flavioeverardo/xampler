@@ -1,6 +1,6 @@
 """
 The xampler module is built from xorro and contains functions to solve logic programs with parity
-constraints. This implementation is taylored for sampling
+constraints. This implementation is taylored for sampling and counting
 
 Classes:
 Application -- Main application class.
@@ -205,8 +205,8 @@ class Application:
             models = []
             counter = 0
             C = []
-            pivot = int(2 * util.compute_threshold(self.__tolerance))
-
+            pivot = int(round(2 * util.compute_threshold(self.__tolerance)))
+            print "pivot", pivot
             """
             Standard xorro workflow asking for pivot + 1 answer sets
             """
@@ -220,7 +220,7 @@ class Application:
             translate(self.__approach, prg_)
             ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
 
-            if len(models) < pivot:
+            if len(models) <= pivot and ret.exhausted:
                 print("Exact count: %s answer sets"%len(models))
 
             else:
@@ -235,8 +235,7 @@ class Application:
                     counter +=1
                     print("\nIter: %s"%counter)
                     l = util.get_l(pivot)## Consider to move this out. This is constant
-                    i = int(l - 1) ## Consider to move this out. This is constant
-
+                    i = round(l - 1) ## Consider to move this out. This is constant
                     xor = ""
                     while True:                        
                         i += 1
@@ -249,7 +248,7 @@ class Application:
                         prg_.configuration.solve.models = pivot + 1
 
                         ## Build xor
-                        xor += util.get_xor(variables)
+                        xor += util.get_xor(variables, int(i-l)+1)
                         filename = "examples/approx_mc_xors.lp"
                         f = open(filename, "w") ## append?
                         f.write(xor)
@@ -266,12 +265,13 @@ class Application:
                         ## SAT, UNSAT or number of modesl greater than pivot
                         if len(models) == 0 or len(models) > pivot:
                             if str(ret) == "UNSAT":
-                                print("  Solving with %s xors, %s Discarding solution... there are no answer sets"%(len(xor.splitlines()), ret))
+                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... "%(i,l, i-l,len(xor.splitlines()), ret))
+                                break
                             elif str(ret) == "SAT":
-                                print("  Solving with %s xors, %s Discarding solution... there are more answer sets (%s) than pivot value (%s)"%(len(xor.splitlines()),ret,len(models),pivot))
+                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... there are more answer sets than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,pivot))
                         
                         elif (len(models)>=1 and len(models) <= pivot) or (i == n):
-                            print("  Solving with %s xors, %s Storing solution... there are less answer sets (%s) than pivot value (%s)"%(len(xor.splitlines()),ret,len(models),pivot))
+                            print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Storing solution... there are less answer sets (%s) than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,len(models),pivot))
                             print("  Partial Count = |S| * 2^(i-l) : %s"%int(len(models) * 2**(i-l)))
                             C.append(int(len(models) * (2**(i-l))))
                             break
