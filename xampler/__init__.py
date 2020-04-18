@@ -248,7 +248,7 @@ class Application:
                         prg_.configuration.solve.models = pivot + 1
 
                         ## Build xor
-                        xor += util.get_xor(variables, int(i-l)+1)
+                        xor += util.get_xor(variables, int(i-l))
                         filename = "examples/approx_mc_xors.lp"
                         f = open(filename, "w") ## append?
                         f.write(xor)
