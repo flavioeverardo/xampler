@@ -3,7 +3,7 @@ from itertools import *
 from functools import *
 import sys
 from textwrap import dedent as _dedent
-from math import log, e
+from math import log, e, floor
 from random import randint, sample
 #import xxhash
 import os
@@ -147,7 +147,7 @@ def compute_itercount(confidence):
     return 35 * (log(3/confidence,2))
 
 def get_l(pivot):
-    return log(pivot,2) -1
+    return floor(log(pivot,2)-1)
 
 def build_theory_atom(constraint, parity):
     terms = " ; ".join(str(x)+":"+str(x) for x in sorted(constraint))
