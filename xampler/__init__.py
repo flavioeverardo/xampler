@@ -206,7 +206,7 @@ class Application:
             counter = 0
             C = []
             pivot = int(round(2 * util.compute_threshold(self.__tolerance)))
-            print "pivot", pivot
+            print("pivot: %s"%pivot)
             """
             Standard xorro workflow asking for pivot + 1 answer sets
             """
@@ -228,7 +228,7 @@ class Application:
                 
                 n = len(variables)
                 t = int(util.compute_itercount(self.__confidence))                
-                print "pivot", pivot
+                print("pivot: %s"%pivot)
                 
                 while True:
                     ## Solve with XORs
