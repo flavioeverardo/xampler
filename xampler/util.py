@@ -3,11 +3,12 @@ from itertools import *
 from functools import *
 import sys
 from textwrap import dedent as _dedent
-from math import log, e, floor
+from math import log, e, floor, ceil
 from random import randint, sample
 #import xxhash
 import os
-import numpy as np 
+import numpy as np
+from statistics import median as _median
 import random
 import time
 
@@ -141,10 +142,10 @@ def generate_random_xors(prg, files, s, q):
     return xors
 
 def compute_threshold(tolerance):
-    return 3 * e**(1/2.0) * (1 + (1/tolerance))**2 #3 * exp(1/2) * (1 + (1/tolerance)**2 )
+    return ceil(3 * e**(1/2.0) * (1 + (1/tolerance))**2)
 
 def compute_itercount(confidence):
-    return 35 * (log(3/confidence,2))
+    return ceil(35 * (log(3/confidence,2)))
 
 def get_l(pivot):
     return floor(log(pivot,2)-1)
@@ -156,8 +157,6 @@ def build_theory_atom(constraint, parity):
 
 def get_xor(variables, m):
     n = len(variables)
-    #if m == 0:
-    #    m = 1
     a_list = np.zeros(n, dtype=int)
     a_list[:m] = 1
     np.random.shuffle(a_list)
@@ -171,7 +170,7 @@ def get_xor(variables, m):
 
 def get_median(l):
     if l:
-        return np.median(l)
+        return _median(l)
     else:
         return False
     

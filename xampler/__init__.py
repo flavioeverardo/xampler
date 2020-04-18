@@ -282,6 +282,8 @@ class Application:
                 print("")
                 print("Number of calls: %s, SAT: %s, UNSAT: %s"%(counter,len(C), counter-len(C)))
                 print("List of all partial counts: %s"%C)
+                print("")
+                print("List of all sorted partial counts: %s"%sorted(C))
                 final_count = int(util.get_median(C))
                 print("")
                 print("Approximate answer sets count: %s"%final_count)
