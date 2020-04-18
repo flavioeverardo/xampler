@@ -5,7 +5,7 @@ import sys
 from textwrap import dedent as _dedent
 from math import log, e
 from random import randint, sample
-import xxhash
+#import xxhash
 import os
 import numpy as np 
 import random
