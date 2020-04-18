@@ -156,8 +156,8 @@ def build_theory_atom(constraint, parity):
 
 def get_xor(variables, m):
     n = len(variables)
-    if m == 0:
-        m = 2
+    #if m == 0:
+    #    m = 1
     a_list = np.zeros(n, dtype=int)
     a_list[:m] = 1
     np.random.shuffle(a_list)
