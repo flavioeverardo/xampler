@@ -1,0 +1,24 @@
+%%
+#show dom/1.
+
+% select the dominating set
+{ dom(U) : vtx(U) }.
+
+% normalize graph
+uedge(U,V) :- edge(U,V), U < V.
+uedge(U,V) :- edge(V,U), U < V.
+
+% vertex V has an edge in the set D or is in D
+in(V) :- uedge(U,V), dom(U).
+in(V) :- uedge(V,U), dom(U).
+in(V) :- dom(V).
+
+% build reachability relation
+reach(U) :- dom(U), not dom(V) : vtx(V) , V < U.
+reach(V) :- reach(U), dom(V), uedge(U,V).
+reach(V) :- reach(U), dom(V), uedge(V,U).
+
+% dominating set conditions
+ :- dom(U), not reach(U).
+ :- vtx(U), not in(U).
+ :- not { dom(U) : vtx(U) } K, bound(K).

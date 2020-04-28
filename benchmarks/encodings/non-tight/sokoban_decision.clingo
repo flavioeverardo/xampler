@@ -1,0 +1,69 @@
+% possible directions
+direction(up). direction(down). direction(right). direction(left).
+
+loc(L1;L2) :- top(L1,L2).
+loc(L1;L2) :- right(L1,L2).
+
+adj(up,   L1,L2) :- top(L1,L2).
+adj(down, L1,L2) :- top(L2,L1).
+adj(right,L1,L2) :- right(L1,L2).
+adj(left, L1,L2) :- right(L2,L1).
+
+first(S1) :- step(S1), not next(S2,S1) : step(S2).
+last(S1)  :- step(S1), not next(S1,S2) : step(S2).
+
+sokoban(L,S) :- sokoban(L), first(S).
+box(L,S)     :- box(L),     first(S).
+
+% reachable places at timestep k
+route(L, S) :- sokoban(L,S), not last(S).
+route(L2,S) :- route(L1,S), step(S), adj(D,L1,L2), not box(L2,S), not last(S).
+
+% select a place to push from (must be reachable and have a box to push)
+1 { push_from(L,D,S) : loc(L) , direction(D) } 1 :- step(S), not goal(S).
+:- push_from(L,D,S), not route(L,S).
+:- push_from(L1,D,S), adj(D,L1,L2), not box(L2,S).
+:- push_from(L1,D,S), { adj(D,L1,L2) : loc(L2) } 0.
+
+% push the box one or more fields into direction D (but at least one)
+push(L2,D,S) :- push_from(L1,D,S), adj(D,L1,L2).
+{ push(L2,D,S) } :- push(L1,D,S), adj(D,L1,L2), step(S), not last(S).
+:- push(L1,D,S), adj(D,L1,L2), box(L2,S).
+:- push(L1,D,S), { adj(D,L1,L2) : loc(L2) } 0.
+
+% the last push is the final location
+push_to(L1,D,S) :- push(L1,D,S), adj(D,L1,L2), not push(L2,D,S).
+
+% the sokoban stands behind the pushed box
+sokoban(L,S2) :- push_to(L,D,S1), next(S1,S2).
+
+% put the pushed box at the new location
+box(L2,S2) :- push_to(L1,D,S1), adj(D,L1,L2), next(S1,S2).
+% all other boxes stay where they are
+box(L2,S2) :- box(L2,S1), loc(L2), next(S1,S2), not push_from(L1,D,S1) : adj(D,L1,L2).
+
+% forbid redundant moves
+:- push_to(L,D,S1), push_from(L,D,S2), next(S1,S2).
+
+% the goal
+% :- solution(L), last(S), not box(L,S).
+goal(S)  :- box(L,S) : solution(L); step(S).
+goal(S2) :- goal(S1), next(S1,S2).
+:- last(S), not goal(S).
+
+% append dummy moves if solution found before last step
+  push(L2,D,L2,S2)  :- push(L2,D,L2,S1), adj(D,L1,L2),               next(S1,S2), goal(S1), not last(S2).
+  push(L2,D,L2,S2)  :- push_to(L1,D,S1), adj(D,L1,L2), solution(L2), next(S1,S2), goal(S2), not last(S2).
+{ push(L2,D,L2,S) } :- route(L1,S),      adj(D,L1,L2), box(L2),      first(S),    goal(S),  not last(S).
+:- not 1 { push(L2,D,L2,S) : adj(D,L1,L2) } 1,                       first(S),    goal(S),  not last(S).
+
+% the output format makes grounding slow
+% push(L2,D,L4,S) :- push_from(L1,D,S), push_to(L3,D,S), adj(D,L1,L2), adj(D,L3,L4).
+
+% I hope this reduces the blow-up a bit
+same(D,L2,L2) :- loc(L2), direction(D), { adj(D,L1,L2) : loc(L1) } 0.
+same(D,L1,L3) :- loc(L1), same(D,L1,L2), adj(D,L2,L3).
+
+push(L2,D,L4,S) :- push_from(L1,D,S), push_to(L3,D,S), adj(D,L1,L2), adj(D,L3,L4), same(D,L,L1); same(D,L,L3).
+
+#show push/4.

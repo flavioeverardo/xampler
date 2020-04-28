@@ -1,0 +1,25 @@
+%%
+#show partition/2.
+
+% normalize the graph
+uedge(U,V) :- edge(U,V), U < V.
+uedge(U,V) :- edge(V,U), U < V.
+uedge(U,V,W) :- uedge(U,V), weight_wtedge(U,V,W).
+uedge(U,V,W) :- uedge(U,V), weight_wtedge(V,U,W).
+
+% select a partition of vertices
+1 { partition(U,K) : vtx(U) } V :- parts(K), vtxbound(V).
+1 { partition(U,K) : parts(K) } 1 :- vtx(U).
+
+% check that the sum of the weights between
+% two partitions is lower than edgebound
+ :- not #sum{ W,U,V : adjacent(U,V,X,Y), uedge(U,V,W) } E, edgebound(E), parts(X); parts(Y), X < Y.
+% :- not [ adjacent(U,V,X,Y) : uedge(U,V,W) = W ] E, edgebound(E), parts(X;Y), X < Y.
+adjacent(U,V,X,Y) :- uedge(U,V), partition(U,X), partition(V,Y), X < Y.
+adjacent(U,V,X,Y) :- uedge(U,V), partition(U,Y), partition(V,X), X < Y.
+
+% check reachability
+reach(K,U) :- partition(U,K), not partition(V,K) : vtx(V), V < U.
+reach(K,V) :- uedge(U,V), reach(K,U), partition(V,K).
+reach(K,V) :- uedge(V,U), reach(K,U), partition(V,K).
+ :- partition(U,K), not reach(K,U).

@@ -1,0 +1,47 @@
+%%
+#show col/1.
+#show wall/2.
+#show empty/2.
+
+:- exit(X,Y), wall(X,Y).
+
+grid(X,Y) :- col(X), row(Y).
+
+adjacent(X,Y,X,Y+1) :- grid(X,Y), row(Y+1).
+adjacent(X,Y,X,Y-1) :- grid(X,Y), row(Y-1).
+adjacent(X,Y,X+1,Y) :- grid(X,Y), col(X+1).
+adjacent(X,Y,X-1,Y) :- grid(X,Y), col(X-1).
+
+maxcol(X) :- col(X), not col(X+1).
+maxrow(Y) :- row(Y), not row(Y+1).
+
+border(1,Y) :- col(1), row(Y).
+border(X,1) :- col(X), row(1).
+border(X,Y) :- row(Y), maxcol(X).
+border(X,Y) :- col(X), maxrow(Y).
+
+reach(X,Y)   :- entrance(X,Y), not wall(X,Y).
+reach(XX,YY) :- adjacent(X,Y,XX,YY), reach(X,Y), not wall(XX,YY).
+ :- empty(X,Y), not reach(X,Y).
+
+ :- wall(X,Y), wall(X+1,Y), wall(X,Y+1), wall(X+1,Y+1).
+ :- empty(X,Y), empty(X+1,Y), empty(X,Y+1), empty(X+1,Y+1).
+ :- wall(X,Y), empty(X+1,Y); empty(X-1,Y); empty(X,Y+1); empty(X,Y-1), grid(X+1,Y+1); grid(X-1,Y-1).
+% :- wall(X,Y), empty(X+1;X-1,Y), empty(X,Y+1;Y-1), grid(X+1;X-1,Y+1;Y-1).
+ :- wall(X,Y), wall(X+1,Y+1), not wall(X+1,Y), not wall(X,Y+1).
+ :- wall(X+1,Y), wall(X,Y+1), not wall(X,Y), not wall(X+1,Y+1).
+
+wall(X,Y) :- border(X,Y), not entrance(X,Y), not exit(X,Y).
+{ wall(X,Y) : grid(X,Y), not entrance(X,Y) , not exit(X,Y) , not border(X,Y) }.
+
+empty(X,Y) :- grid(X,Y), not wall(X,Y).
+
+%*
+% The following is just a conjecture ...
+
+:- maxcol(M), maxrow(N), M \ 2 == 0, N \ 2 == 0, entrance(X,Y), exit(XX,YY), not adjacent(X,Y,XX,YY).
+:- maxcol(M), maxrow(N), M \ 2 == 0, N \ 2 == 0, entrance(X,Y), exit(XX,YY), X  \ 2 == 0,  X > XX.
+:- maxcol(M), maxrow(N), M \ 2 == 0, N \ 2 == 0, entrance(X,Y), exit(XX,YY), XX \ 2 == 0, XX > X.
+:- maxcol(M), maxrow(N), M \ 2 == 0, N \ 2 == 0, entrance(X,Y), exit(XX,YY), Y  \ 2 == 0,  Y > YY.
+:- maxcol(M), maxrow(N), M \ 2 == 0, N \ 2 == 0, entrance(X,Y), exit(XX,YY), YY \ 2 == 0, YY > Y.
+*%

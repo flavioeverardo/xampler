@@ -1,0 +1,329 @@
+
+ vtx(1).  
+ vtx(2).  
+ vtx(3).  
+ vtx(4).  
+ vtx(5).  
+ vtx(6).  
+ vtx(7).  
+ vtx(8).  
+ vtx(9).  
+ vtx(10).  
+ vtx(11).  
+ vtx(12).  
+ vtx(13).  
+ vtx(14).  
+ vtx(15).  
+ vtx(16).  
+ vtx(17).  
+ vtx(18).  
+ vtx(19).  
+ vtx(20).  
+ vtx(21).  
+ vtx(22).  
+ vtx(23).  
+ vtx(24).  
+ vtx(25).  
+ vtx(26).  
+ vtx(27).  
+ vtx(28).  
+ vtx(29).  
+ vtx(30).  
+ vtx(31).  
+ vtx(32).  
+ vtx(33).  
+ vtx(34).  
+ vtx(35).  
+ vtx(36).  
+ vtx(37).  
+ vtx(38).  
+ vtx(39).  
+ vtx(40).  
+ vtx(41).  
+ vtx(42).  
+ vtx(43).  
+ vtx(44).  
+ vtx(45).  
+ vtx(46).  
+ vtx(47).  
+ vtx(48).  
+ vtx(49).  
+ vtx(50).  
+ vtx(51).  
+ vtx(52).  
+ vtx(53).  
+ vtx(54).  
+ vtx(55).  
+ vtx(56).  
+ vtx(57).  
+ vtx(58).  
+ vtx(59).  
+ vtx(60).  
+ edge(31, 30). 
+ edge(31, 9). 
+ edge(31, 16). 
+ edge(31, 15). 
+ edge(31, 6). 
+ edge(30, 37). 
+ edge(30, 9). 
+ edge(30, 16). 
+ edge(30, 15). 
+ edge(30, 40). 
+ edge(37, 28). 
+ edge(37, 40). 
+ edge(37, 42). 
+ edge(37, 54). 
+ edge(37, 47). 
+ edge(14, 17). 
+ edge(14, 50). 
+ edge(14, 2). 
+ edge(14, 26). 
+ edge(14, 1). 
+ edge(14, 7). 
+ edge(9, 16). 
+ edge(9, 15). 
+ edge(9, 6). 
+ edge(9, 44). 
+ edge(16, 15). 
+ edge(16, 40). 
+ edge(16, 6). 
+ edge(16, 44). 
+ edge(28, 17). 
+ edge(28, 40). 
+ edge(28, 42). 
+ edge(28, 54). 
+ edge(28, 47). 
+ edge(28, 48). 
+ edge(17, 50). 
+ edge(17, 2). 
+ edge(17, 26). 
+ edge(17, 54). 
+ edge(17, 1). 
+ edge(17, 7). 
+ edge(50, 2). 
+ edge(50, 26). 
+ edge(50, 1). 
+ edge(50, 7). 
+ edge(50, 34). 
+ edge(2, 26). 
+ edge(2, 1). 
+ edge(2, 7). 
+ edge(26, 1). 
+ edge(26, 7). 
+ edge(26, 51). 
+ edge(15, 40). 
+ edge(15, 6). 
+ edge(15, 44). 
+ edge(15, 27). 
+ edge(40, 42). 
+ edge(40, 54). 
+ edge(40, 44). 
+ edge(40, 47). 
+ edge(40, 56). 
+ edge(40, 48). 
+ edge(40, 23). 
+ edge(42, 54). 
+ edge(42, 47). 
+ edge(42, 56). 
+ edge(42, 48). 
+ edge(42, 53). 
+ edge(42, 22). 
+ edge(54, 1). 
+ edge(54, 47). 
+ edge(54, 56). 
+ edge(54, 48). 
+ edge(54, 53). 
+ edge(1, 7). 
+ edge(1, 53). 
+ edge(1, 34). 
+ edge(1, 51). 
+ edge(6, 44). 
+ edge(6, 27). 
+ edge(6, 4). 
+ edge(6, 8). 
+ edge(6, 5). 
+ edge(44, 27). 
+ edge(44, 4). 
+ edge(44, 8). 
+ edge(44, 23). 
+ edge(47, 56). 
+ edge(47, 48). 
+ edge(47, 53). 
+ edge(47, 23). 
+ edge(47, 60). 
+ edge(47, 22). 
+ edge(47, 25). 
+ edge(7, 34). 
+ edge(7, 51). 
+ edge(7, 20). 
+ edge(56, 48). 
+ edge(56, 53). 
+ edge(56, 8). 
+ edge(56, 23). 
+ edge(56, 60). 
+ edge(56, 22). 
+ edge(56, 25). 
+ edge(56, 49). 
+ edge(48, 53). 
+ edge(48, 23). 
+ edge(48, 60). 
+ edge(48, 22). 
+ edge(48, 25). 
+ edge(48, 49). 
+ edge(48, 39). 
+ edge(53, 34). 
+ edge(53, 22). 
+ edge(53, 25). 
+ edge(53, 49). 
+ edge(53, 39). 
+ edge(53, 55). 
+ edge(34, 51). 
+ edge(34, 20). 
+ edge(34, 39). 
+ edge(34, 32). 
+ edge(51, 20). 
+ edge(51, 32). 
+ edge(27, 4). 
+ edge(27, 8). 
+ edge(27, 23). 
+ edge(27, 5). 
+ edge(27, 59). 
+ edge(27, 35). 
+ edge(4, 8). 
+ edge(4, 23). 
+ edge(4, 60). 
+ edge(4, 5). 
+ edge(4, 59). 
+ edge(4, 35). 
+ edge(4, 41). 
+ edge(8, 23). 
+ edge(8, 60). 
+ edge(8, 22). 
+ edge(8, 5). 
+ edge(8, 59). 
+ edge(8, 35). 
+ edge(8, 43). 
+ edge(23, 60). 
+ edge(23, 22). 
+ edge(23, 25). 
+ edge(23, 35). 
+ edge(23, 12). 
+ edge(60, 22). 
+ edge(60, 25). 
+ edge(60, 49). 
+ edge(60, 24). 
+ edge(22, 25). 
+ edge(22, 49). 
+ edge(22, 39). 
+ edge(22, 55). 
+ edge(22, 38). 
+ edge(20, 32). 
+ edge(20, 11). 
+ edge(5, 59). 
+ edge(5, 35). 
+ edge(5, 41). 
+ edge(5, 43). 
+ edge(25, 49). 
+ edge(25, 39). 
+ edge(25, 55). 
+ edge(25, 12). 
+ edge(25, 24). 
+ edge(25, 38). 
+ edge(25, 45). 
+ edge(49, 39). 
+ edge(49, 55). 
+ edge(49, 24). 
+ edge(49, 38). 
+ edge(49, 45). 
+ edge(39, 55). 
+ edge(39, 38). 
+ edge(39, 45). 
+ edge(39, 18). 
+ edge(39, 3). 
+ edge(32, 11). 
+ edge(32, 18). 
+ edge(32, 21). 
+ edge(59, 35). 
+ edge(59, 41). 
+ edge(59, 43). 
+ edge(59, 52). 
+ edge(59, 36). 
+ edge(35, 41). 
+ edge(35, 43). 
+ edge(35, 12). 
+ edge(35, 52). 
+ edge(35, 10). 
+ edge(55, 11). 
+ edge(55, 38). 
+ edge(55, 45). 
+ edge(55, 18). 
+ edge(55, 3). 
+ edge(55, 29). 
+ edge(11, 18). 
+ edge(11, 21). 
+ edge(11, 29). 
+ edge(11, 19). 
+ edge(41, 43). 
+ edge(41, 12). 
+ edge(41, 24). 
+ edge(41, 52). 
+ edge(41, 10). 
+ edge(41, 36). 
+ edge(43, 12). 
+ edge(43, 24). 
+ edge(43, 38). 
+ edge(43, 52). 
+ edge(43, 10). 
+ edge(43, 36). 
+ edge(43, 46). 
+ edge(12, 24). 
+ edge(12, 38). 
+ edge(12, 52). 
+ edge(12, 10). 
+ edge(24, 38). 
+ edge(24, 45). 
+ edge(24, 52). 
+ edge(24, 10). 
+ edge(38, 45). 
+ edge(38, 10). 
+ edge(38, 3). 
+ edge(38, 57). 
+ edge(45, 18). 
+ edge(45, 21). 
+ edge(45, 3). 
+ edge(45, 29). 
+ edge(45, 33). 
+ edge(18, 21). 
+ edge(18, 3). 
+ edge(18, 29). 
+ edge(18, 33). 
+ edge(18, 19). 
+ edge(18, 13). 
+ edge(21, 29). 
+ edge(21, 33). 
+ edge(21, 19). 
+ edge(52, 10). 
+ edge(52, 36). 
+ edge(52, 58). 
+ edge(52, 46). 
+ edge(10, 46). 
+ edge(10, 57). 
+ edge(3, 29). 
+ edge(3, 33). 
+ edge(3, 57). 
+ edge(3, 13). 
+ edge(29, 33). 
+ edge(29, 19). 
+ edge(29, 13). 
+ edge(36, 58). 
+ edge(36, 46). 
+ edge(33, 19). 
+ edge(33, 13). 
+ edge(19, 13). 
+ edge(58, 46). 
+ edge(46, 57). 
+bound(3). 
+levels(1).
+levels(2).
+levels(3).
+levels(4).

@@ -1,0 +1,9 @@
+%%
+1 { path(X,Y) : edge(X,Y) } 1 :- vtx(Y), not start(Y).
+
+reached(X) :- start(X).
+reached(Y) :- reached(X), path(X,Y), { path(X,Z) : edge(X,Z), Z != Y } 0.
+
+:- vtx(X), not reached(X).
+
+#show path/2.

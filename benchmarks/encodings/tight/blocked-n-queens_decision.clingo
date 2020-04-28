@@ -1,0 +1,15 @@
+diagX(X,Y,X-Y) :- num(X), num(Y).
+diagY(X,Y,X+Y) :- num(X), num(Y).
+
+diagX(D) :- diagX(X,Y,D).
+diagY(D) :- diagY(X,Y,D).
+
+% exactly 1 queen in each row/col
+1 { queen(X,Y) : num(Y) , not block(X,Y) } 1 :- num(X).
+1 { queen(X,Y) : num(X) , not block(X,Y) } 1 :- num(Y).
+
+% at most 1 queen on each diagonal
+{ queen(X,Y) : diagX(X,Y,D) , not block(X,Y) } 1 :- diagX(D).
+{ queen(X,Y) : diagY(X,Y,D) , not block(X,Y) } 1 :- diagY(D).
+
+#show queen/2.

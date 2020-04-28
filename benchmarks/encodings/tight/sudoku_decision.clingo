@@ -1,0 +1,18 @@
+% take square root
+subSize(M) :- size(N), M = 0..N, M*M == N.
+
+% each cell contains exactly one number
+1 { sol(X,Y,Z) : Z = 1..N } 1 :- size(N), X = 1..N, Y = 1..N.
+
+% each row contains each number exactly once
+1 { sol(X,Y,Z) : Y = 1..N } 1 :- size(N), X = 1..N, Z = 1..N.
+
+% each column contains each number exactly once
+1 { sol(X,Y,Z) : X = 1..N } 1 :- size(N), Y = 1..N, Z = 1..N.
+
+% each subsquare contains each number exactly once
+1 { sol((P*M)+R,(Q*M)+S,Z) : R = 1..M , S = 1..M } 1 :- subSize(M), P = 0..M-1, Q = 0..M-1, size(N), Z = 1..N.
+
+:- square(X,Y,Z), not sol(X,Y,Z).
+
+#show sol/3.
