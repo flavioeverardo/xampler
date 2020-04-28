@@ -235,7 +235,7 @@ class Application:
                     counter +=1
                     print("\nIter: %s"%counter)
                     l = util.get_l(pivot)## Consider to move this out. This is constant
-                    i = round(l - 1) ## Consider to move this out. This is constant
+                    i = l -1 ## Consider to move this out. This is constant
                     xor = ""
                     while True:                        
                         i += 1

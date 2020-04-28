@@ -5,10 +5,8 @@ import sys
 from textwrap import dedent as _dedent
 from math import log, e, floor, ceil
 from random import randint, sample
-#import xxhash
 import os
 import numpy as np
-from statistics import median as _median
 import random
 import time
 
@@ -170,7 +168,7 @@ def get_xor(variables, m):
 
 def get_median(l):
     if l:
-        return _median(l)
+        return np.median(l)
     else:
         return False
     
