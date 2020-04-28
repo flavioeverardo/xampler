@@ -1,0 +1,11 @@
+layers(1). tracks(7). 
+connect(n1,top,1). connect(n1,top,2).
+connect(n2,bot,1). connect(n2,bot,3). connect(n2,top,4).
+connect(n3,bot,2). connect(n3,top,5). connect(n3,top,7).
+connect(n4,top,3). connect(n4,top,6). connect(n4,bot,7).
+connect(n5,bot,5). connect(n5,top,9). connect(n5,top,11).
+connect(n6,bot,6). connect(n6,top,8). connect(n6,bot,9).
+connect(n7,bot,8). connect(n7,bot,12).
+connect(n8,top,10). connect(n8,bot,11).
+connect(n9,bot,10). connect(n9,top,12).
+

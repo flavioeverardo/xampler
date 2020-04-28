@@ -1,0 +1,12 @@
+%%
+#show pos/3.
+
+net(N) :- connect(N,R,T).
+1 { pos(N,L,T) : L = 1..X , T = 1..Y } 1 :- net(N), layers(X), tracks(Y).
+
+abv(A,B) :- connect(A,top,T), connect(B,bot,T), A != B.
+ :- abv(A,B),     abv(B,A), pos(A,L,T1), pos(B,L,T2).
+ :- abv(A,B), not abv(B,A), pos(A,L,T1), pos(B,L,T2), T1 >  T2.
+
+cmp(A,B) :- connect(A,R,T1), connect(B,S,T2), A != B, T1 >= T2.
+ :- cmp(A,B), cmp(B,A), pos(A,L,T), pos(B,L,T).

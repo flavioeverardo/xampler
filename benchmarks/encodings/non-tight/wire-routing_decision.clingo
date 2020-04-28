@@ -1,0 +1,34 @@
+%%
+#show path/3.
+
+% neighboring grid points
+neighbor(X,Y,X+1,Y) :- pt(X);pt(Y);pt(X+1), not block(X,Y), not block(X+1,Y).
+%neighbor(X,Y,X+1,Y) :- pt(X;Y;X+1), not block(X,Y), not block(X+1,Y).
+neighbor(X,Y,X-1,Y) :- pt(X);pt(Y);pt(X-1), not block(X,Y), not block(X-1,Y).
+neighbor(X,Y,X,Y+1) :- pt(X);pt(Y);pt(Y+1), not block(X,Y), not block(X,Y+1).
+neighbor(X,Y,X,Y-1) :- pt(X);pt(Y);pt(Y-1), not block(X,Y), not block(X,Y-1).
+
+% get ending point
+t2(X1,Y1,W) :- terminal(X1,Y1,W), terminal(X1,Y2,W), Y1 > Y2.
+t2(X1,Y1,W) :- terminal(X1,Y1,W), terminal(X2,Y2,W), X1 > X2.
+
+% get starting point
+t1(X,Y,W) :- terminal(X,Y,W), not t2(X,Y,W).
+
+% connect starting and ending points
+path(X,Y,W) :- t1(X,Y,W).
+path(X,Y,W) :- edge(XX,YY,X,Y,W).
+1 { edge(X1,Y1,X2,Y2,W) : neighbor(X1,Y1,X2,Y2) } 1 :- t1(X1,Y1,W), t2(X3,Y3,W).
+2 { edge(X1,Y1,X2,Y2,W) : neighbor(X1,Y1,X2,Y2) } 2 :- path(X1,Y1,W), not t1(X1,Y1,W), not t2(X1,Y1,W), pt(X1;Y1), wire(W), not block(X1,Y1).
+    edge(X2,Y2,X1,Y1,W) :- neighbor(X1,Y1,X2,Y2), wire(W), edge(X1,Y1,X2,Y2,W).
+
+:- t2(X,Y,W), not path(X,Y,W).
+
+% further constraints
+:- terminal(X,Y,W), block(X,Y).
+:- path(X,Y,W) ; path(X,Y,WW), W < WW, not allow(X,Y), not block(X,Y).
+%:- path(X,Y,W;WW), W < WW, not allow(X,Y), not block(X,Y).
+:- 3 { path(X,Y,W) : wire(W) }, allow(X,Y), not block(X,Y).
+:- edge(X1,Y1,X2,Y2,W) ; edge(X1,Y1,X2,Y2,WW), W < WW.
+%:- edge(X1,Y1,X2,Y2,W;WW), W < WW.
+% :- edge(X1,Y1,X2,Y2,W), edge(X2,Y2,X1,Y1,WW), W < WW.

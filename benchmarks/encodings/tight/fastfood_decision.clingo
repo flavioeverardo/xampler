@@ -1,0 +1,27 @@
+%%
+#show altdepot/2.
+
+% calculate the number of depots
+depots(X) :- X = { depot(DN,DK) : depot(DN,DK) }.
+
+% get the closest depot for a restaurant
+serves(RN,Dist) :- restaurant(RN,RK), Dist = #min{ |DK-RK| : depot(DN,DK) }.
+%serves(RN,Dist) :- restaurant(RN,RK), Dist = min [ depot(DN,DK) : depot(DN,DK) = abs(DK-RK) ].
+
+% get possible distances
+dist(|RK1-RK2|) :- restaurant(RN1,RK1), restaurant(RN2,RK2).
+
+% each restaurant may be an alternative depot
+X { altdepot(RN,RK) : restaurant(RN,RK) } X :- depots(X).
+
+% get the closest alternative depot for a restaurant
+altserves(RN,Dist) :- restaurant(RN,RK), Dist = #min{ |DK-RK| : altdepot(DN,DK) , restaurant(DN,DK) }.
+%altserves(RN,Dist) :- restaurant(RN,RK), Dist = min [ altdepot(DN,DK) : restaurant(DN,DK) = abs(DK-RK) ].
+
+% calculate the costs for the initial depots
+costs(C) :- C = #sum{ Dist,RN : serves(RN,Dist) }.
+%costs(C) :- C = [ serves(RN,Dist) : serves(RN,Dist) = Dist ].
+
+% fail if we have not found a better solution
+:- costs(C), C <= #sum{ Dist,RN : restaurant(RN,RK), altserves(RN,Dist), dist(Dist) }.
+%:- costs(C), C [ altserves(RN,Dist) : restaurant(RN,RK) : dist(Dist) = Dist ].

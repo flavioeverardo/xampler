@@ -1,0 +1,5 @@
+%%
+1 { assigned(X,P) : part(P) } 1 :- number(X).
+:- assigned(X,P), assigned(Y,P), X <= Y, assigned(X+Y,P).
+
+#show assigned/2.

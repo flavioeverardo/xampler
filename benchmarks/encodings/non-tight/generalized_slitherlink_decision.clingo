@@ -1,0 +1,16 @@
+{ linked(U;V) : edge(U,V) }.
+
+2 { link(U,V) : edge(U,V); link(W,U) : edge(W,U) } 2 :- linked(U).
+
+:- link(U,V), not linked(U).
+:- link(U,V), not linked(V).
+
+reached(U) :- linked(U), not linked(V) : edge(V,Y) , V < U; not linked(W) : edge(Z,W) , W < U.
+reached(V) :- reached(U), link(U,V).
+reached(V) :- reached(U), link(V,U).
+
+:- linked(U), not reached(U).
+
+:- clue(C,N), not N { link(U,V) : cell_contains(C,U,V) } N.
+
+#show link/2.

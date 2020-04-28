@@ -1,0 +1,2 @@
+1 { chosenColour(N,C) : colour(C) } 1 :- node(N).
+ :- link(U,V), U < V, chosenColour(U,C), chosenColour(V,C).

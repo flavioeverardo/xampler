@@ -1,0 +1,27 @@
+%%
+#show move/4.
+#show p/1.
+
+% doesn't work with odd numbers, for which we don't want to ground the rest ;-)
+tour :- size(N), N \ 2 == 0.
+ :- not tour, not size(1).
+
+p(1..N) :- size(N), tour.
+
+valid(X,Y,X+2,Y+1) :- p(X) ; p(Y) ; p(X+2) ; p(Y+1), tour.
+valid(X,Y,X+2,Y-1) :- p(X) ; p(Y) ; p(X+2) ; p(Y-1), tour.  
+valid(X,Y,X+1,Y+2) :- p(X) ; p(Y) ; p(X+1) ; p(Y+2), tour.  
+valid(X,Y,X+1,Y-2) :- p(X) ; p(Y) ; p(X+1) ; p(Y-2), tour.  
+valid(X,Y,X-1,Y+2) :- p(X) ; p(Y) ; p(X-1) ; p(Y+2), tour.  
+valid(X,Y,X-1,Y-2) :- p(X) ; p(Y) ; p(X-1) ; p(Y-2), tour.  
+valid(X,Y,X-2,Y+1) :- p(X) ; p(Y) ; p(X-2) ; p(Y+1), tour.  
+valid(X,Y,X-2,Y-1) :- p(X) ; p(Y) ; p(X-2) ; p(Y-1), tour.
+
+move(X1,Y1,X2,Y2) :- givenmove(X1,Y1,X2,Y2), tour.
+ :- givenmove(X1,Y1,X2,Y2), not valid(X1,Y1,X2,Y2).
+1 { move(X1,Y1,X2,Y2) : valid(X1,Y1,X2,Y2) } 1 :- p(X1) ; p(Y1), tour.
+1 { move(X1,Y1,X2,Y2) : valid(X1,Y1,X2,Y2) } 1 :- p(X2) ; p(Y2), tour.
+
+reached(1,1) :- tour.
+reached(X2,Y2) :- reached(X1,Y1), move(X1,Y1,X2,Y2), tour.
+ :- p(X); p(Y), not reached(X,Y), tour.

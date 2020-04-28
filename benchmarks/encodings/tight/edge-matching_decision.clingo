@@ -1,0 +1,15 @@
+%%
+rotate(R,0,R) :- side(R). 
+rotate(top,90,right).    rotate(top,180,bottom). rotate(top,270,left).
+rotate(right,90,bottom). rotate(right,180,left). rotate(right,270,top).
+rotate(bottom,90,left).  rotate(bottom,180,top). rotate(bottom,270,right).
+rotate(left,90,top).     rotate(left,180,right). rotate(left,270,bottom).
+
+1 { chosenTile(X,Y,N) : row(Y) , col(X) } 1 :- tile(N).
+1 { chosenTile(X,Y,N) : tile(N) } 1 :- row(Y), col(X).
+1 { chosenRotation(X,Y,R) : rotation(R) } 1 :- row(Y), col(X).
+
+color(X,Y,SR,C) :- chosenTile(X,Y,N), chosenRotation(X,Y,R), tileSide(N,S,C), rotate(S,R,SR).
+
+ :- color(X,Y,right,C1), color(X+1,Y,left,C2), C1 != C2.
+ :- color(X,Y,bottom,C1), color(X,Y+1,top,C2), C1 != C2.

@@ -1,0 +1,24 @@
+%%
+#show move/4.
+#show full/2.
+#show time/1.
+field(X,Y) :- empty(X,Y).
+field(X,Y) :- full(X,Y).
+
+dir(left ,-1, 0).
+dir(right, 1, 0).
+dir(up   , 0,-1).
+dir(down , 0, 1).
+
+stone(X,Y,0) :- full(X,Y).
+field(X,Y,D) :- field(X,Y), field(X+DX,Y+DY), field(X+2*DX,Y+2*DY), dir(D,DX,DY).
+
+1 { move(T,D,X,Y) : field(X,Y,D) } 1 :- time(T).
+ :- move(T,D,X,Y), not stone(X,Y,T-1).
+ :- move(T,D,X,Y), stone(X+2*DX,Y+2*DY,T-1), dir(D,DX,DY).
+ :- move(T,D,X,Y), not stone(X+DX,Y+DY,T-1), dir(D,DX,DY).
+
+moved(T,X,Y) :- move(T,D,X,Y), time(T).
+removed(T,X+DX,Y+DY) :- move(T,D,X,Y), dir(D,DX,DY).
+stone(X+2*DX,Y+2*DY,T) :- move(T,D,X,Y), dir(D,DX,DY).
+stone(X,Y,T) :- field(X,Y), stone(X,Y,T-1), not moved(T,X,Y), not removed(T,X,Y), time(T).
