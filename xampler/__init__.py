@@ -205,8 +205,11 @@ class Application:
             models = []
             counter = 0
             C = []
+            display = self.__display.value
             pivot = int(round(2 * util.compute_threshold(self.__tolerance)))
-            print("pivot: %s"%pivot)
+            print("Solving...")
+            if display:
+                print("pivot: %s"%pivot)
             """
             Standard xorro workflow asking for pivot + 1 answer sets
             """
@@ -217,24 +220,28 @@ class Application:
             prg_.ground([("base", [])])
             ## Get the number of variables
             variables = [atom.symbol for atom in prg_.symbolic_atoms if atom.is_fact is False and "__parity" not in str(atom.symbol)]
-            print("Number of variables (symbols): %s"%len(variables))
+            if display:
+                print("Number of variables (symbols): %s"%len(variables))
             translate(self.__approach, prg_)
             ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
 
             if len(models) <= pivot and ret.exhausted:
-                print("Exact count: %s answer sets"%len(models))
-
+                if display:
+                    print("Exact count: %s answer sets"%len(models))
             else:
-                print("NOT Exact count... There are more than %s answer sets"%(len(models)))
+                if display:
+                    print("NOT Exact count... There are more than %s answer sets"%(len(models)))
                 
                 n = len(variables)
-                t = int(util.compute_itercount(self.__confidence))                
-                print("pivot: %s"%pivot)
+                t = int(util.compute_itercount(self.__confidence))
+                if display:
+                    print("pivot: %s"%pivot)
                 
                 while True:
                     ## Solve with XORs
                     counter +=1
-                    print("\nIter: %s"%counter)
+                    if display:
+                        print("\nIter: %s"%counter)
                     l = util.get_l(pivot)## Consider to move this out. This is constant
                     i = l -1 ## Consider to move this out. This is constant
                     xor = ""
@@ -266,14 +273,18 @@ class Application:
                         ## SAT, UNSAT or number of modesl greater than pivot
                         if len(models) == 0 or len(models) > pivot:
                             if str(ret) == "UNSAT":
-                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... "%(i,l, i-l,len(xor.splitlines()), ret))
+                                if display:
+                                    print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... "%(i,l, i-l,len(xor.splitlines()), ret))
                                 break
                             elif str(ret) == "SAT":
-                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... there are more answer sets than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,pivot))
+                                if display:
+                                    print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... there are more answer sets than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,pivot))
                         
                         elif (len(models)>=1 and len(models) <= pivot) or (i == n):
-                            print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Storing solution... there are less answer sets (%s) than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,len(models),pivot))
-                            print("  Partial Count = |S| * 2^(i-l) : %s"%int(len(models) * 2**(i-l)))
+                            if display:
+                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Storing solution... there are less answer sets (%s) than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,len(models),pivot))
+                            if display:
+                                print("  Partial Count = |S| * 2^(i-l) : %s"%int(len(models) * 2**(i-l)))
                             C.append(int(len(models) * (2**(i-l))))
                             break
                     
