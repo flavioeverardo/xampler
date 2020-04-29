@@ -210,7 +210,8 @@ class Application:
             """
             Standard xorro workflow asking for pivot + 1 answer sets
             """
-            prg_ = _clingo.Control()
+            clingo_args = ["--warn=none"]  ## Disable Warnings
+            prg_ = _clingo.Control(clingo_args)
             prg_.configuration.solve.models = pivot + 1
             transform(prg_,files)
             prg_.ground([("base", [])])
@@ -243,7 +244,7 @@ class Application:
                         models = []
 
                         ## Create new clingo control object
-                        prg_ = _clingo.Control()
+                        prg_ = _clingo.Control(clingo_args)
                         ## Ask for pivot + 1 answer sets
                         prg_.configuration.solve.models = pivot + 1
 
