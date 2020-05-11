@@ -207,35 +207,29 @@ class Application:
             C = []
             display = self.__display.value
             pivot = int(round(2 * util.compute_threshold(self.__tolerance)))
-            print("Solving...")
-            if display:
-                print("pivot: %s"%pivot)
             """
             Standard xorro workflow asking for pivot + 1 answer sets
             """
-            clingo_args = ["--warn=none"]  ## Disable Warnings
+            clingo_args = ["--warn=none"]  ## Disable Warnings and other clingo options
             prg_ = _clingo.Control(clingo_args)
             prg_.configuration.solve.models = pivot + 1
             transform(prg_,files)
             prg_.ground([("base", [])])
             ## Get the number of variables
             variables = [atom.symbol for atom in prg_.symbolic_atoms if atom.is_fact is False and "__parity" not in str(atom.symbol)]
-            if display:
-                print("Number of variables (symbols): %s"%len(variables))
+            print("Number of variables (symbols): %s"%len(variables))
+            print("pivot: %s"%pivot)
             translate(self.__approach, prg_)
+            print("Solving...")
             ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
 
             if len(models) <= pivot and ret.exhausted:
-                if display:
-                    print("Exact count: %s answer sets"%len(models))
+                print("Exact count: %s answer sets"%len(models))
             else:
-                if display:
-                    print("NOT Exact count... There are more than %s answer sets"%(len(models)))
+                print("NOT Exact count... There are more than %s answer sets"%(len(models)))
                 
                 n = len(variables)
                 t = int(util.compute_itercount(self.__confidence))
-                if display:
-                    print("pivot: %s"%pivot)
                 
                 while True:
                     ## Solve with XORs
@@ -245,18 +239,19 @@ class Application:
                     l = util.get_l(pivot)## Consider to move this out. This is constant
                     i = l -1 ## Consider to move this out. This is constant
                     xor = ""
+                    binary_lists = []
                     while True:                        
                         i += 1
                         
                         models = []
-
                         ## Create new clingo control object
                         prg_ = _clingo.Control(clingo_args)
                         ## Ask for pivot + 1 answer sets
                         prg_.configuration.solve.models = pivot + 1
 
                         ## Build xor
-                        xor += util.get_xor(variables, int(i-l))
+                        xor_, binary_lists = util.get_xor(variables, binary_lists, int(i-l))
+                        xor += xor_
                         filename = "examples/approx_mc_xors.lp"
                         f = open(filename, "w") ## append?
                         f.write(xor)
@@ -293,12 +288,14 @@ class Application:
 
                 print("")
                 print("Number of calls: %s, SAT: %s, UNSAT: %s"%(counter,len(C), counter-len(C)))
+                print("")
                 print("List of all partial counts: %s"%C)
                 print("")
                 print("List of all sorted partial counts: %s"%sorted(C))
-                final_count = int(util.get_median(C))
+                median, average = util.get_median(C)
                 print("")
-                print("Approximate answer sets count: %s"%final_count)
+                print("Approximate answer sets count (median)  : %s"%int(median))
+                print("Approximate answer sets count (average) : %s"%int(average))
 
         else:
             """
