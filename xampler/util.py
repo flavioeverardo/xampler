@@ -5,10 +5,8 @@ import sys
 from textwrap import dedent as _dedent
 from math import log, e, floor, ceil
 from random import randint, sample
-#import xxhash
 import os
 import numpy as np
-from statistics import median as _median
 import random
 import time
 
@@ -155,22 +153,30 @@ def build_theory_atom(constraint, parity):
     out_str  = "&%s{ %s }.\n"%(get_str_parity(parity), terms)
     return out_str
 
-def get_xor(variables, m):
+def get_xor(variables, binary, m):
     n = len(variables)
     a_list = np.zeros(n, dtype=int)
     a_list[:m] = 1
     np.random.shuffle(a_list)
+    while True:
+        if a_list.tolist() not in binary:
+            binary.append(a_list.tolist())
+            #for a in binary:
+            #    print(a)
+            break
+        else:
+            print("repeated hash")
     selected_vars = []
     for i in range(n):
         if a_list[i] == 1:
             selected_vars.append(variables[i])
     xors = ""
     xors = build_theory_atom(sorted(selected_vars), randint(0,1))
-    return xors
+    return xors, binary
 
 def get_median(l):
     if l:
-        return _median(l)
+        return np.median(l), np.average(l)
     else:
         return False
     

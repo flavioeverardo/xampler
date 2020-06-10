@@ -1,0 +1,38 @@
+%%
+#show put/3.
+
+peg(1;2;3).
+
+% group disks by peg
+at(0,D, P) :- peg(P), on0(P,D).
+at(0,D2,P) :- peg(P), disk(D2), on0(D1,D2), at(0,D1,P).
+
+% same with goal (assumption goal is complete)
+atGoal(D, P) :- peg(P), ongoal(P,D).
+atGoal(D2,P) :- peg(P), disk(D2), ongoal(D1,D2), atGoal(D1,P).
+
+% move disk D to peg P
+1 { move(T,D,P) : peg(P) , disk(D) , not peg(D) } 1 :- time(T), not steps(T).
+moved(T,D) :- move(T,D,P).
+
+% goal
+ :- atGoal(D,P), not at(T,D,P), steps(T).
+
+% calculate new locations
+at(T+1,D,P) :- move(T,D,P), time(T), disk(D), peg(P).
+at(T+1,D,P) :-   at(T,D,P), time(T), disk(D), peg(P), not moved(T,D).
+
+% put disks only on bigger disks
+ :- move(T,X,P), at(T,Y,P), X <= Y.
+% move the topmost disk
+ :- moved(T,X), at(T,X,Q), at(T,Y,Q), X < Y.
+
+% convert output
+smaller(T,P,P) :- peg(P), time(T).
+smaller(T,X,P) :- at(T,X,P).
+smaller(T,X,P) :- smaller(T,X+1,P), time(T), peg(P), disk(X;X+1).
+highest(T,X,P) :- smaller(T,X,P), not smaller(T,X+1,P), time(T), peg(P), disk(X).
+put(T,X,Y)     :- move(T,Y,P), highest(T,X,P).
+
+% redundancies
+ :- not 1 { at(T,D,P) : peg(P) } 1, time(T), disk(D), D > 3.

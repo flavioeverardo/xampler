@@ -1,0 +1,25 @@
+%%
+#show levelvtx/2.
+#show parentedge/2.
+
+% normalize graph
+uedge(U,V) :- edge(U,V), U < V.
+uedge(U,V) :- edge(V,U), U < V.
+
+% every vertex is on exactly one level
+1 { levelvtx(L,U) : levels(L) } 1 :- vtx(U).
+
+% a vertex U on level L>1 has exactly one parentedge
+1 { parentedge(P, U) : uedge(P, U); parentedge(P, U) : uedge(U, P) } 1 :- levelvtx(L,U), L > 1.
+% the parentedge vertex must have level L-1
+ :- levelvtx(L,V),parentedge(P,V), not levelvtx(L-1,P).
+
+% every cluster has at most b elements
+ :- not { parentedge(P,U) : vtx(U) } B, vtx(P), bound(B).
+% level one is handled specially
+ :- not { levelvtx(1,U) : vtx(U) } B, bound(B).
+
+% every cluster is a clique
+ :- parentedge(P,U), parentedge(P,V), U < V, not uedge(U,V).
+% level one is handled specially again
+ :- levelvtx(1,U), levelvtx(1,V), U < V, not uedge(U,V).

@@ -1,0 +1,677 @@
+
+ vtx(1).  
+ vtx(2).  
+ vtx(3).  
+ vtx(4).  
+ vtx(5).  
+ vtx(6).  
+ vtx(7).  
+ vtx(8).  
+ vtx(9).  
+ vtx(10).  
+ vtx(11).  
+ vtx(12).  
+ vtx(13).  
+ vtx(14).  
+ vtx(15).  
+ vtx(16).  
+ vtx(17).  
+ vtx(18).  
+ vtx(19).  
+ vtx(20).  
+ vtx(21).  
+ vtx(22).  
+ vtx(23).  
+ vtx(24).  
+ vtx(25).  
+ vtx(26).  
+ vtx(27).  
+ vtx(28).  
+ vtx(29).  
+ vtx(30).  
+ vtx(31).  
+ vtx(32).  
+ vtx(33).  
+ vtx(34).  
+ vtx(35).  
+ vtx(36).  
+ vtx(37).  
+ vtx(38).  
+ vtx(39).  
+ vtx(40).  
+ vtx(41).  
+ vtx(42).  
+ vtx(43).  
+ vtx(44).  
+ vtx(45).  
+ vtx(46).  
+ vtx(47).  
+ vtx(48).  
+ vtx(49).  
+ vtx(50).  
+ vtx(51).  
+ vtx(52).  
+ vtx(53).  
+ vtx(54).  
+ vtx(55).  
+ vtx(56).  
+ vtx(57).  
+ vtx(58).  
+ vtx(59).  
+ vtx(60).  
+ vtx(61).  
+ vtx(62).  
+ vtx(63).  
+ vtx(64).  
+ vtx(65).  
+ vtx(66).  
+ vtx(67).  
+ vtx(68).  
+ vtx(69).  
+ vtx(70).  
+ vtx(71).  
+ vtx(72).  
+ vtx(73).  
+ vtx(74).  
+ vtx(75).  
+ vtx(76).  
+ vtx(77).  
+ vtx(78).  
+ vtx(79).  
+ vtx(80).  
+ vtx(81).  
+ vtx(82).  
+ vtx(83).  
+ vtx(84).  
+ vtx(85).  
+ vtx(86).  
+ vtx(87).  
+ vtx(88).  
+ vtx(89).  
+ vtx(90).  
+ vtx(91).  
+ vtx(92).  
+ vtx(93).  
+ vtx(94).  
+ vtx(95).  
+ vtx(96).  
+ vtx(97).  
+ vtx(98).  
+ vtx(99).  
+ vtx(100).  
+ edge(27, 8). 
+ edge(27, 16). 
+ edge(27, 71). 
+ edge(27, 3). 
+ edge(33, 96). 
+ edge(33, 16). 
+ edge(33, 77). 
+ edge(33, 23). 
+ edge(33, 32). 
+ edge(33, 3). 
+ edge(33, 91). 
+ edge(33, 42). 
+ edge(96, 2). 
+ edge(96, 23). 
+ edge(96, 32). 
+ edge(96, 82). 
+ edge(96, 42). 
+ edge(96, 64). 
+ edge(96, 74). 
+ edge(2, 48). 
+ edge(2, 73). 
+ edge(2, 82). 
+ edge(2, 62). 
+ edge(2, 42). 
+ edge(2, 64). 
+ edge(2, 14). 
+ edge(2, 43). 
+ edge(48, 73). 
+ edge(48, 82). 
+ edge(48, 62). 
+ edge(48, 14). 
+ edge(48, 75). 
+ edge(73, 62). 
+ edge(73, 72). 
+ edge(73, 14). 
+ edge(73, 75). 
+ edge(73, 31). 
+ edge(8, 16). 
+ edge(8, 77). 
+ edge(8, 71). 
+ edge(8, 3). 
+ edge(8, 83). 
+ edge(16, 77). 
+ edge(16, 23). 
+ edge(16, 32). 
+ edge(16, 71). 
+ edge(16, 3). 
+ edge(16, 91). 
+ edge(16, 88). 
+ edge(16, 40). 
+ edge(77, 23). 
+ edge(77, 32). 
+ edge(77, 71). 
+ edge(77, 3). 
+ edge(77, 91). 
+ edge(77, 88). 
+ edge(77, 28). 
+ edge(77, 17). 
+ edge(23, 32). 
+ edge(23, 3). 
+ edge(23, 91). 
+ edge(23, 42). 
+ edge(23, 88). 
+ edge(23, 28). 
+ edge(23, 74). 
+ edge(23, 93). 
+ edge(32, 82). 
+ edge(32, 91). 
+ edge(32, 42). 
+ edge(32, 64). 
+ edge(32, 88). 
+ edge(32, 28). 
+ edge(32, 74). 
+ edge(32, 13). 
+ edge(32, 12). 
+ edge(82, 62). 
+ edge(82, 42). 
+ edge(82, 64). 
+ edge(82, 14). 
+ edge(82, 74). 
+ edge(82, 13). 
+ edge(82, 43). 
+ edge(82, 76). 
+ edge(62, 64). 
+ edge(62, 14). 
+ edge(62, 75). 
+ edge(62, 13). 
+ edge(62, 43). 
+ edge(62, 76). 
+ edge(72, 75). 
+ edge(72, 31). 
+ edge(72, 38). 
+ edge(71, 3). 
+ edge(71, 91). 
+ edge(71, 88). 
+ edge(71, 83). 
+ edge(71, 40). 
+ edge(71, 17). 
+ edge(3, 91). 
+ edge(3, 88). 
+ edge(3, 83). 
+ edge(3, 40). 
+ edge(3, 17). 
+ edge(3, 93). 
+ edge(3, 5). 
+ edge(91, 42). 
+ edge(91, 88). 
+ edge(91, 28). 
+ edge(91, 40). 
+ edge(91, 17). 
+ edge(91, 93). 
+ edge(91, 12). 
+ edge(42, 64). 
+ edge(42, 28). 
+ edge(42, 74). 
+ edge(42, 13). 
+ edge(42, 43). 
+ edge(42, 93). 
+ edge(42, 12). 
+ edge(42, 10). 
+ edge(42, 58). 
+ edge(64, 14). 
+ edge(64, 28). 
+ edge(64, 74). 
+ edge(64, 13). 
+ edge(64, 43). 
+ edge(64, 76). 
+ edge(64, 12). 
+ edge(64, 10). 
+ edge(64, 58). 
+ edge(64, 68). 
+ edge(14, 75). 
+ edge(14, 31). 
+ edge(14, 43). 
+ edge(14, 76). 
+ edge(14, 25). 
+ edge(14, 81). 
+ edge(75, 31). 
+ edge(75, 76). 
+ edge(75, 25). 
+ edge(75, 38). 
+ edge(31, 25). 
+ edge(31, 38). 
+ edge(31, 89). 
+ edge(88, 28). 
+ edge(88, 74). 
+ edge(88, 40). 
+ edge(88, 17). 
+ edge(88, 93). 
+ edge(88, 12). 
+ edge(88, 5). 
+ edge(88, 53). 
+ edge(88, 44). 
+ edge(28, 74). 
+ edge(28, 13). 
+ edge(28, 43). 
+ edge(28, 17). 
+ edge(28, 93). 
+ edge(28, 12). 
+ edge(28, 10). 
+ edge(28, 58). 
+ edge(28, 53). 
+ edge(28, 68). 
+ edge(74, 13). 
+ edge(74, 43). 
+ edge(74, 76). 
+ edge(74, 93). 
+ edge(74, 12). 
+ edge(74, 10). 
+ edge(74, 58). 
+ edge(74, 53). 
+ edge(74, 68). 
+ edge(74, 22). 
+ edge(13, 43). 
+ edge(13, 76). 
+ edge(13, 12). 
+ edge(13, 10). 
+ edge(13, 58). 
+ edge(13, 68). 
+ edge(13, 52). 
+ edge(43, 76). 
+ edge(43, 10). 
+ edge(43, 58). 
+ edge(43, 68). 
+ edge(43, 81). 
+ edge(43, 59). 
+ edge(76, 58). 
+ edge(76, 68). 
+ edge(76, 81). 
+ edge(76, 47). 
+ edge(83, 40). 
+ edge(83, 17). 
+ edge(83, 5). 
+ edge(83, 94). 
+ edge(83, 4). 
+ edge(40, 17). 
+ edge(40, 93). 
+ edge(40, 12). 
+ edge(40, 5). 
+ edge(40, 53). 
+ edge(40, 94). 
+ edge(40, 4). 
+ edge(40, 44). 
+ edge(40, 100). 
+ edge(40, 41). 
+ edge(17, 93). 
+ edge(17, 12). 
+ edge(17, 10). 
+ edge(17, 5). 
+ edge(17, 53). 
+ edge(17, 94). 
+ edge(17, 4). 
+ edge(17, 44). 
+ edge(17, 100). 
+ edge(17, 56). 
+ edge(93, 12). 
+ edge(93, 10). 
+ edge(93, 58). 
+ edge(93, 5). 
+ edge(93, 53). 
+ edge(93, 4). 
+ edge(93, 44). 
+ edge(93, 100). 
+ edge(93, 22). 
+ edge(12, 10). 
+ edge(12, 58). 
+ edge(12, 53). 
+ edge(12, 68). 
+ edge(12, 44). 
+ edge(12, 100). 
+ edge(12, 22). 
+ edge(12, 52). 
+ edge(12, 18). 
+ edge(10, 58). 
+ edge(10, 53). 
+ edge(10, 68). 
+ edge(10, 100). 
+ edge(10, 22). 
+ edge(10, 52). 
+ edge(10, 59). 
+ edge(58, 68). 
+ edge(58, 22). 
+ edge(58, 52). 
+ edge(58, 59). 
+ edge(58, 47). 
+ edge(25, 38). 
+ edge(25, 81). 
+ edge(25, 79). 
+ edge(25, 89). 
+ edge(25, 63). 
+ edge(25, 1). 
+ edge(25, 29). 
+ edge(38, 79). 
+ edge(38, 89). 
+ edge(38, 1). 
+ edge(38, 7). 
+ edge(5, 53). 
+ edge(5, 94). 
+ edge(5, 4). 
+ edge(5, 44). 
+ edge(5, 100). 
+ edge(5, 41). 
+ edge(5, 56). 
+ edge(5, 60). 
+ edge(53, 68). 
+ edge(53, 4). 
+ edge(53, 44). 
+ edge(53, 100). 
+ edge(53, 22). 
+ edge(53, 41). 
+ edge(53, 56). 
+ edge(53, 18). 
+ edge(68, 81). 
+ edge(68, 22). 
+ edge(68, 52). 
+ edge(68, 59). 
+ edge(68, 47). 
+ edge(68, 18). 
+ edge(81, 79). 
+ edge(81, 89). 
+ edge(81, 59). 
+ edge(81, 47). 
+ edge(81, 63). 
+ edge(81, 1). 
+ edge(81, 29). 
+ edge(79, 89). 
+ edge(79, 63). 
+ edge(79, 1). 
+ edge(79, 29). 
+ edge(79, 7). 
+ edge(79, 69). 
+ edge(89, 1). 
+ edge(89, 29). 
+ edge(89, 7). 
+ edge(89, 65). 
+ edge(94, 4). 
+ edge(94, 44). 
+ edge(94, 100). 
+ edge(94, 41). 
+ edge(94, 56). 
+ edge(94, 67). 
+ edge(94, 60). 
+ edge(4, 44). 
+ edge(4, 100). 
+ edge(4, 41). 
+ edge(4, 56). 
+ edge(4, 67). 
+ edge(4, 60). 
+ edge(44, 100). 
+ edge(44, 22). 
+ edge(44, 41). 
+ edge(44, 56). 
+ edge(44, 18). 
+ edge(44, 67). 
+ edge(44, 60). 
+ edge(44, 24). 
+ edge(100, 22). 
+ edge(100, 52). 
+ edge(100, 41). 
+ edge(100, 56). 
+ edge(100, 18). 
+ edge(100, 60). 
+ edge(100, 24). 
+ edge(22, 52). 
+ edge(22, 59). 
+ edge(22, 47). 
+ edge(22, 18). 
+ edge(22, 24). 
+ edge(52, 59). 
+ edge(52, 47). 
+ edge(52, 63). 
+ edge(52, 18). 
+ edge(52, 24). 
+ edge(52, 19). 
+ edge(59, 47). 
+ edge(59, 63). 
+ edge(59, 1). 
+ edge(59, 70). 
+ edge(47, 63). 
+ edge(47, 1). 
+ edge(47, 95). 
+ edge(63, 1). 
+ edge(63, 29). 
+ edge(63, 69). 
+ edge(63, 92). 
+ edge(1, 29). 
+ edge(1, 7). 
+ edge(1, 69). 
+ edge(1, 65). 
+ edge(41, 56). 
+ edge(41, 18). 
+ edge(41, 67). 
+ edge(41, 60). 
+ edge(41, 57). 
+ edge(56, 18). 
+ edge(56, 67). 
+ edge(56, 60). 
+ edge(56, 24). 
+ edge(56, 9). 
+ edge(56, 35). 
+ edge(18, 24). 
+ edge(18, 9). 
+ edge(18, 19). 
+ edge(18, 90). 
+ edge(29, 7). 
+ edge(29, 69). 
+ edge(29, 65). 
+ edge(29, 92). 
+ edge(29, 15). 
+ edge(7, 69). 
+ edge(7, 65). 
+ edge(7, 66). 
+ edge(67, 60). 
+ edge(67, 45). 
+ edge(67, 57). 
+ edge(67, 35). 
+ edge(67, 98). 
+ edge(60, 24). 
+ edge(60, 45). 
+ edge(60, 57). 
+ edge(60, 35). 
+ edge(24, 9). 
+ edge(24, 19). 
+ edge(24, 35). 
+ edge(24, 90). 
+ edge(24, 20). 
+ edge(24, 61). 
+ edge(69, 65). 
+ edge(69, 92). 
+ edge(69, 37). 
+ edge(69, 15). 
+ edge(69, 66). 
+ edge(69, 78). 
+ edge(65, 37). 
+ edge(65, 15). 
+ edge(65, 66). 
+ edge(9, 19). 
+ edge(9, 70). 
+ edge(9, 35). 
+ edge(9, 90). 
+ edge(9, 20). 
+ edge(9, 61). 
+ edge(9, 87). 
+ edge(9, 86). 
+ edge(19, 70). 
+ edge(19, 95). 
+ edge(19, 92). 
+ edge(19, 90). 
+ edge(19, 20). 
+ edge(19, 61). 
+ edge(19, 87). 
+ edge(19, 85). 
+ edge(19, 97). 
+ edge(70, 95). 
+ edge(70, 92). 
+ edge(70, 20). 
+ edge(70, 87). 
+ edge(70, 85). 
+ edge(70, 97). 
+ edge(95, 92). 
+ edge(95, 37). 
+ edge(95, 85). 
+ edge(95, 97). 
+ edge(95, 55). 
+ edge(92, 37). 
+ edge(92, 15). 
+ edge(92, 85). 
+ edge(92, 97). 
+ edge(92, 78). 
+ edge(45, 57). 
+ edge(45, 35). 
+ edge(45, 98). 
+ edge(45, 36). 
+ edge(45, 6). 
+ edge(45, 80). 
+ edge(45, 34). 
+ edge(57, 35). 
+ edge(57, 90). 
+ edge(57, 98). 
+ edge(57, 36). 
+ edge(57, 6). 
+ edge(57, 80). 
+ edge(57, 84). 
+ edge(35, 90). 
+ edge(35, 20). 
+ edge(35, 98). 
+ edge(35, 61). 
+ edge(35, 6). 
+ edge(35, 80). 
+ edge(35, 84). 
+ edge(35, 86). 
+ edge(35, 46). 
+ edge(90, 20). 
+ edge(90, 61). 
+ edge(90, 87). 
+ edge(90, 84). 
+ edge(90, 86). 
+ edge(90, 50). 
+ edge(20, 61). 
+ edge(20, 87). 
+ edge(20, 85). 
+ edge(20, 86). 
+ edge(37, 15). 
+ edge(37, 66). 
+ edge(37, 97). 
+ edge(37, 78). 
+ edge(37, 55). 
+ edge(37, 51). 
+ edge(37, 54). 
+ edge(37, 30). 
+ edge(15, 66). 
+ edge(15, 78). 
+ edge(15, 51). 
+ edge(15, 54). 
+ edge(66, 78). 
+ edge(66, 51). 
+ edge(66, 54). 
+ edge(66, 11). 
+ edge(98, 36). 
+ edge(98, 6). 
+ edge(98, 80). 
+ edge(98, 84). 
+ edge(98, 34). 
+ edge(98, 46). 
+ edge(61, 87). 
+ edge(61, 85). 
+ edge(61, 84). 
+ edge(61, 86). 
+ edge(61, 46). 
+ edge(61, 26). 
+ edge(61, 50). 
+ edge(61, 49). 
+ edge(87, 85). 
+ edge(87, 97). 
+ edge(87, 86). 
+ edge(87, 26). 
+ edge(87, 50). 
+ edge(87, 49). 
+ edge(87, 21). 
+ edge(85, 97). 
+ edge(85, 55). 
+ edge(85, 49). 
+ edge(85, 21). 
+ edge(85, 99). 
+ edge(85, 39). 
+ edge(97, 78). 
+ edge(97, 55). 
+ edge(97, 49). 
+ edge(97, 21). 
+ edge(97, 99). 
+ edge(97, 39). 
+ edge(97, 30). 
+ edge(78, 51). 
+ edge(78, 54). 
+ edge(78, 39). 
+ edge(78, 30). 
+ edge(78, 11). 
+ edge(36, 6). 
+ edge(36, 80). 
+ edge(36, 84). 
+ edge(36, 34). 
+ edge(6, 80). 
+ edge(6, 84). 
+ edge(6, 34). 
+ edge(6, 46). 
+ edge(80, 84). 
+ edge(80, 86). 
+ edge(80, 34). 
+ edge(80, 46). 
+ edge(80, 26). 
+ edge(84, 86). 
+ edge(84, 46). 
+ edge(84, 26). 
+ edge(84, 50). 
+ edge(86, 46). 
+ edge(86, 26). 
+ edge(86, 50). 
+ edge(86, 49). 
+ edge(55, 51). 
+ edge(55, 49). 
+ edge(55, 21). 
+ edge(55, 99). 
+ edge(55, 39). 
+ edge(55, 30). 
+ edge(51, 54). 
+ edge(51, 39). 
+ edge(51, 30). 
+ edge(51, 11). 
+ edge(54, 30). 
+ edge(54, 11). 
+ edge(34, 46). 
+ edge(46, 26). 
+ edge(46, 50). 
+ edge(26, 50). 
+ edge(26, 49). 
+ edge(50, 49). 
+ edge(50, 21). 
+ edge(49, 21). 
+ edge(49, 99). 
+ edge(49, 39). 
+ edge(21, 99). 
+ edge(21, 39). 
+ edge(21, 30). 
+ edge(99, 39). 
+ edge(99, 30). 
+ edge(39, 30). 
+ edge(39, 11). 
+ edge(30, 11). 
+bound(2). 
+levels(1).
+levels(2).
+levels(3).
+levels(4).
+levels(5).
+levels(6).
+

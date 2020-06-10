@@ -205,50 +205,53 @@ class Application:
             models = []
             counter = 0
             C = []
+            display = self.__display.value
             pivot = int(round(2 * util.compute_threshold(self.__tolerance)))
-            print("pivot: %s"%pivot)
             """
             Standard xorro workflow asking for pivot + 1 answer sets
             """
-            prg_ = _clingo.Control()
+            clingo_args = ["--warn=none"]  ## Disable Warnings and other clingo options
+            prg_ = _clingo.Control(clingo_args)
             prg_.configuration.solve.models = pivot + 1
             transform(prg_,files)
             prg_.ground([("base", [])])
             ## Get the number of variables
             variables = [atom.symbol for atom in prg_.symbolic_atoms if atom.is_fact is False and "__parity" not in str(atom.symbol)]
             print("Number of variables (symbols): %s"%len(variables))
+            print("pivot: %s"%pivot)
             translate(self.__approach, prg_)
+            print("Solving...")
             ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
 
             if len(models) <= pivot and ret.exhausted:
                 print("Exact count: %s answer sets"%len(models))
-
             else:
                 print("NOT Exact count... There are more than %s answer sets"%(len(models)))
                 
                 n = len(variables)
-                t = int(util.compute_itercount(self.__confidence))                
-                print("pivot: %s"%pivot)
+                t = int(util.compute_itercount(self.__confidence))
                 
                 while True:
                     ## Solve with XORs
                     counter +=1
-                    print("\nIter: %s"%counter)
+                    if display:
+                        print("\nIter: %s"%counter)
                     l = util.get_l(pivot)## Consider to move this out. This is constant
-                    i = round(l - 1) ## Consider to move this out. This is constant
+                    i = l -1 ## Consider to move this out. This is constant
                     xor = ""
+                    binary_lists = []
                     while True:                        
                         i += 1
                         
                         models = []
-
                         ## Create new clingo control object
-                        prg_ = _clingo.Control()
+                        prg_ = _clingo.Control(clingo_args)
                         ## Ask for pivot + 1 answer sets
                         prg_.configuration.solve.models = pivot + 1
 
                         ## Build xor
-                        xor += util.get_xor(variables, int(i-l))
+                        xor_, binary_lists = util.get_xor(variables, binary_lists, int(i-l))
+                        xor += xor_
                         filename = "examples/approx_mc_xors.lp"
                         f = open(filename, "w") ## append?
                         f.write(xor)
@@ -265,14 +268,18 @@ class Application:
                         ## SAT, UNSAT or number of modesl greater than pivot
                         if len(models) == 0 or len(models) > pivot:
                             if str(ret) == "UNSAT":
-                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... "%(i,l, i-l,len(xor.splitlines()), ret))
+                                if display:
+                                    print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... "%(i,l, i-l,len(xor.splitlines()), ret))
                                 break
                             elif str(ret) == "SAT":
-                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... there are more answer sets than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,pivot))
+                                if display:
+                                    print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... there are more answer sets than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,pivot))
                         
                         elif (len(models)>=1 and len(models) <= pivot) or (i == n):
-                            print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Storing solution... there are less answer sets (%s) than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,len(models),pivot))
-                            print("  Partial Count = |S| * 2^(i-l) : %s"%int(len(models) * 2**(i-l)))
+                            if display:
+                                print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Storing solution... there are less answer sets (%s) than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,len(models),pivot))
+                            if display:
+                                print("  Partial Count = |S| * 2^(i-l) : %s"%int(len(models) * 2**(i-l)))
                             C.append(int(len(models) * (2**(i-l))))
                             break
                     
@@ -281,12 +288,14 @@ class Application:
 
                 print("")
                 print("Number of calls: %s, SAT: %s, UNSAT: %s"%(counter,len(C), counter-len(C)))
+                print("")
                 print("List of all partial counts: %s"%C)
                 print("")
                 print("List of all sorted partial counts: %s"%sorted(C))
-                final_count = int(util.get_median(C))
+                median, average = util.get_median(C)
                 print("")
-                print("Approximate answer sets count: %s"%final_count)
+                print("Approximate answer sets count (median)  : %s"%int(median))
+                print("Approximate answer sets count (average) : %s"%int(average))
 
         else:
             """

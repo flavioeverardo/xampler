@@ -1,0 +1,13 @@
+%%
+{ in(X) } :- vtx(X).
+
+:- not inneighbor(X), not in(X), vtx(X).
+
+inneighbor(X) :- #sum { WE,Y : in(Y), edgewt(Y,X,WE), edge(Y,X) }, minweight(W), vtx(X).
+inneighbor(X) :- #sum { WE,Y : in(Y), edgewt(X,Y,WE), edge(X,Y) }, minweight(W), vtx(X).
+%inneighbor(X) :- W [ in(Y) : edgewt(X,Y,WE) : edge(X,Y) = WE ], minweight(W), vtx(X).
+
+% the size of the dominating set is at most k
+:- K+1 { in(X) : vtx(X) }, bound(K).
+
+#show in/1.
