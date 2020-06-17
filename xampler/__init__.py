@@ -237,7 +237,7 @@ class Application:
                     if display:
                         print("\nIter: %s"%counter)
                     l = util.get_l(pivot)## Consider to move this out. This is constant
-                    i = l -1 ## Consider to move this out. This is constant
+                    i = l# -1 ## Consider to move this out. This is constant
                     xor = ""
                     binary_lists = []
                     while True:                        
