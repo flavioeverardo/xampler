@@ -234,23 +234,61 @@ ankit.shukla@jku.at
 \end{abstract}
 
 \section{Introduction} \label{sec:introduction}
+%
+Answer Set Programming (ASP)~\cite{Lifschitz99,BrewkaEiterTruszczynski11,GebserKaminskiKaufmannSchaub12} is a 
+problem modeling and solving framework that is well-known in the area 
+of knowledge representation and reasoning and artificial intelligence. 
+%
+This framework has been practically applied for several 
+problems~\cite{BalducciniGelfondNogueira06a,NiemelaSimonsSoininen99,NogueiraBalducciniGelfond01a,GuziolowskiEtAl13a,SchaubWoltran18}.
+%
 
-Parity (\XOR{}) constraints have been recently accommodated in Answer Set Programming (ASP;~\cite{liftschitz99a/})
+Recently, there has been growing interest for counting solutions of problems.
+%
+Indeed, counting solutions is a well-known task not only in mathematics and computer
+science, but also in other
+areas~\cite{ChakrabortyMeelVardi16a,DomshlakHoffmann07a,GomesKautzSabharwalSelman08a,SangBeameKautz05a}.
+%
+%
+%
+Examples cover also applications in machine learning and probabilistic inference~\cite{ChaviraDarwiche08a}.
+%
+%
+In terms of computational complexity, counting has been well-studied since the
+late
+70s~\cite{DurandHermannKolaitis05,HemaspaandraVollmer95a,Valiant79,Valiant79b}.
+%
+There are also results for counting involving projection, where one wants to
+count only with respect to a given set of projection atoms,
+which has been established for logic~\cite{AzizChuMuise15a,CapelliMengel19,FichteEtAl18,LagniezMarquis19a,GuptaSharmaRoy19a,SharmaRoySoos19a},
+reliability estimation~\cite{MeelEtAl17a} as well as
+answer set programming~\cite{GebserKaufmannSchaub09a,Aziz15a,FichteHecher19}.
+%
+
+Given that in general counting answer sets is rather hard, namely ${\#\cdot\text{coNP}}$-complete~\cite{FichteEtAl17,DurandHermannKolaitis05}, which further increases
+to ${\#\cdot\Sigma_2^P}$-completeness~\cite{FichteHecher19} if counting with respect to a projection,
+a different approach than exact counting seems to be required in practice.
+%
+Indeed, such approaches were successful for propositional logic (SAT), where reasoning modes like sampling (near-uniform generation)
+or (approximate) model counting~\cite{gosase07a,gohosase07b,chmeva13a,chmeva13b,soomee19a}
+were studied.
+%
+For this purpose, so-called parity constraints  (\XOR{} constraints) are used specifically to partition the search space in parts that preferably are of roughly the same size.
+
+Parity constraints have been recently accommodated in ASP
 as the fundamental part of the system \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
 % 
 With different solving approaches over parity constraints in \xorro{}, these constraints amount to the classical \XOR{} operator following the aggregates-like syntax by means of theory atoms.
 They are interpreted as directives, solved on top of an ASP program acting as answer sets filters that do not satisfy the parity constraint in question.
 %
-Currently, these parity constraints may not occur in the bodies nor the heads of rules.
-However, they fit perfectly for reasoning modes like sampling (near-uniform generation)
-or (approximate) model counting~\cite{gosase07a,gohosase07b,chmeva13a,chmeva13b,soomee19a}
-where their purpose is to partition the search space.
+%Currently, these parity constraints may not occur in the bodies nor the heads of rules.
+
 
 
 %Parity constraints constitute the foundations of reasoning modes like sampling or (approximate) model counting \cite{DBLP:journals/corr/abs-1806-02239}, as well as circuit verification and cryptography \cite{DBLP:conf/laitinen2014extending}.
 %
-With most of their applications in the neighboring area of Satisfiability Testing (SAT) \cite{DBLP:journals/corr/abs-1806-02239},
-few attention has been paid to the parity constraints treatment as well as reasoning modes like sampling or model counting into ASP.%~\cite{kalepesc16a}.
+With most of the applications of \XOR{} constraints in the neighboring area of SAT~\cite{DBLP:journals/corr/abs-1806-02239},
+only few attention has been paid to treat parity constraints as well as reasoning modes like sampling or model counting for ASP. %~\cite{kalepesc16a}.
 %
 To this end, we present an extension to \xorro{} towards counting answer sets following the work from~\cite{DBLP:conf/cp/ChakrabortyMV13}
 benefiting from the advanced interfaces of \clingo{},
