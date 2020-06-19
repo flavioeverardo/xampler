@@ -296,7 +296,7 @@ and the sophisticated solving techniques developed in SAT~(e.g. the award-winnin
 %
 This paper is structured in ...
 
-\section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:hashing}
+\section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:parity}
 
 Towards the definition of parity aggregates, let $\true$ and $\false$
 stand for the Boolean constants \emph{true} and \emph{false},
@@ -312,6 +312,26 @@ following the common syntax of \emph{aggregates}~\cite{DBLP:journals/tplp/Gebser
 &odd{ 1 : p(1) }.
 &even{ X : p(X), X>1 }.
 \end{verbatim}
+
+
+
+\begin{table*}[t]
+	% 	\centering
+	\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
+	%\vspace{-5mm}
+	\begin{tabular}{ l|l }
+		Approach  & Description  \\
+		\hline\hline
+		count     & Add count aggregates with a modulo 2 operation  \\  
+		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
+		%            & (binary operators are arranged in list/tree)\\
+		countp    & Propagator simply counting truth literals on total assignments\\
+		up        & Propagator implementing unit propagation\\
+		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
+		
+	\end{tabular}
+	%	\vspace{-7mm}
+\end{table*}
 
 %
 That is, \xorro{} extends the input language of \clingo{} by
@@ -342,29 +362,13 @@ constraint filters out answer sets not containing the atom
 \texttt{p(1)}, while the second requires that either none or both of
 the atoms \texttt{p(2)} and \texttt{p(3)} are included.
 
+
 %As mentioned, \xorro{} handles parity constraints in six ways as shown in Table \ref{table:xorro_approaches},
 %implements different means to handle parity constraints as shown in Table \ref{table:xorro_approaches},
 %where the first three corresponds to the eager, and the last three to the lazy approaches.
 Table~ \ref{table:xorro_approaches}, shows the six implementations to handle parity constraints.
 The first three corresponds to the eager, and the last three to the lazy approaches. 
 
-\begin{table*}[t]
-	% 	\centering
-	\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
-	%\vspace{-5mm}
-	\begin{tabular}{ l|l }
-		Approach  & Description  \\
-		\hline\hline
-		count     & Add count aggregates with a modulo 2 operation  \\  
-		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
-		%            & (binary operators are arranged in list/tree)\\
-		countp    & Propagator simply counting truth literals on total assignments\\
-		up        & Propagator implementing unit propagation\\
-		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
-		
-	\end{tabular}
-	%	\vspace{-7mm}
-\end{table*}
 %
 Finally, we empirically evaluate the different approaches in view of their impact on solving performance,
 while varying the number and size of parity constraints compared against \clingo{} solving time.
