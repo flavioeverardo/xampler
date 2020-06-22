@@ -296,7 +296,138 @@ To this end, we present an extension to \xorro{} towards approximate answer set 
 benefiting from the advanced interfaces of \clingo{},
 and the sophisticated solving techniques developed in SAT~(e.g. the award-winning solver \cryptominisat~\cite{DBLP:conf/sat/SoosNC09}).
 %
-This paper is structured in ...
+%This paper is structured in ...
+
+\section{Preliminaries}
+
+\smallskip
+\noindent\textbf{Answer Set Programming (ASP).} %
+% ASP is a declarative modeling and problem solving framework that
+% combines techniques of knowledge representation and database
+% theory. Two of the main advantages of ASP are its
+% expressiveness~\cite{BrewkaEiterTruszczynski11} and, when using
+% non-ground programs, its advanced declarative problem modelling
+% capability. Prior to solving, non-ground programs are usually compiled
+% into ground ones by a grounder.  For particular non-ground programs,
+% treewidth guarantees are known~\cite{BliemEtAl17a}.
+% In this paper, we restrict ourselves to ground ASP programs.  For a
+% comprehensive introduction, we refer to introductory
+% literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
+%
+%We assume familiarity with propositional satisfiability (\SAT)~\cite{BiereHeuleMaarenWalsh09,KleineBuningLettman99}
+We follow standard definitions of propositional ASP~\cite{BrewkaEiterTruszczynski11}.
+%For comprehensive foundations, we refer to introductory
+%literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
+%
+Let $m$, $n$, $\ell$ be non-negative integers such that
+$m \leq n \leq \ell$, $a_1$, $\ldots$, $a_\ell$ be distinct propositional
+atoms. Moreover, we refer by \emph{literal} to an atom or the negation
+thereof.
+%, and
+%$l \in \{a_1, \neg a_1\}$ being a \emph{literal},~i.e., an atom or the negation thereof.
+%
+A \emph{(logic) program}~$\Pi$ is a set of \emph{rules} of the form
+%
+%\begin{align*}
+%\smallskip
+%\hfill
+%\vspace{-0.75em}
+\(
+a_1\vee \cdots \vee a_m \leftarrow a_{m+1}, \ldots, a_{n}, \neg
+a_{n+1}, \ldots, \neg a_\ell.
+%
+\)
+%\hfill
+%\smallskip
+%
+%\end{align*}
+%
+%
+% \noindent Intuitively this requires at least one atom of
+% $a_1, \ldots, a_\ell$ to be true if all atoms
+% $a_{\ell+1}, \ldots, a_m$ are true and there is no evidence that any
+% atoms of $a_{m+1}, \ldots, a_n$ are true. The set of
+% \emph{well-defined programs} among atoms~$X$ is given by~$prog(X)$.
+%
+%
+%
+%Let $\at(\Pi) \eqdef \SB
+%\at(r) \SM r \in \Pi \SE$ be the atoms occuring in a program~$\Pi$,
+%
+%Therefore, let $\choice(\Pi), \disj(\Pi),
+%\opt(\Pi)$ and $\weight(\Pi)$ denote the set of all choice, disjunctive,
+%optimization and weight rules in a program~$\Pi$, respectively.
+%
+%
+%\noindent 
+For a rule~$r$, we let $H_r = \{a_1, \ldots, a_m\}$,
+$B^+_r = \{a_{m+1}, \ldots, a_{n}\}$, and
+$B^-_r = \{a_{n+1}, \ldots, a_\ell\}$.
+%
+% We call $H_r$ the \emph{head}, $B^+_r$ the \emph{positive body}, and
+% $B^-(r)$ the \emph{negative body} of~$r$.
+%
+% , and $B_r \eqdef B^+_r \cup \SB \neg b \SM b \in B^-_r \SE$ the
+% \emph{body} of~$r$.\nb{Do we really need the body?}
+%
+We denote the sets of \emph{atoms} occurring in a rule~$r$ or in a
+program~$\Pi$ by $\text{at}(r) = H_r \cup B^+_r \cup B^-_r$ and
+$\text{at}(\Pi)= \bigcup_{r\in\Pi} \text{at}(r)$.
+%
+%For a set~$X\subseteq\at(\Pi)$ of atoms, we let~$\overline{X}\eqdef \{\neg x\mid x\in X\}$.
+%
+%Let $\Pi$ be a program.
+%
+%A program~$\Pi'$ is a \emph{sub-program of~$\Pi$} if~$\Pi'\subseteq\Pi$.
+%A program~$\Pi'$ is a \emph{sub-program of~$\Pi$}, if symbols
+%$\Pi' \subseteq \Pi$, if for each rule~$r' \in P'$ there is
+%%exactly one
+%a rule~$r \in \Pi$ with $H_{r'} \subseteq H_r$,
+%$B^+_{r'} \subseteq B^+_r$, and $B^-_{r'} \subseteq B^-_r$. \nb{why so complicated sub-programs?}
+%
+%Program~$\Pi$ is \emph{normal}, if $\Card{H_r} \leq 1$ for
+%every~$r \in \Pi$.
+%
+%The \emph{positive dependency digraph}~$D_\Pi$ of $\Pi$ is the
+%directed graph defined on the set~$\bigcup_{r\in \Pi}H_r \cup B^+_r$ of atoms, where there is a directed edge from vertex~$a$ to~$b$ iff there is a rule~$r \in \Pi$ with $a\in B^+_r$ and~$b\in H_r$.
+%
+%
+% The class~\HCF contains all head-cycle-free programs.\nb{do we need
+% the class?}
+
+An \emph{interpretation} $I$ is a set of atoms. $I$ \emph{satisfies} a
+rule~$r$ if $(H_r\,\cup\, B^-_r) \,\cap\, I \neq \emptyset$ or
+$B^+_r \setminus I \neq \emptyset$.  $I$ is a \emph{model} of $\Pi$
+if it satisfies all rules of~$\Pi$, in symbols $I \models \Pi$. %, if $I$ satisfies every rule~$r \in \Pi$.
+%
+%For brevity, we view propositional formulas 
+%as sets of clauses that need to be satisfied, and
+%use the notion of interpretations, models, and satisfiability analogously. %and 
+%satisfiability 
+%also in the context of satisfiability of
+%propositional formulas.
+%\nb{only used once}
+%
+The \emph{Gelfond-Lifschitz
+  (GL) reduct} of~$\Pi$ under~$I$ is the program~$\Pi^I$ obtained
+from $\Pi$ by first removing all rules~$r$ with
+$B^-_r\cap I\neq \emptyset$ and then removing all~$\neg z$ where
+$z \in B^-_r$ from every remaining
+rule~$r$~\cite{GelfondLifschitz91}. %
+%
+$I$ is an \emph{answer set} of a program~$\Pi$ if $I$ is a minimal
+model of~$\Pi^I$. %
+%
+%Deciding whether a disjunctive program has an answer set is
+%\SIGMA{2}{P}-complete~\cite{EiterGottlob95}. 
+The problem of deciding whether an ASP program has an answer set is called
+\emph{consistency}, which is $\Sigma_2^P$-complete~\cite{EiterGottlob95}. 
+%
+If no rule uses disjunction, the complexity drops to
+\text{NP}-complete~\cite{BidoitFroidevaux91,MarekTruszczynski91}.
+
+\begin{example}
+\end{example}
 
 \section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:parity}
 
