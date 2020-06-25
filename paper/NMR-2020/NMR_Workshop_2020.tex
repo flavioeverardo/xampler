@@ -467,7 +467,7 @@ $a_1\xor a_2\xor\true$
 is satisfied iff none or both of $a_1$ and $a_2$ hold.
 %
 Similarly, an \emph{even parity constraint} can be represented in terms of the \emph{odd} parity by an uneven
-number of negated literals. 
+number of negated literals.
 For instance, $\neg a_1\xor a_2$ is equivalent to $a_1\xor a_2\xor\true$ and pairs of negated literals cancel parity inversion, for example $\neg a_1\xor \neg a_2$ is equivalent to $a_1\xor a_2$
 %Following~\cite{hanjia12a,laitinen14a} a \emph{parity constraint} is in a \emph{normal(or standard)-form} if all of its literals
 %are positive and (pairs of) duplicates are removed.
@@ -487,25 +487,6 @@ following the common syntax of \emph{aggregates}~\cite{DBLP:journals/tplp/Gebser
 &odd{5:p(5)}.
 \end{verbatim}
 
-
-\begin{table*}[t]
-	% 	\centering
-	\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
-	%\vspace{-5mm}
-	\begin{tabular}{ l|l }
-		Approach  & Description  \\
-		\hline\hline
-		count     & Add count aggregates with a modulo 2 operation  \\
-		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
-		%            & (binary operators are arranged in list/tree)\\
-		countp    & Propagator simply counting truth literals on total assignments\\
-		up        & Propagator implementing unit propagation\\
-		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
-
-	\end{tabular}
-	%	\vspace{-7mm}
-\end{table*}
-
 %
 That is, \xorro{} extends the input language of \clingo{} by
 aggregate names \texttt{\&even} and \texttt{\&odd} that are followed
@@ -520,7 +501,7 @@ amounts to the \XOR{} operations:
 $p(1) \xor p(4) \xor p(5)$, $p(2) \xor p(5) \xor p(6)$, $p(3) \xor p(4) \xor p(5) \xor p(6)$, $p(1) \xor p(2) \xor \top$, and $p(1) \xor \bot$
 %(where $\bot$ and $\top$ stand for the Boolean constants true and false, respectively)
 yield the answer sets~\texttt{\set{p(5)}} and \texttt{\set{p(1),p(2),p(4),p(5),p(6)}}.
-This means that each parity constraint divides the search space (roughly) by half, and for this symmetric search space example with five parity constraints ($m=5$), 
+This means that each parity constraint divides the search space (roughly) by half, and for this symmetric search space example with five parity constraints ($m=5$),
 we have $2^m$ clusters, each with two answer sets.
 
 
@@ -532,13 +513,13 @@ Currently, these constraints are interpreted as directives,
 filtering answer sets that do not satisfy the parity constraint in question.
 \footnote{Cannot occur either in the bodies or heads of rules.}
 %
-Hence, the first two 
+Hence, the first two
 constraints hold for any combination of an uneven number of literals from \texttt{p(1), p(4), p(5)} and \texttt{p(2), p(5), p(6)} respectively.
 The third constraint holds if an odd number of literals from \texttt{p(3)} to \texttt{p(6)} are true, while the fourth constraint requires that either none or both of
 the atoms \texttt{p(1)} and \texttt{p(2)} are included.
 The last parity constraint discards any answer set not containing the atom \texttt{p(5)}.
 
-\xorro{} handles parity constraints in six different ways as shown in Table~\ref{table:xorro_approaches}, 
+\xorro{} handles parity constraints in six different ways as shown in Table~\ref{table:xorro_approaches},
 where the first three corresponds to ASP encodings of parity constraints (eager approaches), and the last three to theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
 
 %As mentioned, \xorro{} handles parity constraints in six ways as shown in Table \ref{table:xorro_approaches},
@@ -556,13 +537,13 @@ The first three corresponds to the eager, and the last three to the lazy approac
 	\begin{tabular}{ l|l }
 		Approach  & Description  \\
 		\hline\hline
-		count     & Add count aggregates with a modulo 2 operation  \\  
+		count     & Add count aggregates with a modulo 2 operation  \\
 		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
 		%            & (binary operators are arranged in list/tree)\\
 		countp    & Propagator simply counting truth literals on total assignments\\
 		up        & Propagator implementing unit propagation\\
 		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
-		
+
 	\end{tabular}
 	%	\vspace{-7mm}
 \end{table*}
