@@ -49,6 +49,8 @@
 \usepackage{float}
 \usepackage{listings}
 
+\usepackage{todonotes}
+\setlength{\marginparwidth}{1.4cm}
 %\usepackage[ruled,vlined]{algorithm2e}
 %\SetKwComment{Comment}{$\triangleright$\ }{}
 
@@ -233,17 +235,17 @@ ankit.shukla@jku.at
 %Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI and other areas as well as plenty of practical applications.
 %While modern ASP solvers not only compute one solution (answer set), but actually support different reasoning modes, the problem of counting answer sets has not been subject to intense studies yet.
 Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI, and other areas with plenty of practical applications.
-While modern ASP solvers not only compute one solution (answer set) but support different reasoning modes, the problem of counting answer sets has not been subject to intense studies.
+While modern ASP solvers not only compute one solution (answer set) but support different reasoning modes, \todo{Reads weird!} the problem of counting answer sets has not been subject to intense studies.
 This is in contrast to propositional satisfiability (SAT), where several applications and problems related to quantitative reasoning trace back to model counting. However, due to high computational complexity and depending on the actual application, approximate counting might be sufficient. Indeed, there are plenty of applications, where approximate counting for SAT is well-suited. This work deals with establishing approximate model counting for ASP, thereby lifting ideas from SAT to ASP. We present the first approximate counter for ASP and also show preliminary experiments for several problems.
 \end{abstract}
 
 \section{Introduction} \label{sec:introduction}
 %
-Answer Set Programming (ASP)~\cite{Lifschitz99,BrewkaEiterTruszczynski11,GebserKaminskiKaufmannSchaub12} is a 
-problem modeling and solving framework that is well-known in the area 
-of knowledge representation and reasoning and artificial intelligence. 
+Answer Set Programming (ASP)~\cite{Lifschitz99,BrewkaEiterTruszczynski11,GebserKaminskiKaufmannSchaub12} is a
+problem modeling and solving framework that is well-known in the area
+of knowledge representation and reasoning and artificial intelligence.
 %
-This framework has been practically applied for several 
+This framework has been practically applied for several
 problems~\cite{BalducciniGelfondNogueira06a,NiemelaSimonsSoininen99,NogueiraBalducciniGelfond01a,GuziolowskiEtAl13a,SchaubWoltran18}.
 %
 
@@ -281,7 +283,7 @@ For this purpose, so-called parity constraints  (\XOR{} constraints) are used sp
 
 Parity constraints have been recently accommodated in ASP
 as the fundamental part of the system \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
-% 
+%
 With different solving approaches over parity constraints in \xorro{}, these constraints amount to the classical \XOR{} operator following the aggregates-like syntax by means of theory atoms.
 They are interpreted as directives, solved on top of an ASP program acting as answer set filters that do not satisfy the parity constraint in question.
 %
@@ -361,7 +363,7 @@ a_{n+1}, \ldots, \neg a_\ell.
 %optimization and weight rules in a program~$\Pi$, respectively.
 %
 %
-%\noindent 
+%\noindent
 For a rule~$r$, we let $H_r = \{a_1, \ldots, a_m\}$,
 $B^+_r = \{a_{m+1}, \ldots, a_{n}\}$, and
 $B^-_r = \{a_{n+1}, \ldots, a_\ell\}$.
@@ -402,10 +404,10 @@ rule~$r$ if $(H_r\,\cup\, B^-_r) \,\cap\, I \neq \emptyset$ or
 $B^+_r \setminus I \neq \emptyset$.  $I$ is a \emph{model} of $\Pi$
 if it satisfies all rules of~$\Pi$, in symbols $I \models \Pi$. %, if $I$ satisfies every rule~$r \in \Pi$.
 %
-%For brevity, we view propositional formulas 
+%For brevity, we view propositional formulas
 %as sets of clauses that need to be satisfied, and
-%use the notion of interpretations, models, and satisfiability analogously. %and 
-%satisfiability 
+%use the notion of interpretations, models, and satisfiability analogously. %and
+%satisfiability
 %also in the context of satisfiability of
 %propositional formulas.
 %\nb{only used once}
@@ -421,15 +423,20 @@ $I$ is an \emph{answer set} of a program~$\Pi$ if $I$ is a minimal
 model of~$\Pi^I$. %
 %
 %Deciding whether a disjunctive program has an answer set is
-%\SIGMA{2}{P}-complete~\cite{EiterGottlob95}. 
+%\SIGMA{2}{P}-complete~\cite{EiterGottlob95}.
 The problem of deciding whether an ASP program has an answer set is called
-\emph{consistency}, which is $\Sigma_2^P$-complete~\cite{EiterGottlob95}. 
+\emph{consistency}, which is $\Sigma_2^P$-complete~\cite{EiterGottlob95}.
 %
 If no rule uses disjunction, the complexity drops to
 \text{NP}-complete~\cite{BidoitFroidevaux91,MarekTruszczynski91}.
 
 \begin{example}
 \end{example}
+
+\paragraph{Model counting in ASP}: XXX
+
+\paragraph{Complexity of exact model counting in ASP}: XXX
+
 
 \section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:parity}
 
@@ -457,13 +464,13 @@ following the common syntax of \emph{aggregates}~\cite{DBLP:journals/tplp/Gebser
 	\begin{tabular}{ l|l }
 		Approach  & Description  \\
 		\hline\hline
-		count     & Add count aggregates with a modulo 2 operation  \\  
+		count     & Add count aggregates with a modulo 2 operation  \\
 		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
 		%            & (binary operators are arranged in list/tree)\\
 		countp    & Propagator simply counting truth literals on total assignments\\
 		up        & Propagator implementing unit propagation\\
 		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
-		
+
 	\end{tabular}
 	%	\vspace{-7mm}
 \end{table*}
@@ -502,7 +509,7 @@ the atoms \texttt{p(2)} and \texttt{p(3)} are included.
 %implements different means to handle parity constraints as shown in Table \ref{table:xorro_approaches},
 %where the first three corresponds to the eager, and the last three to the lazy approaches.
 Table~ \ref{table:xorro_approaches}, shows the six implementations to handle parity constraints.
-The first three corresponds to the eager, and the last three to the lazy approaches. 
+The first three corresponds to the eager, and the last three to the lazy approaches.
 
 %
 Finally, we empirically evaluate the different approaches in view of their impact on solving performance,
@@ -515,27 +522,27 @@ When increasing the number of high-density constraints as used in sampling (\XOR
 Comparing to previous approaches, the eager counting, and the list (from the previous \xorro{} and \emph{harvey}), both stay behind for sampling purposes. Their scalability is subjected to the density of the parity constraints and preprocessing, and particularly, grounding becomes the bottleneck for the counting approach with aggregates.
 
 \section{Hashing and Xor's} \label{sec:hashing}
-Apriori we do not know the distribution of the solution set; $Sol(\phi)$. 
+Apriori we do not know the distribution of the solution set; $Sol(\phi)$.
 %
 How to perform a good hashing if we have no knowledge of the distribution of solutions? i.e., how to partition the $Sol(\phi)$ into cells with a roughly equal number of solutions?
 %
-\textbf{Universal hashing}~\cite{DBLP:conf/stoc/CarterW77} comes to our rescue. 
+\textbf{Universal hashing}~\cite{DBLP:conf/stoc/CarterW77} comes to our rescue.
 %
-%To partition the $Sol(\phi)$ into roughly equal small cells without knowing the distribution of the solution we use universal hashing. 
+%To partition the $Sol(\phi)$ into roughly equal small cells without knowing the distribution of the solution we use universal hashing.
 The idea is: pick a function randomly from a family of hash functions.  By choosing a random hash function from a family, we randomize over arbitrary input distribution. This guarantees a low number of collisions in expectation irrespective of how data is chosen.
 %
 
 \begin{definition}
-A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal family if, 
-\[ \forall x,y\in U,~x\neq y:~~\Pr _{h\in H}[h(x)=h(y)]\leq {\frac {1}{m}} \]	
+A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal family if,
+\[ \forall x,y\in U,~x\neq y:~~\Pr _{h\in H}[h(x)=h(y)]\leq {\frac {1}{m}} \]
 \end{definition}
 
 For model counting with high guarantees this is not enough, we not only need every input to be hash uniformly but also hashed independently. We need a family of $k$-wise independent hash functions~\cite{DBLP:conf/focs/WegmanC79},
 %
-%$H(n, m, k)$: 
+%$H(n, m, k)$:
 %Need Family of $k$-wise independent hash functions mapping $\{0, 1\}^{U}$
 % $\to$ $\{0, 1\}^{m}$ such that every $k$ elements are mapped independently.
-formally, 
+formally,
 a family $\mathcal{H} = {h : U \to [m]}$ of hash functions
 is $k$-wise independent if:
 \begin{enumerate}
@@ -548,7 +555,7 @@ Technical definition generally used for the $k$-wise independent:
 % i.e.,  A random hash function $h$ is $k$-independent iffor all choices of distinct $x_1$,…,$x_k$ the values $h(x_1)$,…,$h(x_k)$ are independent.
 \begin{definition}
 	Let $\mathcal{H}=\{h: U \to [m]\}$ be a family of hash functions. For any distinct $x_1$, . . . , $x_k \in U$ and any $y_1$, ..., $y_k \in [m]$ we have the following guarantee.
-	
+
 	$~~\Pr_{h\in H}
 	[h(x_1) = y_1 \land ... \land h(x_k) = y_k] = \frac {1}
 	{m^
@@ -566,7 +573,7 @@ the hash function is defined by:
 
 For $p \gg	 m$, the hash function is statistically close to $k$-wise independent.
 
-The 2-wise independent hash is: 
+The 2-wise independent hash is:
 
 \[ h(x) = (((a_1 x + a_0) \,\, mod \,\, p) \,\, mod \,\, m ) \]
 
@@ -582,11 +589,11 @@ The 2-wise independent hash is:
 	$S \gets Xampler(F, pivot + 1)$ // {Solve pivot+1 AS}  \;
 	\eIf{ $|S| \leq pivot$}
 	{ % Open If
-		\textbf{return} $|S|$ 
+		\textbf{return} $|S|$
 	} % Close If
 	{ % Open Else
-		$t \gets $ \textbf{ComputeIterCount($\delta$)} 
-		
+		$t \gets $ \textbf{ComputeIterCount($\delta$)}
+
 		\While{$counter < t$}{
 			$c \gets $ \textbf{ApproxASPCore($F, pivot$)} \;
 			$counter \gets counter + 1$ \;
@@ -595,7 +602,7 @@ The 2-wise independent hash is:
 	} % Close else
 	$finalCount \gets $ \textbf{FindMedian($C$)} \;
 	\textbf{return} $finalCount$
-	
+
 	\caption{ApproxMC into ASP}
 \end{algorithm}
 
@@ -614,22 +621,25 @@ The 2-wise independent hash is:
 	/* Assume $z_1 , ..., z_n $ are the varaibles of $F$ */ \\
 	$ l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
 	$ i \gets l - 1$ \\
-	
+
 	\While{($1 \leq |S| \leq pivot $) or ($i = n$)}{
 		$ i \gets i + 1$ \\
 		Choose $h$ at random from $H_{xor}(n, i - l, 3)$ \\
 		Choose $\alpha$ at random from $\{0,1\}^{i-l}$ \\
-		$S \gets Xampler(F \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}  
+		$S \gets Xampler(F \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
 	}
-	
+
 	\eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
 	{\textbf{return} $\bot$}
 	{\textbf{return} $|S|$ $\cdot 2^{i-l}$}
-	
-	
-	
+
+
+
 	\caption{ApproxASPCore($F, pivot$)}
 \end{algorithm}
+
+\section{Related work} \label{sec:relwork}
+XXX
 
 \section{Conclusion} \label{sec:conclusion}
 XXX
