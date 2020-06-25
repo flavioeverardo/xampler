@@ -40,6 +40,8 @@
 \def\approxmc{\textsf{ApproxMC}\xspace}
 \def\approxasc{\textsf{ApproxASC}\xspace}
 \def\asp{\textsf{\#ASP}\xspace}
+
+
 \newtheorem{definition}{Definition}
 
 % Copied from Flavio draft
@@ -56,6 +58,12 @@
 
 \newcommand{\XOR}{\textsc{xor}} % just an idea
 
+%%%%%%%%% Added By Ankit
+\newcommand{\fff}{$F$\xspace} 
+\newcommand{\mc}{$mc$\xspace} 
+\newcommand{\ep}{\epsilon\xspace} 
+\newcommand{\del}{\delta\xspace} 
+\def\appasp{\normalfont \textsf{ApproxASP}\xspace}
 
 % - systems ----------------------------------------------------------------------
 % >>> NOT USED in BOOK <<<
@@ -550,6 +558,25 @@ The first three corresponds to the eager, and the last three to the lazy approac
 %
 
 \section{Hashing and Xor's} \label{sec:hashing}
+Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions $sol(\fff)$ of the formula \fff.
+%
+The complexity of exact solution count for large problem instances hinders the application of exact model counting.
+%
+There are ongoing works \cite{bibid} in improving exact model counters, but a broad set of practical applications has remained beyond the reach. 
+%
+
+
+In applications of model counting like probabilistic reasoning, it may be sufficient to approximate the solution count and avoid the overhead of exact model counting.
+%
+An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(F, \epsilon, \delta)$.
+%
+The algorithm takes the formula \fff with a tolerance $\epsilon > 0$ and a confidence $\delta \in (0, 1]$ as an input.
+%
+The output is an estimate \mc based on the parameter $\ep$ and $\del$.
+%
+Proving theoretical bounds and adapting the algorithm for the same is an ongoing work.
+
+
 Apriori we do not know the distribution of the solution set; $Sol(\phi)$.
 %
 How to perform a good hashing if we have no knowledge of the distribution of solutions? i.e., how to partition the $Sol(\phi)$ into cells with a roughly equal number of solutions?
@@ -631,7 +658,7 @@ The 2-wise independent hash is:
 	$finalCount \gets $ \textbf{FindMean($C$)} \;
 	\textbf{return} $finalCount$
 
-	\caption{ApproxMC into ASP}
+	\caption{ApproxASP}
 \end{algorithm}
 
 
