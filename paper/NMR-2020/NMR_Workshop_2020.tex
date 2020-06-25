@@ -611,7 +611,7 @@ The 2-wise independent hash is:
 \begin{algorithm}[h]
 	\textbf{ApproxASP}($F$, $\epsilon$, $\delta$) \;
 	\SetAlgoLined
-	\KwResult{Approximate number of answer sets}
+	\KwResult{Approximate number of answer sets or $\bot$}
 	$counter \gets 0$ ; $C \gets emptyList$\;
 	$pivot \gets  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
 	$S \gets Xampler(F, pivot + 1)$ // {Solve pivot+1 AS}  \;
@@ -647,8 +647,11 @@ The 2-wise independent hash is:
 
 \begin{algorithm}
 	/* Assume $z_1 , ..., z_n $ are the varaibles of $F$ */ \\
-	$ l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
-	$ i \gets l - 1$ \\
+	$ i, l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
+%	$ i \gets l - 1$ \\
+	
+%	$ l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
+%	$ i \gets l - 1$ \\
 
 	\While{($1 \leq |S| \leq pivot $) or ($i = n$)}{
 		$ i \gets i + 1$ \\
@@ -665,6 +668,9 @@ The 2-wise independent hash is:
 
 	\caption{ApproxASPCore($F, pivot$)}
 \end{algorithm}
+
+
+\input{experiments}
 
 \section{Related work} \label{sec:relwork}
 XXX
