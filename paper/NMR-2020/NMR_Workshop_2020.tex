@@ -230,33 +230,206 @@ ankit.shukla@jku.at
 \maketitle
 
 \begin{abstract}
-(\asp) XXX
+%Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI and other areas as well as plenty of practical applications.
+%While modern ASP solvers not only compute one solution (answer set), but actually support different reasoning modes, the problem of counting answer sets has not been subject to intense studies yet.
+Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI, and other areas with plenty of practical applications.
+While modern ASP solvers not only compute one solution (answer set) but support different reasoning modes, the problem of counting answer sets has not been subject to intense studies.
+This is in contrast to propositional satisfiability (SAT), where several applications and problems related to quantitative reasoning trace back to model counting. However, due to high computational complexity and depending on the actual application, approximate counting might be sufficient. Indeed, there are plenty of applications, where approximate counting for SAT is well-suited. This work deals with establishing approximate model counting for ASP, thereby lifting ideas from SAT to ASP. We present the first approximate counter for ASP and also show preliminary experiments for several problems.
 \end{abstract}
 
 \section{Introduction} \label{sec:introduction}
+%
+Answer Set Programming (ASP)~\cite{Lifschitz99,BrewkaEiterTruszczynski11,GebserKaminskiKaufmannSchaub12} is a 
+problem modeling and solving framework that is well-known in the area 
+of knowledge representation and reasoning and artificial intelligence. 
+%
+This framework has been practically applied for several 
+problems~\cite{BalducciniGelfondNogueira06a,NiemelaSimonsSoininen99,NogueiraBalducciniGelfond01a,GuziolowskiEtAl13a,SchaubWoltran18}.
+%
 
-Parity (\XOR{}) constraints have been recently accommodated in Answer Set Programming (ASP;~\cite{liftschitz99a/})
+Recently, there has been growing interest for counting solutions of problems.
+%
+Indeed, counting solutions is a well-known task not only in mathematics and computer
+science, but also in other
+areas~\cite{ChakrabortyMeelVardi16a,DomshlakHoffmann07a,GomesKautzSabharwalSelman08a,SangBeameKautz05a}.
+%
+%
+%
+Examples cover also applications in machine learning and probabilistic inference~\cite{ChaviraDarwiche08a}.
+%
+%
+In terms of computational complexity, counting has been well-studied since the
+late
+70s~\cite{DurandHermannKolaitis05,HemaspaandraVollmer95a,Valiant79,Valiant79b}.
+%
+There are also results for counting involving projection, where one wants to
+count only with respect to a given set of projection atoms,
+which has been established for logic~\cite{AzizChuMuise15a,CapelliMengel19,FichteEtAl18,LagniezMarquis19a,GuptaSharmaRoy19a,SharmaRoySoos19a},
+reliability estimation~\cite{MeelEtAl17a} as well as
+answer set programming~\cite{GebserKaufmannSchaub09a,Aziz15a,FichteHecher19}.
+%
+
+Given that in general counting answer sets is rather hard, namely ${\#\cdot\text{coNP}}$-complete~\cite{FichteEtAl17,DurandHermannKolaitis05}, which further increases
+to ${\#\cdot\Sigma_2^P}$-completeness~\cite{FichteHecher19} if counting with respect to a projection,
+a different approach than exact counting seems to be required in practice.
+%
+Indeed, such approaches were successful for propositional logic (SAT), where reasoning modes like sampling (near-uniform generation)
+or (approximate) model counting~\cite{gosase07a,gohosase07b,chmeva13a,chmeva13b,soomee19a}
+were studied.
+%
+For this purpose, so-called parity constraints  (\XOR{} constraints) are used specifically to partition the search space in parts that preferably are of roughly the same size.
+
+Parity constraints have been recently accommodated in ASP
 as the fundamental part of the system \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
 % 
 With different solving approaches over parity constraints in \xorro{}, these constraints amount to the classical \XOR{} operator following the aggregates-like syntax by means of theory atoms.
-They are interpreted as directives, solved on top of an ASP program acting as answer sets filters that do not satisfy the parity constraint in question.
+They are interpreted as directives, solved on top of an ASP program acting as answer set filters that do not satisfy the parity constraint in question.
 %
-Currently, these parity constraints may not occur in the bodies nor the heads of rules.
-However, they fit perfectly for reasoning modes like sampling (near-uniform generation)
-or (approximate) model counting~\cite{gosase07a,gohosase07b,chmeva13a,chmeva13b,soomee19a}
-where their purpose is to partition the search space.
+%Currently, these parity constraints may not occur in the bodies nor the heads of rules.
+
 
 
 %Parity constraints constitute the foundations of reasoning modes like sampling or (approximate) model counting \cite{DBLP:journals/corr/abs-1806-02239}, as well as circuit verification and cryptography \cite{DBLP:conf/laitinen2014extending}.
 %
-With most of their applications in the neighboring area of Satisfiability Testing (SAT) \cite{DBLP:journals/corr/abs-1806-02239},
-few attention has been paid to the parity constraints treatment as well as reasoning modes like sampling or model counting into ASP.%~\cite{kalepesc16a}.
+With most of the applications of \XOR{} constraints in the neighboring area of SAT~\cite{DBLP:journals/corr/abs-1806-02239},
+only few attention has been paid to treat parity constraints as well as reasoning modes like sampling or approximate model counting for ASP. %~\cite{kalepesc16a}.
 %
-To this end, we present an extension to \xorro{} towards counting answer sets following the work from~\cite{DBLP:conf/cp/ChakrabortyMV13}
+To this end, we present an extension to \xorro{} towards approximate answer set counting following the work from~\cite{DBLP:conf/cp/ChakrabortyMV13}
 benefiting from the advanced interfaces of \clingo{},
 and the sophisticated solving techniques developed in SAT~(e.g. the award-winning solver \cryptominisat~\cite{DBLP:conf/sat/SoosNC09}).
 %
-This paper is structured in ...
+%This paper is structured in ...
+
+\section{Preliminaries}
+
+\smallskip
+\noindent\textbf{Answer Set Programming (ASP).} %
+% ASP is a declarative modeling and problem solving framework that
+% combines techniques of knowledge representation and database
+% theory. Two of the main advantages of ASP are its
+% expressiveness~\cite{BrewkaEiterTruszczynski11} and, when using
+% non-ground programs, its advanced declarative problem modelling
+% capability. Prior to solving, non-ground programs are usually compiled
+% into ground ones by a grounder.  For particular non-ground programs,
+% treewidth guarantees are known~\cite{BliemEtAl17a}.
+% In this paper, we restrict ourselves to ground ASP programs.  For a
+% comprehensive introduction, we refer to introductory
+% literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
+%
+%We assume familiarity with propositional satisfiability (\SAT)~\cite{BiereHeuleMaarenWalsh09,KleineBuningLettman99}
+We follow standard definitions of propositional ASP~\cite{BrewkaEiterTruszczynski11}.
+%For comprehensive foundations, we refer to introductory
+%literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
+%
+Let $m$, $n$, $\ell$ be non-negative integers such that
+$m \leq n \leq \ell$, $a_1$, $\ldots$, $a_\ell$ be distinct propositional
+atoms. Moreover, we refer by \emph{literal} to an atom or the negation
+thereof.
+%, and
+%$l \in \{a_1, \neg a_1\}$ being a \emph{literal},~i.e., an atom or the negation thereof.
+%
+A \emph{(logic) program}~$\Pi$ is a set of \emph{rules} of the form
+%
+%\begin{align*}
+%\smallskip
+%\hfill
+%\vspace{-0.75em}
+\(
+a_1\vee \cdots \vee a_m \leftarrow a_{m+1}, \ldots, a_{n}, \neg
+a_{n+1}, \ldots, \neg a_\ell.
+%
+\)
+%\hfill
+%\smallskip
+%
+%\end{align*}
+%
+%
+% \noindent Intuitively this requires at least one atom of
+% $a_1, \ldots, a_\ell$ to be true if all atoms
+% $a_{\ell+1}, \ldots, a_m$ are true and there is no evidence that any
+% atoms of $a_{m+1}, \ldots, a_n$ are true. The set of
+% \emph{well-defined programs} among atoms~$X$ is given by~$prog(X)$.
+%
+%
+%
+%Let $\at(\Pi) \eqdef \SB
+%\at(r) \SM r \in \Pi \SE$ be the atoms occuring in a program~$\Pi$,
+%
+%Therefore, let $\choice(\Pi), \disj(\Pi),
+%\opt(\Pi)$ and $\weight(\Pi)$ denote the set of all choice, disjunctive,
+%optimization and weight rules in a program~$\Pi$, respectively.
+%
+%
+%\noindent 
+For a rule~$r$, we let $H_r = \{a_1, \ldots, a_m\}$,
+$B^+_r = \{a_{m+1}, \ldots, a_{n}\}$, and
+$B^-_r = \{a_{n+1}, \ldots, a_\ell\}$.
+%
+% We call $H_r$ the \emph{head}, $B^+_r$ the \emph{positive body}, and
+% $B^-(r)$ the \emph{negative body} of~$r$.
+%
+% , and $B_r \eqdef B^+_r \cup \SB \neg b \SM b \in B^-_r \SE$ the
+% \emph{body} of~$r$.\nb{Do we really need the body?}
+%
+We denote the sets of \emph{atoms} occurring in a rule~$r$ or in a
+program~$\Pi$ by $\text{at}(r) = H_r \cup B^+_r \cup B^-_r$ and
+$\text{at}(\Pi)= \bigcup_{r\in\Pi} \text{at}(r)$.
+%
+%For a set~$X\subseteq\at(\Pi)$ of atoms, we let~$\overline{X}\eqdef \{\neg x\mid x\in X\}$.
+%
+%Let $\Pi$ be a program.
+%
+%A program~$\Pi'$ is a \emph{sub-program of~$\Pi$} if~$\Pi'\subseteq\Pi$.
+%A program~$\Pi'$ is a \emph{sub-program of~$\Pi$}, if symbols
+%$\Pi' \subseteq \Pi$, if for each rule~$r' \in P'$ there is
+%%exactly one
+%a rule~$r \in \Pi$ with $H_{r'} \subseteq H_r$,
+%$B^+_{r'} \subseteq B^+_r$, and $B^-_{r'} \subseteq B^-_r$. \nb{why so complicated sub-programs?}
+%
+%Program~$\Pi$ is \emph{normal}, if $\Card{H_r} \leq 1$ for
+%every~$r \in \Pi$.
+%
+%The \emph{positive dependency digraph}~$D_\Pi$ of $\Pi$ is the
+%directed graph defined on the set~$\bigcup_{r\in \Pi}H_r \cup B^+_r$ of atoms, where there is a directed edge from vertex~$a$ to~$b$ iff there is a rule~$r \in \Pi$ with $a\in B^+_r$ and~$b\in H_r$.
+%
+%
+% The class~\HCF contains all head-cycle-free programs.\nb{do we need
+% the class?}
+
+An \emph{interpretation} $I$ is a set of atoms. $I$ \emph{satisfies} a
+rule~$r$ if $(H_r\,\cup\, B^-_r) \,\cap\, I \neq \emptyset$ or
+$B^+_r \setminus I \neq \emptyset$.  $I$ is a \emph{model} of $\Pi$
+if it satisfies all rules of~$\Pi$, in symbols $I \models \Pi$. %, if $I$ satisfies every rule~$r \in \Pi$.
+%
+%For brevity, we view propositional formulas 
+%as sets of clauses that need to be satisfied, and
+%use the notion of interpretations, models, and satisfiability analogously. %and 
+%satisfiability 
+%also in the context of satisfiability of
+%propositional formulas.
+%\nb{only used once}
+%
+The \emph{Gelfond-Lifschitz
+  (GL) reduct} of~$\Pi$ under~$I$ is the program~$\Pi^I$ obtained
+from $\Pi$ by first removing all rules~$r$ with
+$B^-_r\cap I\neq \emptyset$ and then removing all~$\neg z$ where
+$z \in B^-_r$ from every remaining
+rule~$r$~\cite{GelfondLifschitz91}. %
+%
+$I$ is an \emph{answer set} of a program~$\Pi$ if $I$ is a minimal
+model of~$\Pi^I$. %
+%
+%Deciding whether a disjunctive program has an answer set is
+%\SIGMA{2}{P}-complete~\cite{EiterGottlob95}. 
+The problem of deciding whether an ASP program has an answer set is called
+\emph{consistency}, which is $\Sigma_2^P$-complete~\cite{EiterGottlob95}. 
+%
+If no rule uses disjunction, the complexity drops to
+\text{NP}-complete~\cite{BidoitFroidevaux91,MarekTruszczynski91}.
+
+\begin{example}
+\end{example}
 
 \section{Parity Constraints and Search Space Partition with  \emph{xorro}} \label{sec:xorro}
 
@@ -363,14 +536,6 @@ where the first three corresponds to ASP encodings of parity constraints (eager 
 	%	\vspace{-7mm}
 \end{table*}
 %
-%Finally, we empirically evaluate the different approaches in view of their impact on solving performance,
-%while varying the number and size of parity constraints compared against \clingo{} solving time.
-%
-%The experiments show that \xorro{} scales depending on the combination of the number, density, and preprocessing of the parity constraints.
-%
-%When increasing the number of high-density constraints as used in sampling (\XOR{}s with a size of half the program variables), we start to see that the solving time increases concerning \clingo.
-%
-%Comparing to previous approaches, the eager counting, and the list (from the previous \xorro{} and \emph{harvey}), both stay behind for sampling purposes. Their scalability is subjected to the density of the parity constraints and preprocessing, and particularly, grounding becomes the bottleneck for the counting approach with aggregates.
 
 \section{Hashing and Xor's} \label{sec:hashing}
 Apriori we do not know the distribution of the solution set; $Sol(\phi)$. 
@@ -488,11 +653,6 @@ The 2-wise independent hash is:
 	
 	\caption{ApproxASPCore($F, pivot$)}
 \end{algorithm}
-
-
-\section{Experiments} \label{sec:experiments}
-In progress...
-
 
 \section{Conclusion} \label{sec:conclusion}
 XXX
