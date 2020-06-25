@@ -431,22 +431,90 @@ If no rule uses disjunction, the complexity drops to
 \begin{example}
 \end{example}
 
-\section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:parity}
+\section{Parity Constraints and Search Space Partition with  \emph{xorro}} \label{sec:xorro}
 
 Towards the definition of parity aggregates, let $\true$ and $\false$
 stand for the Boolean constants \emph{true} and \emph{false},
 respectively, and a literal is an atom $a$ and its negation $\neg a$.
 \footnote{In the context of ASP, we understand the negation $\neg$ as the default negation.}
+%
+Given atoms $a_1$ and $a_2$, the \emph{exclusive or}
+(\XOR{} for short) of $a_1$ and $a_2$ is denoted by $a_1\xor a_2$ and
+it is satisfied if \emph{either} $a_1$ \emph{or} $a_2$ is true (but
+not both).
+Generalizing the idea for $n$ distinct atoms
+$\rg{a_1}{,}{a_n}$, we obtain an $n$-ary \XOR{} constraint
+$\rg{(((a_1\xor a_2}{)}{\xor\,a_n)}$ by multiple applications of
+$\xor$. Since it is satisfied iff an odd number of atoms among
+$\rg{a_1}{,}{a_n}$ are true,
+we can simply refer it to as an \emph{odd parity constraint}
+and it can be written simply as
+$\rg{a_1}{\xor}{a_n}$ due to associativity.
+%
+Analogously, an \emph{even parity} (or \XOR{}) \emph{constraint} is defined by
+$\rg{a_1}{\xor}{a_n}\xor\true$ as it is satisfied iff an even number
+of atoms among $\rg{a_1}{,}{a_n}$ hold. Then, e.g.,
+%
+$a_1\xor a_2\xor\true$
+%
+is satisfied iff none or both of $a_1$ and $a_2$ hold.
+%
+Similarly, an \emph{even parity constraint} can be represented in terms of the \emph{odd} parity by an uneven
+number of negated literals. 
+For instance, $\neg a_1\xor a_2$ is equivalent to $a_1\xor a_2\xor\true$ and pairs of negated literals cancel parity inversion, for example $\neg a_1\xor \neg a_2$ is equivalent to $a_1\xor a_2$
+%Following~\cite{hanjia12a,laitinen14a} a \emph{parity constraint} is in a \emph{normal(or standard)-form} if all of its literals
+%are positive and (pairs of) duplicates are removed.
+%For example, the parity constraint $a_1\xor a_2\xor \neg a_3\xor a_2$ equals to $a_1\xor a_3\xor\true$.
+Finally, \XOR{} constraints of forms $a\xor\false$ and $a\xor\true$
+are called \emph{unary}.
 
 To accommodate parity constraints in ASP's input language,
 we rely on \clingo’s theory language extension~\cite{DBLP:conf/iclp/GebserKKOSW16}
 following the common syntax of \emph{aggregates}~\cite{DBLP:journals/tplp/GebserHKLS15}:
 
-%
 \begin{verbatim}
-&odd{ 1 : p(1) }.
-&even{ X : p(X), X>1 }.
+&even{1:p(1);4: not p(4);5:p(5)}.
+&odd{2:not p(2);5: not p(5);6:p(6)}.
+&odd{X:p(X), X > 2}.
+&even{X:p(X), X < 3}.
+&odd{5:p(5)}.
 \end{verbatim}
+
+%
+That is, \xorro{} extends the input language of \clingo{} by
+aggregate names \texttt{\&even} and \texttt{\&odd} that are followed
+by a set, whose elements are \emph{terms} conditioned by
+conjunctions of literals separated by commas.%
+%
+\footnote{In turn, multiple conditional terms within an aggregate are
+	separated by semicolons.}
+%
+From a search space of 64 answer sets in the context of the choice rule \texttt{\set{p(1..6)}.}, the parity constraints shown above
+amounts to the \XOR{} operations:
+$p(1) \xor p(4) \xor p(5)$, $p(2) \xor p(5) \xor p(6)$, $p(3) \xor p(4) \xor p(5) \xor p(6)$, $p(1) \xor p(2) \xor \top$, and $p(1) \xor \bot$
+%(where $\bot$ and $\top$ stand for the Boolean constants true and false, respectively)
+yield the answer sets~\texttt{\set{p(5)}} and \texttt{\set{p(1),p(2),p(4),p(5),p(6)}}.
+This means that each parity constraint divides the search space (roughly) by half, and for this symmetric search space example with five parity constraints ($m=5$), 
+we have $2^m$ clusters, each with two answer sets.
+
+
+%The semantics of aggregates formed with keywords \texttt{\&even} and
+%\texttt{\&odd} is defined by \emph{even} and \emph{odd} parity constraints,
+%respectively.
+%In this implementation,
+Currently, these constraints are interpreted as directives,
+filtering answer sets that do not satisfy the parity constraint in question.
+\footnote{Cannot occur either in the bodies or heads of rules.}
+%
+Hence, the first two 
+constraints hold for any combination of an uneven number of literals from \texttt{p(1), p(4), p(5)} and \texttt{p(2), p(5), p(6)} respectively.
+The third constraint holds if an odd number of literals from \texttt{p(3)} to \texttt{p(6)} are true, while the fourth constraint requires that either none or both of
+the atoms \texttt{p(1)} and \texttt{p(2)} are included.
+The last parity constraint discards any answer set not containing the atom \texttt{p(5)}.
+
+\xorro{} handles parity constraints in six different ways as shown in Table~\ref{table:xorro_approaches}, 
+where the first three corresponds to ASP encodings of parity constraints (eager approaches), and the last three to theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
+
 
 
 
@@ -467,52 +535,7 @@ following the common syntax of \emph{aggregates}~\cite{DBLP:journals/tplp/Gebser
 	\end{tabular}
 	%	\vspace{-7mm}
 \end{table*}
-
 %
-That is, \xorro{} extends the input language of \clingo{} by
-aggregate names \texttt{\&even} and \texttt{\&odd} that are followed
-by a set, whose elements are \emph{terms} conditioned by
-conjunctions of literals separated by commas.%
-%
-\footnote{In turn, multiple conditional terms within an aggregate are
-	separated by semicolons.}
-%
-In the context of a choice rule \texttt{\set{p(1..3)}.}, the parity constraints shown above
-amounts to the \XOR{} operations: \\
-$p(1) \xor \bot$ and $p(2) \xor p(3) \xor \top$
-(where $\bot$ and $\top$ stand for the Boolean constants true and false, respectively)
-yielding the answer sets~\texttt{\set{p(1)}} and \texttt{\set{p(1),p(2),p(3)}}.
-
-
-%The semantics of aggregates formed with keywords \texttt{\&even} and
-%\texttt{\&odd} is defined by \emph{even} and \emph{odd} parity constraints,
-%respectively.
-%In this implementation,
-Currently, these constraints are interpreted as directives,
-filtering answer sets that do not satisfy the parity constraint in question.
-\footnote{For now, parity constraints may not occur in the bodies nor the heads of rules.}
-%
-Hence, the first
-constraint filters out answer sets not containing the atom
-\texttt{p(1)}, while the second requires that either none or both of
-the atoms \texttt{p(2)} and \texttt{p(3)} are included.
-
-
-%As mentioned, \xorro{} handles parity constraints in six ways as shown in Table \ref{table:xorro_approaches},
-%implements different means to handle parity constraints as shown in Table \ref{table:xorro_approaches},
-%where the first three corresponds to the eager, and the last three to the lazy approaches.
-Table~ \ref{table:xorro_approaches}, shows the six implementations to handle parity constraints.
-The first three corresponds to the eager, and the last three to the lazy approaches. 
-
-%
-Finally, we empirically evaluate the different approaches in view of their impact on solving performance,
-while varying the number and size of parity constraints compared against \clingo{} solving time.
-%
-The experiments show that \xorro{} scales depending on the combination of the number, density, and preprocessing of the parity constraints.
-%
-When increasing the number of high-density constraints as used in sampling (\XOR{}s with a size of half the program variables), we start to see that the solving time increases concerning \clingo.
-%
-Comparing to previous approaches, the eager counting, and the list (from the previous \xorro{} and \emph{harvey}), both stay behind for sampling purposes. Their scalability is subjected to the density of the parity constraints and preprocessing, and particularly, grounding becomes the bottleneck for the counting approach with aggregates.
 
 \section{Hashing and Xor's} \label{sec:hashing}
 Apriori we do not know the distribution of the solution set; $Sol(\phi)$. 
