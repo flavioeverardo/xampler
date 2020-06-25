@@ -20,6 +20,7 @@ Our experiments' results are summarized in Tables 1-TBD listing for each problem
 The remainder of the table is divided into the best and worst runs from the five. 
 %
 For both cases, we list the median and the mean counts, each with a quality factor (Q) estimating the closeness to the total number of answer sets.
+The last row of each table displays the average Q for each count.
 
 \begin{table*}[t]
   \centering
@@ -33,6 +34,25 @@ For both cases, we list the median and the mean counts, each with a quality fact
   \input{tables/vertex_cover}
   \caption{Approximate answer set count over random instances of the Vertex Cover problem.}\label{table:vertex_cover}
 \end{table*}
+
+
+% comment results
+
+
+The large deviations between the best and the worst cases correspond to one of two possible scenarios.
+%
+If the worst-case count is under approximating,
+it means the partition was not well distributed, and some clusters had too few or too many answer sets. 
+%
+On the opposite case, where there is an over-approximation count,
+our set of \XOR{}s contains linear combinations or linearly dependent equations,
+meaning that the partitioning is not performed concerning the number of \XOR{}s.
+% 
+For instance, the conjunction of the \XOR{} constraints $a \xor \top \land b \xor \top \land a \xor b \xor \top$ can be equivalently reduced to $a \xor \top \land b \xor \top$. 
+%
+Back to our example in Section~\ref{sec:parity}, instead of counting $|S|$ $\cdot 2^5$ being $S=2$,
+one linear combination causes the double of answer sets from the resulting cluster, so for this case, $S=4$, and the approximate count is 1024 instead of 64. 
+
 
 
 As we mentioned above, the performance was not examined for this paper,
