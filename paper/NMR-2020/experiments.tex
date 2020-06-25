@@ -1,0 +1,43 @@
+\section{Experiments} \label{sec:experiments}
+
+To test the approximate counting in ASP, we extend \xorro{} with the algorithms described in the section above.
+For now, we focus only on the quality of the counting, leaving the scalability and performance for further work.
+%
+To test the quality of the counting,
+we generated ten random instances from different ASP problem classes such as Graph Coloring, Vertex Cover, Minimal Vertex Cover, and One More.
+Also, to track the counting, we cared that these instances were ``easy to solve'' for \clasp{},
+meaning that \clasp{} must enumerate all answer sets within 600 seconds timeout (without printing).
+
+To get the feeling for our initial counting experiments, we prefer to keep the number of variables low, so we fixed the confidence and the tolerance values to 0.8, and 0.2 respectively, as shown in [Meel].
+In other words, we kept the same pivot value seeking for a "small" cell and the number of iterations fixed, as shown in lines 3 and 8 from Algorithm 1, respectively.
+As part of the setup of the experiments, we ran \xorro{} calculating the approximate counting not only with the median value but also with the mean. 
+
+The experiments were run sequentially under Linux on a 16 GB memory with a 2.60 GHz Dual-Core Intel Core i7 processor laptop.
+Each benchmark instance (in smodels output format, generated offline with \gringo{}) was five times and restricted to 600 seconds.
+As shown in Algorithm 1, a run is finished with one of three possible situations, either \xorro{} returns the approximate answer sets count or unsatisfiability, or without the count due to time exhaustion.
+
+Our experiments' results are summarized in Tables 1-TBD listing for each problem class instances, the number of answer sets in the first two columns.
+The remainder of the table is divided into the best and worst runs from the five. 
+%
+For both cases, we list the median and the mean counts, each with a quality factor (Q) estimating the closeness to the total number of answer sets.
+
+\begin{table*}[t]
+  \centering
+  \input{tables/graph_color}
+  \caption{Approximate answer set count over random instances of the Graph Coloring problem.}\label{table:graph_color}
+\end{table*}
+
+
+\begin{table*}[t]
+  \centering
+  \input{tables/vertex_cover}
+  \caption{Approximate answer set count over random instances of the Vertex Cover problem.}\label{table:vertex_cover}
+\end{table*}
+
+
+As we mentioned above, the performance was not examined for this paper,
+meaning that it is worth considering for further experiments by testing all the different approaches from \xorro{}.
+For the experiments above, we ran \xorro{} with the lazy counting approach,
+which got the highest overall performance score from all the six implementations.
+However, the random parity constraints generated during each counting iteration were quite small,
+meaning that other approaches would benefit more for these \XOR{}s densities.
