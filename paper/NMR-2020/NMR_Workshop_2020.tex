@@ -256,6 +256,7 @@ This is in contrast to propositional satisfiability (SAT), where several applica
 	\item Focus on extending \emph{xorro} to support approximate ASP counting rather than selling it as the first ApproxASP counter (although we should point out that this is the first such attempt).
 	\item This is an ongoing work. 
 	\item Narrate that this initial work could be helpful to generate interest in approx asp counting.
+	\item Questions will be asked if shoplifting the ApproxMC is fair and what else we need to ensure the theoretical bounds. At least some fundamental understanding should be outlined based on models of SAT and ASP.  
 \end{enumerate}
 
 \section{Introduction} \label{sec:introduction}
@@ -665,61 +666,101 @@ To balance this trade-off we use 3-wise independent hash functions.
 %
 If we use $k$-wise independence, all cells will be small and we will get a \textbf{uniform generation}. 
 %
-Using $3$-wise independence we achieve \emph{a random cell is small with high probabablity}, known as \textbf{almost-uniform generation}.
+Using $3$-wise independence we achieve \emph{a random cell is small with high probability}, known as \textbf{almost-uniform generation}.
 
-\section{ApproxASP} \label{approxasp}
-\textbf{ApproxMC Algorithm into ASP}
+\section{Algorithm} \label{approxasp}We use the already evolved algorithm from propositional case \cite{ChakrabortyMV13} and lift it to ASP. 
+
+The approximate model counting algorithm \appasp use 3-wise independent hashing functions from the Hxor(n, m, 3) family (for an appropriate m) to partition the set of models of an input formula into ``small" cells.
+%
+%In order to test whether the generated cells are indeed small, we choose a random cell and check if it is non-empty and has no more than pivot elements, where pivot is a threshold that depends only on the tolerance bound \ep. 
+%%
+%If the chosen cell is not small, we randomly partition the set of models into twice as many cells as before by choosing a random hashing function from the family Hxor(n, m + 1, 3).
+%%
+%The above procedure is repeated until either a randomly chosen cell is found to be non-empty and small, or the number of cells exceeds 2
+%n+1 pivot.
+%%
+%If all cells that were randomly chosen during the above process were either empty or not small, we report a counting failure and return $\bot$.
+%%
+%Otherwise, the size of the cell last chosen is scaled by the number of cells to obtain an \ep-approximate estimate of the model count.
+
 
 \begin{algorithm}[h]
 	\textbf{ApproxASP}(\fff, \ep, \del) \;
 	\SetAlgoLined
 	\KwResult{Approximate number of answer sets or $\bot$}
-	$counter \gets 0$ ; $C \gets emptyList$\;
-	$pivot \gets  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
-	$S \gets Xampler(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
+	$counter = 0$ ; $C = [\,]$ \;
+%	$$\;
+	$pivot =  2 \, \times \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$ \;
+	$S = Xampler(\fff, pivot + 1)$ \;
 	\eIf{ $|S| \leq pivot$}
 	{ % Open If
 		\textbf{return} $|S|$
 	} % Close If
 	{ % Open Else
-		$t \gets $ \textbf{ComputeIterCount($\delta$)}
-
-		\While{$counter < t$}{
-			$c \gets $ \textbf{ApproxASPCore($\fff, pivot$)} \;
-			$counter \gets counter + 1$ \;
+		$iter= \lceil 27 \log_2 (3/\delta) \rceil$\;
+		\While{$counter < iter$}{
+			$c = $ \textbf{CountAS($\fff, pivot$)} \;
+			$counter = counter + 1$ \;
 			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
 		} % Close While
 	} % Close else
-	$finalCount \gets $ \textbf{FindMean($C$)} \;
-	\textbf{return} $finalCount$
-
+	\textbf{return} \textbf{FindMean($C$)} \;
+	
 	\caption{ApproxASP}
 \end{algorithm}
+%
+%\begin{algorithm}[h]
+%	\textbf{ApproxASP}(\fff, \ep, \del) \;
+%	\SetAlgoLined
+%	\KwResult{Approximate number of answer sets or $\bot$}
+%	$counter \= 0$ ; $C \= emptyList$\;
+%	$threshold = \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$\;
+%	$iterations = \lceil 27 \log_2 (3/\delta) \rceil$\;
+%	$pivot \=  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
+%	$S \= Xampler(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
+%	\eIf{ $|S| \leq pivot$}
+%	{ % Open If
+%		\textbf{return} $|S|$
+%	} % Close If
+%	{ % Open Else
+%		$t \= $ \textbf{ComputeIterCount($\delta$)}
+%
+%		\While{$counter < t$}{
+%			$c \= $ \textbf{ApproxASPCore($\fff, pivot$)} \;
+%			$counter \= counter + 1$ \;
+%			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
+%		} % Close While
+%	} % Close else
+%	$finalCount \= $ \textbf{FindMean($C$)} \;
+%	\textbf{return} $finalCount$
+%
+%	\caption{ApproxASP}
+%\end{algorithm}
 
+
+%\begin{algorithm}
+%	\textbf{return} $\lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$
+%	\caption{ComputeThreshold($\epsilon$)}
+%\end{algorithm}
+%
+%\begin{algorithm}
+%	\textbf{return} $\lceil 27 \log_2 (3/\delta) \rceil$
+%	\caption{ComputeIterCount($\delta$)}
+%\end{algorithm}
 
 \begin{algorithm}
-	\textbf{return} $\lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$
-	\caption{ComputeThreshold($\epsilon$)}
-\end{algorithm}
-
-\begin{algorithm}
-	\textbf{return} $\lceil 27 \log_2 (3/\delta) \rceil$
-	\caption{ComputeIterCount($\delta$)}
-\end{algorithm}
-
-\begin{algorithm}
-	/* Assume $z_1 , ..., z_n $ are the varaibles of \fff */ \\
-	$ i, l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
-%	$ i \gets l - 1$ \\
+	/* Assume $z_1 , ..., z_n $ are the variables of \fff */ \\
+	$ i, l = \lfloor \log_2 (pivot) - 1 \rfloor$ \\
+%	$ i \= l - 1$ \\
 	
-%	$ l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
-%	$ i \gets l - 1$ \\
+%	$ l \= \lfloor \log_2 (pivot) - 1 \rfloor$ \\
+%	$ i \= l - 1$ \\
 
-	\While{($1 \leq |S| \leq pivot $) or ($i = n$)}{
-		$ i \gets i + 1$ \\
+	\While{($1 \leq |S| \leq pivot $) $\lor (i = n)$}{
+		$ i = i + 1$ \\
 		Choose $h$ at random from $H_{xor}(n, i - l, 3)$ \\
 		Choose $\alpha$ at random from $\{0,1\}^{i-l}$ \\
-		$S \gets Xampler(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
+		$S = Xampler(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
 	}
 
 	\eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
@@ -728,7 +769,7 @@ Using $3$-wise independence we achieve \emph{a random cell is small with high pr
 
 
 
-	\caption{ApproxASPCore($\fff, pivot$)}
+	\caption{CountAS($\fff, pivot$)}
 \end{algorithm}
 
 
