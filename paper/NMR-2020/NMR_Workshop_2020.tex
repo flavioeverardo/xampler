@@ -561,34 +561,47 @@ The first three corresponds to the eager, and the last three to the lazy approac
 %
 
 \section{Hashing and Xor's} \label{sec:hashing}
-Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions \sol of the program \fff.
+Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program \fff.
 %
-The complexity of exact solution count for large problem instances hinders the application of exact model counting.
+One approach is to count all the solutions by enumeration (almost), known as exact counting.
+% 
+The exact counting gives precise results but the complexity of exact solution count for large problem instances hinders the application of exact model counting.
 %
 There are ongoing works \cite{bibid} in improving exact model counters, but a broad set of practical applications has remained beyond the reach. 
 %
 
 
-In applications of model counting like probabilistic reasoning, it may be sufficient to approximate the solution count and avoid the overhead of exact model counting.
+In applications of model counting like probabilistic reasoning, planning with uncertainty etc, it may be sufficient to approximate the solution count and avoid the overhead of exact model counting.
 %
 An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(F, \epsilon, \delta)$.
 %
-The algorithm takes the program \fff with a tolerance $\epsilon > 0$ and a confidence $\delta \in (0, 1]$ as an input.
+The algorithm takes a program \fff with a tolerance $\epsilon > 0$ and a confidence $0 < \delta \leq 1$ as an input.
 %
 The output is an estimate \mc based on the parameter $\ep$ and $\del$.
 %
 Proving theoretical bounds and adapting the algorithm for the same is an ongoing work.
 
+The central idea of the approximate model counting approach is the use of hash functions to partition the \sol for a program \fff, into roughly equal small cells.
+%
+Then pick a random cell and scale it by the number of cells to obtain an $\ep$-approximate estimate of the model count.
+%
+Note that apriori we do not know the distribution of the solution set, \sol.
+%
+We have to perform a good hashing without the knowledge of the distribution of solutions. i.e., partition the $Sol(\phi)$ into cells with a roughly equal number of solutions.
+%
+%This difficulty is handled by the use of \textbf{universal hashing}~\cite{DBLP:conf/stoc/CarterW77}.
+%
+%%
+%%To partition the $Sol(\phi)$ into roughly equal small cells without knowing the distribution of the solution we use universal hashing.
+%The key idea of universal hashing is to select a hash function randomly from a family of hash functions with low probability of collision between any two keys. 
+%%
+%By choosing a random hash function from a family, we randomize over arbitrary input distribution. This guarantees a low number of collisions in expectation irrespective of how data is chosen.
+%
+The difficulty is resolved by the use of \textbf{universal hashing}~\cite{DBLP:conf/stoc/CarterW77}.
 
-Apriori we do not know the distribution of the solution set; \sol.
+The universal hashing selects a hash function randomly from a family of hash functions with a low probability of collision between any two keys. 
 %
-How to perform a good hashing if we have no knowledge of the distribution of solutions? i.e., how to partition the $Sol(\phi)$ into cells with a roughly equal number of solutions?
-%
-\textbf{Universal hashing}~\cite{DBLP:conf/stoc/CarterW77} comes to our rescue.
-%
-%To partition the $Sol(\phi)$ into roughly equal small cells without knowing the distribution of the solution we use universal hashing.
-The idea is: pick a function randomly from a family of hash functions.  By choosing a random hash function from a family, we randomize over arbitrary input distribution. This guarantees a low number of collisions in expectation irrespective of how data is chosen.
-%
+By choosing a random hash function from a family, we randomize over arbitrary input distribution. This guarantees a low number of collisions in expectation irrespective of how data is chosen.
 
 \begin{definition}
 A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal family if,
