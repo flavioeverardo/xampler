@@ -61,12 +61,12 @@
 %%%%%%%%% Added By Ankit
 \newcommand{\fff}{$P$\xspace} 
 \newcommand{\mc}{$mc$\xspace} 
-\newcommand{\ep}{\epsilon\xspace} 
-\newcommand{\del}{\delta\xspace} 
+\newcommand{\ep}{$\epsilon$\xspace} 
+\newcommand{\del}{$\delta$\xspace} 
 \def\appasp{\normalfont \textsf{ApproxASP}\xspace}
 
 \newcommand{\sol}{$Sol(P)$\xspace} 
-
+\newcommand{\hash}{$\mathcal{H}$} 
 \def\approxmc{\textsf{ApproxMC}\xspace}
 % - systems ----------------------------------------------------------------------
 % >>> NOT USED in BOOK <<<
@@ -560,7 +560,7 @@ The first three corresponds to the eager, and the last three to the lazy approac
 \end{table*}
 %
 
-\section{Hashing and Xor's} \label{sec:hashing}
+\section{Universal hashing and xor's} \label{sec:hashing}
 Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program \fff.
 %
 One approach is to count all the solutions by enumeration (almost), known as exact counting.
@@ -577,13 +577,13 @@ An approximate counting tries to approximately compute the number of solutions b
 %
 The algorithm takes a program \fff with a tolerance $\epsilon > 0$ and a confidence $0 < \delta \leq 1$ as an input.
 %
-The output is an estimate \mc based on the parameter $\ep$ and $\del$.
+The output is an estimate \mc based on the parameter \ep and \del.
 %
 Proving theoretical bounds and adapting the algorithm for the same is an ongoing work.
 
 The central idea of the approximate model counting approach is the use of hash functions to partition the \sol for a program \fff, into roughly equal small cells.
 %
-Then pick a random cell and scale it by the number of cells to obtain an $\ep$-approximate estimate of the model count.
+Then pick a random cell and scale it by the number of cells to obtain an \ep-approximate estimate of the model count.
 %
 Note that apriori we do not know the distribution of the solution set, \sol.
 %
@@ -607,6 +607,10 @@ By choosing a random hash function from a family, we randomize over arbitrary in
 A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal family if,
 \[ \forall x,y\in U,~x\neq y:~~\Pr _{h\in H}[h(x)=h(y)]\leq {\frac {1}{m}} \]
 \end{definition}
+
+if the hash function $h$ is drawn randomly from \hash, the probability at which any two keys of the universe $U$ will collide is at most $1/m$.
+%
+This probability of collision is what we generally expect if the hash function was assigned truly randomly to every key $x \in U$.
 
 For model counting with high guarantees this is not enough, we not only need every input to be hash uniformly but also hashed independently. We need a family of $k$-wise independent hash functions~\cite{DBLP:conf/focs/WegmanC79},
 %
