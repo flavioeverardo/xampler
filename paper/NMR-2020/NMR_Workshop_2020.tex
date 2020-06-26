@@ -59,12 +59,15 @@
 \newcommand{\XOR}{\textsc{xor}} % just an idea
 
 %%%%%%%%% Added By Ankit
-\newcommand{\fff}{$F$\xspace} 
+\newcommand{\fff}{$P$\xspace} 
 \newcommand{\mc}{$mc$\xspace} 
 \newcommand{\ep}{\epsilon\xspace} 
 \newcommand{\del}{\delta\xspace} 
 \def\appasp{\normalfont \textsf{ApproxASP}\xspace}
 
+\newcommand{\sol}{$Sol(P)$\xspace} 
+
+\def\approxmc{\textsf{ApproxMC}\xspace}
 % - systems ----------------------------------------------------------------------
 % >>> NOT USED in BOOK <<<
 \newcommand{\sysfont}{\textit}
@@ -558,7 +561,7 @@ The first three corresponds to the eager, and the last three to the lazy approac
 %
 
 \section{Hashing and Xor's} \label{sec:hashing}
-Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions $sol(\fff)$ of the formula \fff.
+Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions \sol of the program \fff.
 %
 The complexity of exact solution count for large problem instances hinders the application of exact model counting.
 %
@@ -570,14 +573,14 @@ In applications of model counting like probabilistic reasoning, it may be suffic
 %
 An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(F, \epsilon, \delta)$.
 %
-The algorithm takes the formula \fff with a tolerance $\epsilon > 0$ and a confidence $\delta \in (0, 1]$ as an input.
+The algorithm takes the program \fff with a tolerance $\epsilon > 0$ and a confidence $\delta \in (0, 1]$ as an input.
 %
 The output is an estimate \mc based on the parameter $\ep$ and $\del$.
 %
 Proving theoretical bounds and adapting the algorithm for the same is an ongoing work.
 
 
-Apriori we do not know the distribution of the solution set; $Sol(\phi)$.
+Apriori we do not know the distribution of the solution set; \sol.
 %
 How to perform a good hashing if we have no knowledge of the distribution of solutions? i.e., how to partition the $Sol(\phi)$ into cells with a roughly equal number of solutions?
 %
