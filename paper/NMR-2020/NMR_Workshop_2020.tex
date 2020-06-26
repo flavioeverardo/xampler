@@ -785,8 +785,8 @@ The final estimate of the model count returned by \appasp is the mean of the est
 
 	\While{($1 \leq |S| \leq pivot $) $\lor (i = n)$}{
 		$ i = i + 1$ \\
-		Choose $h$ at random from $H_{xor}(n, i - l, 3)$ \\
-		Choose $\alpha$ at random from $\{0,1\}^{i-l}$ \\
+		$h \gets H_{xor}(n, i - l, 3)$ \\
+		$\alpha \gets \{0,1\}^{i-l}$ \\
 		$S = Xampler(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
 	}
 
