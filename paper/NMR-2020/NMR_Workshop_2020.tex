@@ -711,7 +711,7 @@ The resulted in non-$\bot$ estimates of the ASP model count $c$ returned by \cou
 %
 The final estimate of the model count returned by \appasp is the mean of the estimates stored in $C$, computed using FindMean(C).
 
-\begin{algorithm}[h]
+\begin{algorithm}[t]
 	\textbf{ApproxASP}(\fff, \ep, \del) \;
 	\SetAlgoLined
 	\KwResult{Approximate number of answer sets or $\bot$}
@@ -775,7 +775,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 %	\caption{ComputeIterCount($\delta$)}
 %\end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[t]
 	/* Assume $z_1 , ..., z_n $ are the variables of \fff */ \\
 	$ i, l = \lfloor \log_2 (pivot) - 1 \rfloor$ \\
 %	$ i \= l - 1$ \\
