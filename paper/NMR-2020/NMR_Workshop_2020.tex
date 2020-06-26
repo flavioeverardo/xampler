@@ -633,9 +633,6 @@ Intuitively a family $\mathcal{H} = {h : U \to [m]}$ of hash functions
 is $k$-wise independent if for any distinct keys $x_1, ..., x_k \in U$, the hash codes $h(x_1), ..., h(x_k)$ are independent random variables and for any fixed $x$, $h(x)$ is uniformly distributed in $[m]$.
 %\end{itemize}
 
-Higher the $k$, stronger will be the guarantee on a range of the size of cells. To encode $k$-wise independence we will require polynomial of degree $k$ - $1$. But higher the $k$, harder it will be to solve the formula with these constraints. Due to this trade-off we just use 3-wise independent. If we use $k$-wise independence, all cells will be  small and we will get a \textbf{uniform generation}. With $3$-wise independence we achieve: \emph{a random cell is small with high probabablity}, also called \textbf{almost-uniform generation}.
-
-
 The canonical construction of a $k$-wise independent family is based on polynomials
 of degree $k$ - $1$. Let $p \geq |U|$ be prime. Picking random $a_0,...,a_{k - 1} \in \{0, . . . , p$-$ 1\}$,
 the hash function is defined by:
@@ -648,16 +645,29 @@ The 2-wise independent hash is:
 
 \[ h(x) = (((a_1 x + a_0) \,\, mod \,\, p) \,\, mod \,\, m ) \]
 
+
+Higher the $k$, stronger will be the guarantee on a range of the size of cells. 
+%
+To encode $k$-wise independence we will require polynomial of degree $k$ - $1$.
+%
+But higher the $k$, harder it will be to solve the formula with these constraints. 
+%
+To balance this trade-off we use 3-wise independent hash functions.
+%
+If we use $k$-wise independence, all cells will be small and we will get a \textbf{uniform generation}. 
+%
+Using $3$-wise independence we achieve \emph{a random cell is small with high probabablity}, known as \textbf{almost-uniform generation}.
+
 \section{ApproxASP} \label{approxasp}
 \textbf{ApproxMC Algorithm into ASP}
 
 \begin{algorithm}[h]
-	\textbf{ApproxASP}($F$, $\epsilon$, $\delta$) \;
+	\textbf{ApproxASP}(\fff, \ep, \del) \;
 	\SetAlgoLined
 	\KwResult{Approximate number of answer sets or $\bot$}
 	$counter \gets 0$ ; $C \gets emptyList$\;
 	$pivot \gets  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
-	$S \gets Xampler(F, pivot + 1)$ // {Solve pivot+1 AS}  \;
+	$S \gets Xampler(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
 	\eIf{ $|S| \leq pivot$}
 	{ % Open If
 		\textbf{return} $|S|$
@@ -666,7 +676,7 @@ The 2-wise independent hash is:
 		$t \gets $ \textbf{ComputeIterCount($\delta$)}
 
 		\While{$counter < t$}{
-			$c \gets $ \textbf{ApproxASPCore($F, pivot$)} \;
+			$c \gets $ \textbf{ApproxASPCore($\fff, pivot$)} \;
 			$counter \gets counter + 1$ \;
 			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
 		} % Close While
@@ -684,12 +694,12 @@ The 2-wise independent hash is:
 \end{algorithm}
 
 \begin{algorithm}
-	\textbf{return} $\lceil 35 \log_2 (3/\delta) \rceil$
+	\textbf{return} $\lceil 27 \log_2 (3/\delta) \rceil$
 	\caption{ComputeIterCount($\delta$)}
 \end{algorithm}
 
 \begin{algorithm}
-	/* Assume $z_1 , ..., z_n $ are the varaibles of $F$ */ \\
+	/* Assume $z_1 , ..., z_n $ are the varaibles of \fff */ \\
 	$ i, l \gets \lfloor \log_2 (pivot) - 1 \rfloor$ \\
 %	$ i \gets l - 1$ \\
 	
@@ -700,7 +710,7 @@ The 2-wise independent hash is:
 		$ i \gets i + 1$ \\
 		Choose $h$ at random from $H_{xor}(n, i - l, 3)$ \\
 		Choose $\alpha$ at random from $\{0,1\}^{i-l}$ \\
-		$S \gets Xampler(F \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
+		$S \gets Xampler(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
 	}
 
 	\eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
@@ -709,7 +719,7 @@ The 2-wise independent hash is:
 
 
 
-	\caption{ApproxASPCore($F, pivot$)}
+	\caption{ApproxASPCore($\fff, pivot$)}
 \end{algorithm}
 
 
