@@ -541,34 +541,36 @@ The third constraint holds if an odd number of literals from \texttt{p(3)} to \t
 the atoms \texttt{p(1)} and \texttt{p(2)} are included.
 The last parity constraint discards any answer set not containing the atom \texttt{p(5)}.
 
-\xorro{} handles parity constraints in six different ways as shown in Table~\ref{table:xorro_approaches},
-where the first three corresponds to ASP encodings of parity constraints (eager approaches), and the last three to theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
+\xorro{} handles parity constraints in six different ways,
+switching between ASP encodings of parity constraints (eager approaches), and the use of theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
+%as shown in Table~\ref{table:xorro_approaches},
+%where the first three corresponds to ASP encodings of parity constraints (eager approaches), and the last three to theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
 
 %As mentioned, \xorro{} handles parity constraints in six ways as shown in Table \ref{table:xorro_approaches},
 %implements different means to handle parity constraints as shown in Table \ref{table:xorro_approaches},
 %where the first three corresponds to the eager, and the last three to the lazy approaches.
-Table~ \ref{table:xorro_approaches}, shows the six implementations to handle parity constraints.
-The first three corresponds to the eager, and the last three to the lazy approaches.
+%Table~ \ref{table:xorro_approaches}, shows the six implementations to handle parity constraints.
+%The first three corresponds to the eager, and the last three to the lazy approaches.
 
 
 
-\begin{table*}[t]
-	% 	\centering
-	\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
-	%\vspace{-5mm}
-	\begin{tabular}{ l|l }
-		Approach  & Description  \\
-		\hline\hline
-		count     & Add count aggregates with a modulo 2 operation  \\
-		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
-		%            & (binary operators are arranged in list/tree)\\
-		countp    & Propagator simply counting truth literals on total assignments\\
-		up        & Propagator implementing unit propagation\\
-		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
+%\begin{table*}[t]
+%	% 	\centering
+%	\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
+%	%\vspace{-5mm}
+%	\begin{tabular}{ l|l }
+%		Approach  & Description  \\
+%		\hline\hline
+%		count     & Add count aggregates with a modulo 2 operation  \\
+%		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
+%		%            & (binary operators are arranged in list/tree)\\
+%		countp    & Propagator simply counting truth literals on total assignments\\
+%		up        & Propagator implementing unit propagation\\
+%		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
 
-	\end{tabular}
-	%	\vspace{-7mm}
-\end{table*}
+%	\end{tabular}
+%	%	\vspace{-7mm}
+%\end{table*}
 %
 
 \section{Universal hashing and xor's} \label{sec:hashing}
