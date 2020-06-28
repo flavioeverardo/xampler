@@ -19,6 +19,7 @@
 \usepackage[small]{caption}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{booktabs}
 %\usepackage{algorithm}
@@ -40,6 +41,21 @@
 \def\approxmc{\textsf{ApproxMC}\xspace}
 \def\approxasc{\textsf{ApproxASC}\xspace}
 \def\asp{\textsf{\#ASP}\xspace}
+
+% complexity stuff
+
+\newcommand{\bigO}[1]{\ensuremath{{\mathcal O}(#1)}}
+\newcommand{\Nat}{\mathbb{N}} %
+\newcommand{\CCard}[1]{\|#1\|}
+\newcommand{\Card}[1]{\left|#1\right|}
+\renewcommand{\P}{\ensuremath{\textsc{P}}\xspace}
+\newcommand{\NP}{\ensuremath{\textsc{NP}}\xspace}
+\newcommand{\SIGMA}[2]{\ensuremath{\Sigma_{\textrm{#1}}^{\textrm{#2}}}}
+\newcommand{\WWW}{\ensuremath{\mathcal{W}}}%
+\newcommand{\mtext}[1]{\ensuremath{\mathcal{#1}}}
+\newcommand{\cnt}[0]{\ensuremath{\#}}
+\newcommand{\cntc}[0]{\ensuremath{\cnt\cdot}}
+
 
 
 \newtheorem{definition}{Definition}
@@ -327,6 +343,91 @@ and the sophisticated solving techniques developed in SAT~(e.g. the award-winnin
 
 \section{Preliminaries}
 
+\smallskip\noindent\textbf{Computational Complexity.}
+%
+%
+We assume familiarity with standard notions in
+  computational complexity~\cite{Papadimitriou94} and use counting complexity classes
+  as defined by Durand, Hermann and
+  Kolaitis~\cite{DurandHermannKolaitis05}.
+%
+%}
+%
+%
+% which are different from the counting complexity classes introduced
+% Valiant~\cite{Valiant79,Valiant79b}, in particular, they allow for a
+% more fine-grained distinction of counting complexity. % beyond \#P.
+%
+% and follow the notation by Hesaspaandra and
+% Vollmer~\cite{HemaspaandraVollmer95a} for counting complexity classes,
+% which are different from the counting complexity classes introduced
+% Valiant~\cite{Valiant79,Valiant79b}, in particular, they allow for a
+% more fine-grained distinction of counting complexity. % beyond \#P.
+%
+%For parameterized complexity, we refer to standard
+%texts~\cite{CyganEtAl15}. 
+%
+% ,DowneyFellows13,FlumGrohe06,Niedermeier06}.
+%
+%We recall some basic notions.
+%
+Let $\Sigma$ and $\Sigma'$ be finite alphabets, $I \in \Sigma^*$ an \emph{instance}, and $\CCard{I}$
+%%
+ denote the size of~$I$. %
+%\longversion{ denote its size.}
+% Let $L\subseteq \Sigma^*$ and $L' \subseteq \Sigma'^*$ be
+% decision problems.
+%
+%Let $L \subseteq \Sigma^* \times \Nat$ and
+%$L' \subseteq {\Sigma'}^*\times \Nat$ be two parameterized problems. 
+%An \emph{fpt-reduction} $r$ from $L$ to $L'$ is a many-to-one reduction
+%from $\Sigma^*\times \Nat$ to ${\Sigma'}^*\times \Nat$ such that for all
+%$I \in \Sigma^*$ we have $(I,k) \in L$ if and only if
+%$r(I,k)=(I',k')\in L'$ such that $k' \leq g(k)$ for a fixed computable
+%function $g: \Nat \rightarrow \Nat$, and there is a computable function
+%$f$ and a constant $c$ such that $r$ is computable in time
+%$O(f(k)\CCard{I}^c)$. If additionally~$g$ is linear,
+%then~$r$ is referred to as~\emph{fptl-reduction}.
+%~\cite{FlumGrohe06}.
+%
+%
+%
+A \emph{witness function} %is a
+%function
+ $\mathcal{W}: \Sigma^* \rightarrow 2^{{\Sigma'}^*}$ %that
+maps an instance~$I \in \Sigma^*$ to its \emph{witnesses}. 
+%a finite subset of~${\Sigma'}^*$. %We call the set~$\WWW(I)$ the \emph{witnesses}. 
+A
+\emph{counting
+  problem}~$L: \Sigma^* \rightarrow \Nat_0$ is a
+function that maps a given instance~$I \in \Sigma^*$ to the cardinality of its
+witnesses~$\Card{\WWW(I)}$.
+%
+%
+Let $\mtext{C}$ be a decision complexity class,~e.g., \P. Then,
+$\cntc\mtext{C}$ denotes the class of all counting problems whose
+witness function~$\WWW$ satisfies (i)~there is a
+function~$f: \Nat_0 \rightarrow \Nat_0$ such that for every
+instance~$I \in \Sigma^*$ and every $W \in \WWW(I)$ we have
+$\Card{W} \leq f(\CCard{I})$ and $f$ is computable in
+time~$\bigO{\CCard{I}^c}$ for some constant~$c$ and (ii)~for every
+instance~$I \in \Sigma^*$ decision problem~$\WWW(I)$ is in the complexity class~$\mtext{C}$.
+% ``given~$x$ and~$y$, is $y \in w(x)$?''
+Then, $\cntc\P$ is the complexity class consisting of all counting
+problems associated with decision problems in \NP.
+%
+% unused
+%
+% We say that a problem~$L$ is \emph{$\mtext{C}\hy \text{hard}$} if
+% there is a polynomial-time reduction or parsimonious reduction,
+% respectively, for every problem~$L' \in \mtext{C}$ to $L$. If in
+% addition $L \in \mtext{C}$, then $L$ is
+% \emph{$\mtext{C}\hy \text{complete}$}.  For instance, a decision
+% problem is \NP-complete if it belongs to \NP and all decision
+% problems in \NP have polynomial-time reductions to it.
+
+
+
 \smallskip
 \noindent\textbf{Answer Set Programming (ASP).} %
 % ASP is a declarative modeling and problem solving framework that
@@ -455,6 +556,8 @@ If no rule uses disjunction, the complexity drops to
 
 \begin{example}
 \end{example}
+
+\noindent\textbf{Answer Set Counting.}
 
 \paragraph{Model counting in ASP}: XXX
 
