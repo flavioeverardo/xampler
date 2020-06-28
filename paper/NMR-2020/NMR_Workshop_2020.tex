@@ -41,6 +41,7 @@
 \def\approxmc{\textsf{ApproxMC}\xspace}
 \def\approxasc{\textsf{ApproxASC}\xspace}
 \def\asp{\textsf{\#ASP}\xspace}
+\def\SAT{\textsf{SAT}\xspace}
 
 % complexity stuff
 
@@ -446,8 +447,8 @@ problems associated with decision problems in \NP.
 % comprehensive introduction, we refer to introductory
 % literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
 %
-%We assume familiarity with propositional satisfiability (\SAT)~\cite{BiereHeuleMaarenWalsh09,KleineBuningLettman99}
-We follow standard definitions of propositional ASP~\cite{BrewkaEiterTruszczynski11}.
+We assume familiarity with propositional satisfiability (\SAT)~\cite{KleineBuningLettman99}
+and follow standard definitions of propositional ASP~\cite{BrewkaEiterTruszczynski11}.
 %For comprehensive foundations, we refer to introductory
 %literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
 %
@@ -583,7 +584,7 @@ $\cntc\coNP$-complete~\cite{FichteEtAl17}.
 If we restrict the problem~$\asp$ to normal programs without disjunction,
 the complexity drops to~$\cntc\P$-completeness,
 which is easy to see via standard reductions
-that preserve the number of solutions~\cite{Janhunen06} from and to propositional satisfiability (SAT).
+that preserve the number of solutions from and to propositional satisfiability (\SAT), see, e.g.,~\cite{Janhunen06}.
 
 \begin{example}
 Recall the previous example, graph~$G$ and example program~$\Pi$.
