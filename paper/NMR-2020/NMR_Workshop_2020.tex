@@ -50,6 +50,7 @@
 \newcommand{\Card}[1]{\left|#1\right|}
 \renewcommand{\P}{\ensuremath{\textsc{P}}\xspace}
 \newcommand{\NP}{\ensuremath{\textsc{NP}}\xspace}
+\newcommand{\coNP}{\ensuremath{\text{co-}\textsc{NP}}\xspace}
 \newcommand{\SIGMA}[2]{\ensuremath{\Sigma_{\textrm{#1}}^{\textrm{#2}}}}
 \newcommand{\WWW}{\ensuremath{\mathcal{W}}}%
 \newcommand{\mtext}[1]{\ensuremath{\mathcal{#1}}}
@@ -314,7 +315,7 @@ Given that in general counting answer sets is rather hard, namely ${\#\cdot\text
 to ${\#\cdot\Sigma_2^P}$-completeness~\cite{FichteHecher19} if counting with respect to a projection,
 a different approach than exact counting seems to be required in practice.
 %
-Indeed, such approaches were successful for propositional logic (SAT), where reasoning modes like sampling (near-uniform generation)
+Indeed, such approaches were successful for propositional logic (SAT), which is~$\cntc\P$-complete and where reasoning modes like sampling (near-uniform generation)
 or (approximate) model counting~\cite{gosase07a,gohosase07b,chmeva13a,chmeva13b,soomee19a}
 were studied.
 %
@@ -338,6 +339,9 @@ only few attention has been paid to treat parity constraints as well as reasonin
 To this end, we present an extension of \xorro{} towards approximate answer set counting following the work from~\cite{DBLP:conf/cp/ChakrabortyMV13}
 benefiting from the advanced interfaces of \clingo{},
 and the sophisticated solving techniques developed in SAT~(e.g. the award-winning solver \cryptominisat~\cite{DBLP:conf/sat/SoosNC09}).
+%
+While we do not yet have theoretical guarantees in terms of accuracy of our approach in general,
+the results look promising and we hope that this will foster further research in approximate answer set counting.
 %
 %This paper is structured in ...
 
@@ -554,14 +558,38 @@ The problem of deciding whether an ASP program has an answer set is called
 If no rule uses disjunction, the complexity drops to
 \text{NP}-complete~\cite{BidoitFroidevaux91,MarekTruszczynski91}.
 
+%The problem~$\asp$ asks for a given program~$\Pi$ to compute the number of
+%answer sets of~$\Pi$.
+%In general we have that problem~$\asp$ is
+%$\cntc\coNP$-complete~\cite{FichteEtAl17}.
+
 \begin{example}
+Assume a graph~$G$ consisting of vertices~$V=a,b,c,d$
+and edges~$E=\{\{a,b\}, \{a,c\}, \{b,c\}, \{c,d\}\}$.
+Then, the \emph{vertex cover problem} asks for a set~$S\subseteq V$ of vertices
+such that for each edge~$e\in E$ we have that~$S\cap e\neq \emptyset$.
+An extension is the \emph{subset-minimal vertex cover problem}, where we ask
+only for sets~$S$, where no subset~$S'\subsetneq S$ is a vertex cover of~$G$.
+We elegantly encode the computation of subset-minimal vertex covers into an ASP program~$\Pi$ as follows:
+For each edge~$\{u,v\}\in E$, program~$\Pi$ contains the rules~$u \vee v \leftarrow$.
+Observe that the resulting program~$\Pi$ indeed precisly characterizes the subset-minimal vertex covers of~$G$, which are~$\{a,c\}$, $\{b,c\}$, and $\{a,b,d\}$.
 \end{example}
 
-\noindent\textbf{Answer Set Counting.}
+\noindent\textbf{Answer Set Counting (\asp).}
+The problem~$\asp$ asks for a given program~$\Pi$ to compute the number of
+answer sets of~$\Pi$.
+In general we have that problem~$\asp$ is
+$\cntc\coNP$-complete~\cite{FichteEtAl17}.
+If we restrict the problem~$\asp$ to normal programs without disjunction,
+the complexity drops to~$\cntc\P$-completeness,
+which is easy to see via standard reductions
+that preserve the number of solutions~\cite{Janhunen06} from and to propositional satisfiability (SAT).
 
-\paragraph{Model counting in ASP}: XXX
-
-\paragraph{Complexity of exact model counting in ASP}: XXX
+\begin{example}
+Recall the previous example, graph~$G$ and example program~$\Pi$.
+Since~$G$ has~$3$ subset-minimal vertix covers, the solution to problem~$\asp$
+for given program~$\Pi$ is~$3$.
+\end{example}
 
 
 \section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:parity}
