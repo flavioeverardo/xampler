@@ -173,7 +173,7 @@
 \newcommand{\unclasp}{\sysfont{unclasp}}
 \newcommand{\wasp}{\sysfont{wasp}}
 \newcommand{\xorro}{\sysfont{xorro}}
-\newcommand{\xampler}{\sysfont{xampler}}
+\newcommand{\xampler}{\sysfont{xorro}}
 \newcommand{\zchaff}{\sysfont{zchaff}}
 \newcommand{\zzz}{\sysfont{z3}}
 \newcommand{\cryptominisat}{\sysfont{crypto-minisat}}
@@ -851,7 +851,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 	$counter = 0$ ; $C = [\,]$ \;
 %	$$\;
 	$pivot =  2 \, \times \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$ \;
-	$S = Xampler(\fff, pivot + 1)$ \;
+	$S = \xampler(\fff, pivot + 1)$ \;
 	\eIf{ $|S| \leq pivot$}
 	{ % Open If
 		\textbf{return} $|S|$
@@ -877,7 +877,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 %	$threshold = \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$\;
 %	$iterations = \lceil 27 \log_2 (3/\delta) \rceil$\;
 %	$pivot \=  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
-%	$S \= Xampler(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
+%	$S \= \xampler(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
 %	\eIf{ $|S| \leq pivot$}
 %	{ % Open If
 %		\textbf{return} $|S|$
@@ -920,7 +920,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 		$ i = i + 1$ \\
 		$h \gets H_{xor}(n, i - l, 3)$ \\
 		$\alpha \gets \{0,1\}^{i-l}$ \\
-		$S = Xampler(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
+		$S = \xampler(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
 	}
 
 	\eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
