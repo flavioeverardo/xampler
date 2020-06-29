@@ -173,7 +173,7 @@
 \newcommand{\unclasp}{\sysfont{unclasp}}
 \newcommand{\wasp}{\sysfont{wasp}}
 \newcommand{\xorro}{\sysfont{xorro}}
-\newcommand{\xampler}{\sysfont{xorro}}
+\newcommand{\xampler}{\sysfont{xampler}}
 \newcommand{\zchaff}{\sysfont{zchaff}}
 \newcommand{\zzz}{\sysfont{z3}}
 \newcommand{\cryptominisat}{\sysfont{crypto-minisat}}
@@ -803,15 +803,17 @@ If we use $k$-wise independence, all cells will be small and we will get a \text
 %
 Using $3$-wise independence we achieve \emph{a random cell is small with high probability}, known as \textbf{almost-uniform generation}.
 
-\section{Algorithm} \label{approxasp}We use the already evolved algorithm from propositional case \cite{ChakrabortyMV13} and lift it to ASP.
+\section{Algorithm} \label{approxasp}We use the already evolved algorithm from the case of propositional satisfiability~\cite{ChakrabortyMV13} and lift it to ASP.
 %
 We use 3-wise independent hashing functions to partition the set of models of an input formula into ``small" cells.
+%
+Our resulting system extends \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} and is called \xampler\footnote{The system \xampler\ is open-source and available at~\url{https://github.com/flavioeverardo/xampler/}.}.
 
 %The approximate model counting algorithm 
 
-We assume that that the algorithm has access to \xampler\ that takes an input an ASP program $\fff^{\prime}$ possibly in conjunction with \XOR\ constraints, as well as a bound $b\geq0$.
+We assume that \xampler\ has access to \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} that takes an input an ASP program $\fff^{\prime}$ possibly in conjunction with \XOR\ constraints, as well as a bound $b\geq0$.
 %
-The \xampler $(\fff^{\prime},b)$ returns set of models $S$ of $\fff^{\prime}$ such that $|S| = min(b, \#\fff^{\prime})$.
+The function \xorro $(\fff^{\prime},b)$ returns set of models $S$ of $\fff^{\prime}$ such that $|S| = min(b, \#\fff^{\prime})$.
 %
 %In order to test whether the generated cells are indeed small, we choose a random cell and check if it is non-empty and has no more than pivot elements, where the pivot is a threshold that depends only on the tolerance bound \ep. 
 %%
@@ -824,13 +826,13 @@ The \xampler $(\fff^{\prime},b)$ returns set of models $S$ of $\fff^{\prime}$ su
 %%
 %Otherwise, the size of the cell last chosen is scaled by the number of cells to obtain an \ep-approximate estimate of the model count.
 
-Algorithm \appasp takes as input ASP program $\fff$, a tolerance \ep $(0 < \epsilon \leq 1)$ and a confidence \del $(0 < \delta \leq 1)$ as an input.
+The system \xampler\ implements algorithm \appasp, which takes as input ASP program $\fff$, a tolerance \ep $(0 < \epsilon \leq 1)$ and a confidence \del $(0 < \delta \leq 1)$ as an input.
 %
 It computes a threshold pivot that depends on \ep to determine the chosen value of the size of a small cell.
 %
 Then it checks if the input program $\fff$ has at least a pivot number of solutions.
 %
-It uses the \xampler\ to check if the input program has at least $b \, (b = pivots+ 1)$ solutions.
+It uses \xorro\ to check if the input program has at least $b \, (b = pivots+ 1)$ solutions.
 %
 If the total number of solutions $S$ of $\fff$ is less than or equals to $b$ the algorithm returns the answer set count $|S|$. 
 %
@@ -851,7 +853,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 	$counter = 0$ ; $C = [\,]$ \;
 %	$$\;
 	$pivot =  2 \, \times \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$ \;
-	$S = \xampler(\fff, pivot + 1)$ \;
+	$S = \xorro(\fff, pivot + 1)$ \;
 	\eIf{ $|S| \leq pivot$}
 	{ % Open If
 		\textbf{return} $|S|$
@@ -877,7 +879,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 %	$threshold = \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$\;
 %	$iterations = \lceil 27 \log_2 (3/\delta) \rceil$\;
 %	$pivot \=  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
-%	$S \= \xampler(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
+%	$S \= \xorro(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
 %	\eIf{ $|S| \leq pivot$}
 %	{ % Open If
 %		\textbf{return} $|S|$
@@ -920,7 +922,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 		$ i = i + 1$ \\
 		$h \gets H_{xor}(n, i - l, 3)$ \\
 		$\alpha \gets \{0,1\}^{i-l}$ \\
-		$S = \xampler(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
+		$S = \xorro(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
 	}
 
 	\eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
@@ -941,7 +943,7 @@ The algorithm uses random hash functions from $H_{xor}(n, i-l, 3)$ to partition 
 %
 This is done by choosing a random hash function $h$ (on line 5) and choosing randomly with probability half ($\alpha$, line 6) bits to set.
 %
-Then it conjunct the chosen XOR with the program \fff and use \xampler\ to check whether it has at most $pivot +1$ models.
+Then it conjuncts the chosen XOR with the program \fff and uses \xorro\ to check whether it has at most $pivot +1$ models.
 % 
 This process repeats (lines 5-7) and the loop terminates if either a randomly chosen cell is found to be small ($|S| \leq pivot$) and non-empty, or if the number of cells generated $> 2^n+1/pivot$.
 
