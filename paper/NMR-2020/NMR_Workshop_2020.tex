@@ -266,7 +266,7 @@ ankit.shukla@jku.at
 %Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI and other areas as well as plenty of practical applications.
 %While modern ASP solvers not only compute one solution (answer set), but actually support different reasoning modes, the problem of counting answer sets has not been subject to intense studies yet.
 Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI, and other areas with plenty of practical applications.
-While modern ASP solvers not only compute one solution (answer set) but actually support different (reasoning) problems, the problem of counting answer sets has not been subject to intense studies.
+While modern ASP solvers not only compute one solution (answer set) buts support different (reasoning) problems, the problem of counting answer sets has not been subject to intense studies.
 This is in contrast to propositional satisfiability (SAT), where several applications and problems related to quantitative reasoning trace back to model counting. However, due to high computational complexity and depending on the actual application, approximate counting might be sufficient. Indeed, there are plenty of applications, where approximate counting for SAT is well-suited. This work deals with lifting \xorro{}, which builds on top of an ASP solver and allows XOR constraints, towards approximate model counting for ASP. We present preliminary experiments using the resulting approximate counter for ASP. % and also show preliminary experiments for several problems.
 While we do not have specific guarantees in terms of accuracy, our preliminary results look promising.
 \end{abstract}
@@ -325,7 +325,7 @@ For this purpose, so-called parity constraints  (\XOR{} constraints) are used sp
 Parity constraints have been recently accommodated in ASP
 as the fundamental part of the system \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
 %
-With different solving approaches over parity constraints in \xorro{}, these constraints amount to the classical \XOR{} operator following the aggregates-like syntax by means of theory atoms.
+With different solving approaches over parity constraints in \xorro{}, these constraints amount to the classical \XOR{} operator following the aggregates-like syntax using theory atoms.
 They are interpreted as directives, solved on top of an ASP program acting as answer set filters that do not satisfy the parity constraint in question.
 %
 %Currently, these parity constraints may not occur in the bodies nor the heads of rules.
@@ -335,13 +335,13 @@ They are interpreted as directives, solved on top of an ASP program acting as an
 %Parity constraints constitute the foundations of reasoning modes like sampling or (approximate) model counting \cite{DBLP:journals/corr/abs-1806-02239}, as well as circuit verification and cryptography \cite{DBLP:conf/laitinen2014extending}.
 %
 With most of the applications of \XOR{} constraints in the neighboring area of SAT~\cite{DBLP:journals/corr/abs-1806-02239},
-only few attention has been paid to treat parity constraints as well as reasoning modes like sampling or approximate model counting for ASP. %~\cite{kalepesc16a}.
+only a few attention has been paid to treat parity constraints as well as reasoning modes like sampling or approximate model counting for ASP. %~\cite{kalepesc16a}.
 %
 To this end, we present an extension of \xorro{} towards approximate answer set counting following the work from~\cite{ChakrabortyMV13}
 benefiting from the advanced interfaces of ASP solver \clingo{}~\cite{DBLP:conf/iclp/GebserKKOSW16},
 and the sophisticated solving techniques developed in SAT~(e.g. the award-winning solver \cryptominisat~\cite{DBLP:conf/sat/SoosNC09}).
 %
-While we do not yet have theoretical guarantees in terms of accuracy of our approach in general,
+While we do not yet have theoretical guarantees in terms of the accuracy of our approach in general,
 the results look promising and we hope that this will foster further research in approximate answer set counting.
 %
 %This paper is structured in ...
