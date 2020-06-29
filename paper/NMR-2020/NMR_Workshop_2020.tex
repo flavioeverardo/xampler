@@ -77,7 +77,7 @@
 \newcommand{\XOR}{\textsc{xor}} % just an idea
 
 %%%%%%%%% Added By Ankit
-\newcommand{\fff}{$P$\xspace} 
+\newcommand{\fff}{\Pi\xspace} 
 \newcommand{\mc}{$mc$\xspace} 
 \newcommand{\ep}{$\epsilon$\xspace} 
 \newcommand{\del}{$\delta$\xspace} 
@@ -707,7 +707,7 @@ switching between ASP encodings of parity constraints (eager approaches), and th
 %
 
 \section{Universal hashing and xor's} \label{sec:hashing}
-Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program \fff.
+Given an input ASP program $\fff$, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program $\fff$.
 %
 One approach is to count all the solutions by enumeration (almost), known as exact counting.
 % 
@@ -719,15 +719,15 @@ There are ongoing works \cite{FichteEtAl17} in improving exact model counters, b
 
 In applications of model counting like probabilistic reasoning, planning with uncertainty etc, it may be sufficient to approximate the solution count and avoid the overhead of exact model counting.
 %
-An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(F, \epsilon, \delta)$.
+An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(\fff, \epsilon, \delta)$.
 %
-The algorithm takes a program \fff with a tolerance $\epsilon > 0$ and a confidence $0 < \delta \leq 1$ as an input.
+The algorithm takes a program $\fff$ with a tolerance $\epsilon > 0$ and a confidence $0 < \delta \leq 1$ as an input.
 %
 The output is an estimate \mc based on the parameter \ep and \del.
 %
 Proving theoretical bounds and adapting the algorithm for the same is an ongoing work.
 
-The central idea of the approximate model counting approach is the use of hash functions to partition the \sol for a program \fff, into roughly equal small cells.
+The central idea of the approximate model counting approach is the use of hash functions to partition the \sol for a program $\fff$, into roughly equal small cells.
 %
 Then pick a random cell and scale it by the number of cells to obtain an \ep-approximate estimate of the model count.
 %
@@ -808,7 +808,7 @@ We use 3-wise independent hashing functions to partition the set of models of an
 
 %The approximate model counting algorithm 
 
-We assume that that the algorithm has access to \xampler\ that takes an input an ASP program $\fff^{\prime}$ possibly in conjunction with xor constraints, as well as a bound $b\geq0$.
+We assume that that the algorithm has access to \xampler\ that takes an input an ASP program $\fff^{\prime}$ possibly in conjunction with \XOR\ constraints, as well as a bound $b\geq0$.
 %
 The \xampler $(\fff^{\prime},b)$ returns set of models $S$ of $\fff^{\prime}$ such that $|S| = min(b, \#\fff^{\prime})$.
 %
@@ -823,15 +823,15 @@ The \xampler $(\fff^{\prime},b)$ returns set of models $S$ of $\fff^{\prime}$ su
 %%
 %Otherwise, the size of the cell last chosen is scaled by the number of cells to obtain an \ep-approximate estimate of the model count.
 
-Algorithm \appasp takes as input ASP program \fff, a tolerance \ep $(0 < \epsilon \leq 1)$ and a confidence \del $(0 < \delta \leq 1)$ as an input.
+Algorithm \appasp takes as input ASP program $\fff$, a tolerance \ep $(0 < \epsilon \leq 1)$ and a confidence \del $(0 < \delta \leq 1)$ as an input.
 %
 It computes a threshold pivot that depends on \ep to determine the chosen value of the size of a small cell.
 %
-Then it checks if the input program \fff has at least a pivot number of solutions.
+Then it checks if the input program $\fff$ has at least a pivot number of solutions.
 %
 It uses the \xampler\ to check if the input program has at least $b \, (b = pivots+ 1)$ solutions.
 %
-If the total number of solutions $S$ of \fff is less than or equals to $b$ the algorithm returns the answer set count $|S|$. 
+If the total number of solutions $S$ of $\fff$ is less than or equals to $b$ the algorithm returns the answer set count $|S|$. 
 %
 Otherwise, the algorithm continues and calculates a parameter $iter (\geq 1)$ determines the number of times \countas is invoked.
 %
@@ -844,7 +844,7 @@ The resulted in non-$\bot$ estimates of the ASP model count $c$ returned by \cou
 The final estimate of the model count returned by \appasp is the mean of the estimates stored in $C$, computed using FindMean(C).
 
 \begin{algorithm}[t]
-	\textbf{ApproxASP}(\fff, \ep, \del) \;
+	\textbf{ApproxASP}($\fff$, \ep, \del) \;
 	\SetAlgoLined
 	\KwResult{Approximate number of answer sets or $\bot$}
 	$counter = 0$ ; $C = [\,]$ \;
@@ -908,7 +908,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 %\end{algorithm}
 
 \begin{algorithm}[t]
-	/* Assume $z_1 , ..., z_n $ are the variables of \fff */ \\
+	/* Assume $z_1 , ..., z_n $ are the variables of $\fff$ */ \\
 	$ i, l = \lfloor \log_2 (pivot) - 1 \rfloor$ \\
 %	$ i \= l - 1$ \\
 	
@@ -931,16 +931,16 @@ The final estimate of the model count returned by \appasp is the mean of the est
 	\caption{CountAS($\fff, pivot$)}
 \end{algorithm}
 
-Algorithm \countas takes as input an ASP program \fff and a
+Algorithm \countas takes as input an ASP program $\fff$ and a
 pivot.
 %
-It returns an \ep-approximate estimate of the model count of the program \fff.
+It returns an \ep-approximate estimate of the model count of the program $\fff$.
 %
-The algorithm uses random hash functions from $H_{xor}(n, i-l, 3)$ to partition the model space of the program \fff.
+The algorithm uses random hash functions from $H_{xor}(n, i-l, 3)$ to partition the model space of the program $\fff$.
 %
 This is done by choosing a random hash function $h$ (on line 5) and choosing randomly with probability half ($\alpha$, line 6) bits to set.
 %
-Then it conjunct the chosen xor with the program \fff and use \xampler\ to check whether it has at most $pivot +1$ models.
+Then it conjunct the chosen xor with the program $\fff$ and use \xampler\ to check whether it has at most $pivot +1$ models.
 % 
 This process repeats (lines 5-7) and the loop terminates if either a randomly chosen cell is found to be small ($|S| \leq pivot$) and non-empty, or if the number of cells generated $> 2^n+1/pivot$.
 
