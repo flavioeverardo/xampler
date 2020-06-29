@@ -5,13 +5,13 @@ For now, we focus only on the quality of the counting, leaving the scalability a
 %
 To test the quality of the counting,
 we generated ten random instances from different ASP problem classes, where we aim for counting \emph{graph colorings}, \emph{subset-minimal vertex covers}, solutions (witnesses) to the \emph{schur decision problem}, \emph{hamiltonian paths}, \emph{subset-minimal independent dominating sets} as well as solving \emph{projected model counting} on 2-QBFs~\cite{DurandHermannKolaitis05,KleineBuningLettman99}.~\footnote{The encodings and instances can be found in: \url{https://tinyurl.com/approx-asp}}
-Note that projected model counting on 2-QBFs is proven to be $\cntc\coNP$-complete~\cite{DurandHermannKolaitis05}. Further, we also suspect that both problems of counting all the subset-minimal vertex covers as well as counting subset-minimal independent dominating set are hard for this complexity class. At least there are no known polynomial encodings for \SAT that precisely capture the solutions to these problems. Hence, it is unlikely that one can easily approximate the number of solutions by means of approximate SAT counting.
+Note that projected model counting on 2-QBFs is proven to be $\cntc\coNP$-complete~\cite{DurandHermannKolaitis05}. Further, we also suspect that both problems of counting all the subset-minimal vertex cover as well as counting subset-minimal independent dominating sets are hard for this complexity class. At least there are no known polynomial encodings for \SAT that precisely capture the solutions to these problems. Hence, it is unlikely that one can easily approximate the number of solutions using approximate SAT counting.
 Also, to track the counting, we cared that these instances were ``easy to solve'' for \clasp{},
 meaning that \clasp{} must enumerate all answer sets within 600 seconds timeout (without printing).
 
 To get the feeling for our initial counting experiments, we tried different values for both the tolerance and the confidence, seeking to different size of clusters and number of iterations,
 as shown in lines 3 and 8 from Algorithm 1, respectively.
-As part of the setup of the experiments and for comparisson, we asked \xorro{} to estimate the count also by calcuating the median, taken from the original ApproxMC Algorithm in~\cite{ChakrabortyMV13}.
+As part of the setup of the experiments and for comparison, we asked \xorro{} to estimate the count also by calculating the median, taken from the original ApproxMC Algorithm in~\cite{ChakrabortyMV13}.
 
 The experiments were run sequentially under the Ubuntu-based Elementary OS on a 16 GB memory with a 2.60 GHz Dual-Core Intel Core i7 processor laptop using Python 3.7.6.
 Each benchmark instance (in smodels output format, generated offline with \gringo{}) was run five times without any time restriction. 
@@ -67,7 +67,7 @@ The last row of each table displays the average Q for each count.
 In the first three tables, we can see the pattern that the mean count got better results even in their worst case.
 On the other hand, the median under approximate the counts. For instance, in the Schur problem, the last three instances where almost 50\% under approximated, lowering the average on the bottom line.
 %
-On the other hand, for the subset-minimal vertex covers, we see that both counts were almost exact on average. In this example, also the worst cases are close to an exact count.
+On the other hand, for the subset-minimal vertex covers, we see that both counts were almost exactly on average. In this example, also the worst cases are close to an exact count.
 %
 For the most complex problems shown in Tables~\ref{table:smds} and~\ref{table:qbf}, the average counts over approximate the number of solutions.
 However, the margin for the median's best case is close to an exact count. A proof for this is in Table~\ref{table:qbf} where a Q of 1 was gotten in six instances out of ten.
