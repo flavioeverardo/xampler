@@ -77,7 +77,7 @@
 \newcommand{\XOR}{\textsc{xor}} % just an idea
 
 %%%%%%%%% Added By Ankit
-\newcommand{\fff}{\Pi\xspace} 
+\newcommand{\fff}{\ensuremath{\Pi}\xspace} 
 \newcommand{\mc}{$mc$\xspace} 
 \newcommand{\ep}{$\epsilon$\xspace} 
 \newcommand{\del}{$\delta$\xspace} 
@@ -666,7 +666,7 @@ we have $2^m$ clusters, each with two answer sets.
 %In this implementation,
 Currently, these constraints are interpreted as directives,
 filtering answer sets that do not satisfy the parity constraint in question.
-\footnote{Cannot occur either in the bodies or heads of rules.}
+\footnote{XOR constraints cannot occur either in the bodies or heads of rules.}
 %
 Hence, the first two
 constraints hold for any combination of an uneven number of literals from \texttt{p(1), p(4), p(5)} and \texttt{p(2), p(5), p(6)} respectively.
@@ -674,7 +674,7 @@ The third constraint holds if an odd number of literals from \texttt{p(3)} to \t
 the atoms \texttt{p(1)} and \texttt{p(2)} are included.
 The last parity constraint discards any answer set not containing the atom \texttt{p(5)}.
 
-\xorro{} handles parity constraints in six different ways,
+The solver \xorro{} handles parity constraints in six different ways,
 switching between ASP encodings of parity constraints (eager approaches), and the use of theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
 %as shown in Table~\ref{table:xorro_approaches},
 %where the first three corresponds to ASP encodings of parity constraints (eager approaches), and the last three to theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
@@ -706,8 +706,8 @@ switching between ASP encodings of parity constraints (eager approaches), and th
 %\end{table*}
 %
 
-\section{Universal hashing and xor's} \label{sec:hashing}
-Given an input ASP program $\fff$, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program $\fff$.
+\section{Universal hashing and XOR's} \label{sec:hashing}
+Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program \fff.
 %
 One approach is to count all the solutions by enumeration (almost), known as exact counting.
 % 
@@ -908,7 +908,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 %\end{algorithm}
 
 \begin{algorithm}[t]
-	/* Assume $z_1 , ..., z_n $ are the variables of $\fff$ */ \\
+	/* Assume $z_1 , ..., z_n $ are the atoms of \fff */ \\
 	$ i, l = \lfloor \log_2 (pivot) - 1 \rfloor$ \\
 %	$ i \= l - 1$ \\
 	
@@ -940,7 +940,7 @@ The algorithm uses random hash functions from $H_{xor}(n, i-l, 3)$ to partition 
 %
 This is done by choosing a random hash function $h$ (on line 5) and choosing randomly with probability half ($\alpha$, line 6) bits to set.
 %
-Then it conjunct the chosen xor with the program $\fff$ and use \xampler\ to check whether it has at most $pivot +1$ models.
+Then it conjunct the chosen XOR with the program \fff and use \xampler\ to check whether it has at most $pivot +1$ models.
 % 
 This process repeats (lines 5-7) and the loop terminates if either a randomly chosen cell is found to be small ($|S| \leq pivot$) and non-empty, or if the number of cells generated $> 2^n+1/pivot$.
 
