@@ -19,41 +19,41 @@
 \begin{document}
 \mainmatter              % start of a contribution
 %
-\title{Hamiltonian Mechanics unter besonderer Ber\"ucksichtigung der
-h\"ohereren Lehranstalten}
+\title{Extending XORO with Approximate Model Counting}
 %
 \titlerunning{Hamiltonian Mechanics}  % abbreviated title (for running head)
 %                                     also used for the TOC unless
 %                                     \toctitle is used
 %
-\author{Ivar Ekeland\inst{1} \and Roger Temam\inst{2}
-Jeffrey Dean \and David Grove \and Craig Chambers \and Kim~B.~Bruce \and
-Elsa Bertino}
 %
-\authorrunning{Ivar Ekeland et al.} % abbreviated author list (for running head)
+\author{
+	Flavio Everardo\inst{1}\and
+	Markus Hecher\inst{2}\and
+	Ankit Shukla\inst{3}
+}
+%
+\authorrunning{Flavio Everardo et al.} % abbreviated author list (for running head)
 %
 %%%% list of authors for the TOC (use if author list has to be modified)
-\tocauthor{Ivar Ekeland, Roger Temam, Jeffrey Dean, David Grove,
-Craig Chambers, Kim B. Bruce, and Elisa Bertino}
+%\tocauthor{Ivar Ekeland, Roger Temam, Jeffrey Dean, David Grove, Craig Chambers, Kim B. Bruce, and Elisa Bertino}
 %
-\institute{Princeton University, Princeton NJ 08544, USA,\\
-\email{I.Ekeland@princeton.edu},\\ WWW home page:
-\texttt{http://users/\homedir iekeland/web/welcome.html}
-\and
-Universit\'{e} de Paris-Sud,
-Laboratoire d'Analyse Num\'{e}rique, B\^{a}timent 425,\\
-F-91405 Orsay Cedex, France}
+\institute{ University of Potsdam, Germany \and 
+	TU Wien, Vienna, Austria\\
+	\and  JKU, Linz, Austria\\
+}
 
 \maketitle              % typeset the title of the contribution
 
 \begin{abstract}
-The abstract should summarize the contents of the paper
-using at least 70 and at most 150 words. It will be set in 9-point
-font size and be inset 1.0 cm from the right and left margins.
-There will be two blank lines before and after the Abstract. \dots
-% We would like to encourage you to list your keywords within
-% the abstract section using the \keywords{...} command.
-\keywords{computational geometry, graph theory, Hamilton cycles}
+Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI and other areas as well as plenty of practical applications.
+While modern ASP solvers not only compute one solution (answer set), but actually support different reasoning modes, the problem of counting answer sets has not been subject to intense studies yet.
+
+This is in contrast to propositional satisfiability (SAT), where several applications and problems related to quantitative reasoning trace back to model counting. However, due to high computational complexity and depending on the actual application, approximate counting might be sufficient. Indeed, there are plenty of applications, where approximate counting for SAT is well-suited. This work deals with establishing approximate model counting for ASP, thereby lifting ideas from SAT to ASP. We present the first approximate counter for ASP and also show preliminary experiments for several problems.
+\keywords{Approximate Counting,
+	Answer Set Solving,
+	Answer Set Programming,
+	Counting Problems,
+	Model Counting}
 \end{abstract}
 %
 \section{Fixed-Period Problems: The Sublinear Case}
