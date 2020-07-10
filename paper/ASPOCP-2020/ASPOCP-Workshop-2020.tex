@@ -222,7 +222,7 @@
 %
 \title{Extending XORO with Approximate Model Counting}
 %
-\titlerunning{Hamiltonian Mechanics}  % abbreviated title (for running head)
+\titlerunning{Extending XORO with Approximate Model Counting}  % abbreviated title (for running head)
 %                                     also used for the TOC unless
 %                                     \toctitle is used
 %
@@ -259,21 +259,693 @@ This is in contrast to propositional satisfiability (SAT), where several applica
 %
 
 \section{Introduction} \label{sec:introduction}
-XXX
+%
+Answer Set Programming (ASP)~\cite{Lifschitz99,BrewkaEiterTruszczynski11,GebserKaminskiKaufmannSchaub12} is a
+problem modeling and solving framework that is well-known in the area
+of knowledge representation and reasoning and artificial intelligence.
+%
+This framework has been practically applied for several
+problems~\cite{BalducciniGelfondNogueira06a,NiemelaSimonsSoininen99,NogueiraBalducciniGelfond01a,GuziolowskiEtAl13a,SchaubWoltran18}.
+%
 
-\section{Preliminaries} \label{sec:preliminaries}
-XXX
+Recently, there has been growing interest for counting solutions of problems.
+%
+Indeed, counting solutions is a well-known task not only in mathematics and computer
+science, but also in other
+areas~\cite{ChakrabortyMeelVardi16a,DomshlakHoffmann07a,GomesKautzSabharwalSelman08a,SangBeameKautz05a}.
+%
+%
+%
+Examples cover also applications in machine learning and probabilistic inference~\cite{ChaviraDarwiche08a}.
+%
+%
+In terms of computational complexity, counting has been well-studied since the
+late
+70s~\cite{DurandHermannKolaitis05,HemaspaandraVollmer95a,Valiant79,Valiant79b}.
+%
+There are also results for counting involving projection, where one wants to
+count only with respect to a given set of projection atoms,
+which has been established for logic~\cite{AzizChuMuise15a,CapelliMengel19,FichteEtAl18,LagniezMarquis19a,GuptaSharmaRoy19a,SharmaRoySoos19a},
+reliability estimation~\cite{MeelEtAl17a} as well as
+answer set programming~\cite{GebserKaufmannSchaub09a,Aziz15a,FichteHecher19}.
+%
+
+Given that in general counting answer sets is rather hard, namely ${\#\cdot\text{coNP}}$-complete~\cite{FichteEtAl17,DurandHermannKolaitis05}, which further increases
+to ${\#\cdot\Sigma_2^P}$-completeness~\cite{FichteHecher19} if counting with respect to a projection,
+a different approach than exact counting seems to be required in practice.
+%
+Indeed, such approaches were successful for propositional logic (SAT), which is~$\cntc\P$-complete and where reasoning modes like sampling (near-uniform generation)
+or (approximate) model counting~\cite{gosase07a,chmeva13a,ChakrabortyMV13,SharmaRoySoos19a}
+were studied.
+%
+For this purpose, so-called parity constraints  (\XOR{} constraints) are used specifically to partition the search space in parts that preferably are of roughly the same size.
+
+Parity constraints have been recently accommodated in ASP
+as the fundamental part of the system \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
+%
+With different solving approaches over parity constraints in \xorro{}, these constraints amount to the classical \XOR{} operator following the aggregates-like syntax using theory atoms.
+They are interpreted as directives, solved on top of an ASP program acting as answer set filters that do not satisfy the parity constraint in question.
+%
+%Currently, these parity constraints may not occur in the bodies nor the heads of rules.
+
+
+
+%Parity constraints constitute the foundations of reasoning modes like sampling or (approximate) model counting \cite{DBLP:journals/corr/abs-1806-02239}, as well as circuit verification and cryptography \cite{DBLP:conf/laitinen2014extending}.
+%
+With most of the applications of \XOR{} constraints in the neighboring area of SAT~\cite{DBLP:journals/corr/abs-1806-02239},
+only a few attention has been paid to treat parity constraints as well as reasoning modes like sampling or approximate model counting for ASP. %~\cite{kalepesc16a}.
+%
+To this end, we present an extension of \xorro{} towards approximate answer set counting following the work from~\cite{ChakrabortyMV13}
+benefiting from the advanced interfaces of ASP solver \clingo{}~\cite{DBLP:conf/iclp/GebserKKOSW16},
+and the sophisticated solving techniques developed in SAT~(e.g. the award-winning solver \cryptominisat~\cite{DBLP:conf/sat/SoosNC09}).
+%
+While we do not yet have theoretical guarantees in terms of the accuracy of our approach in general,
+the results look promising and we hope that this will foster further research in approximate answer set counting.
+%
+%This paper is structured in ...
+
+\section{Preliminaries}
+
+\smallskip\noindent\textbf{Computational Complexity.}
+%
+%
+We assume familiarity with standard notions in
+  computational complexity~\cite{Papadimitriou94} and use counting complexity classes
+  as defined by Durand, Hermann and
+  Kolaitis~\cite{DurandHermannKolaitis05}.
+%
+%}
+%
+%
+% which are different from the counting complexity classes introduced
+% Valiant~\cite{Valiant79,Valiant79b}, in particular, they allow for a
+% more fine-grained distinction of counting complexity. % beyond \#P.
+%
+% and follow the notation by Hesaspaandra and
+% Vollmer~\cite{HemaspaandraVollmer95a} for counting complexity classes,
+% which are different from the counting complexity classes introduced
+% Valiant~\cite{Valiant79,Valiant79b}, in particular, they allow for a
+% more fine-grained distinction of counting complexity. % beyond \#P.
+%
+%For parameterized complexity, we refer to standard
+%texts~\cite{CyganEtAl15}. 
+%
+% ,DowneyFellows13,FlumGrohe06,Niedermeier06}.
+%
+%We recall some basic notions.
+%
+Let $\Sigma$ and $\Sigma'$ be finite alphabets, $I \in \Sigma^*$ an \emph{instance}, and $\CCard{I}$
+%%
+ denote the size of~$I$. %
+%\longversion{ denote its size.}
+% Let $L\subseteq \Sigma^*$ and $L' \subseteq \Sigma'^*$ be
+% decision problems.
+%
+%Let $L \subseteq \Sigma^* \times \Nat$ and
+%$L' \subseteq {\Sigma'}^*\times \Nat$ be two parameterized problems. 
+%An \emph{fpt-reduction} $r$ from $L$ to $L'$ is a many-to-one reduction
+%from $\Sigma^*\times \Nat$ to ${\Sigma'}^*\times \Nat$ such that for all
+%$I \in \Sigma^*$ we have $(I,k) \in L$ if and only if
+%$r(I,k)=(I',k')\in L'$ such that $k' \leq g(k)$ for a fixed computable
+%function $g: \Nat \rightarrow \Nat$, and there is a computable function
+%$f$ and a constant $c$ such that $r$ is computable in time
+%$O(f(k)\CCard{I}^c)$. If additionally~$g$ is linear,
+%then~$r$ is referred to as~\emph{fptl-reduction}.
+%~\cite{FlumGrohe06}.
+%
+%
+%
+A \emph{witness function} %is a
+%function
+ $\mathcal{W}: \Sigma^* \rightarrow 2^{{\Sigma'}^*}$ %that
+maps an instance~$I \in \Sigma^*$ to its \emph{witnesses}. 
+%a finite subset of~${\Sigma'}^*$. %We call the set~$\WWW(I)$ the \emph{witnesses}. 
+A
+\emph{counting
+  problem}~$L: \Sigma^* \rightarrow \Nat_0$ is a
+function that maps a given instance~$I \in \Sigma^*$ to the cardinality of its
+witnesses~$\Card{\WWW(I)}$.
+%
+%
+Let $\mtext{C}$ be a decision complexity class,~e.g., \P. Then,
+$\cntc\mtext{C}$ denotes the class of all counting problems whose
+witness function~$\WWW$ satisfies (i)~there is a
+function~$f: \Nat_0 \rightarrow \Nat_0$ such that for every
+instance~$I \in \Sigma^*$ and every $W \in \WWW(I)$ we have
+$\Card{W} \leq f(\CCard{I})$ and $f$ is computable in
+time~$\bigO{\CCard{I}^c}$ for some constant~$c$ and (ii)~for every
+instance~$I \in \Sigma^*$ decision problem~$\WWW(I)$ is in the complexity class~$\mtext{C}$.
+% ``given~$x$ and~$y$, is $y \in w(x)$?''
+Then, $\cntc\P$ is the complexity class consisting of all counting
+problems associated with decision problems in \NP.
+%
+% unused
+%
+% We say that a problem~$L$ is \emph{$\mtext{C}\hy \text{hard}$} if
+% there is a polynomial-time reduction or parsimonious reduction,
+% respectively, for every problem~$L' \in \mtext{C}$ to $L$. If in
+% addition $L \in \mtext{C}$, then $L$ is
+% \emph{$\mtext{C}\hy \text{complete}$}.  For instance, a decision
+% problem is \NP-complete if it belongs to \NP and all decision
+% problems in \NP have polynomial-time reductions to it.
+
+
+
+\smallskip
+\noindent\textbf{Answer Set Programming (ASP).} %
+% ASP is a declarative modeling and problem solving framework that
+% combines techniques of knowledge representation and database
+% theory. Two of the main advantages of ASP are its
+% expressiveness~\cite{BrewkaEiterTruszczynski11} and, when using
+% non-ground programs, its advanced declarative problem modelling
+% capability. Prior to solving, non-ground programs are usually compiled
+% into ground ones by a grounder.  For particular non-ground programs,
+% treewidth guarantees are known~\cite{BliemEtAl17a}.
+% In this paper, we restrict ourselves to ground ASP programs.  For a
+% comprehensive introduction, we refer to introductory
+% literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
+%
+We assume familiarity with propositional satisfiability (\SAT)~\cite{KleineBuningLettman99}
+and follow standard definitions of propositional ASP~\cite{BrewkaEiterTruszczynski11}.
+%For comprehensive foundations, we refer to introductory
+%literature~\cite{BrewkaEiterTruszczynski11,JanhunenNiemela16a}.
+%
+Let $m$, $n$, $\ell$ be non-negative integers such that
+$m \leq n \leq \ell$, $a_1$, $\ldots$, $a_\ell$ be distinct propositional
+atoms. Moreover, we refer by \emph{literal} to an atom or the negation
+thereof.
+%, and
+%$l \in \{a_1, \neg a_1\}$ being a \emph{literal},~i.e., an atom or the negation thereof.
+%
+A \emph{(logic) program}~$\Pi$ is a set of \emph{rules} of the form
+%
+%\begin{align*}
+%\smallskip
+%\hfill
+%\vspace{-0.75em}
+\(
+a_1\vee \cdots \vee a_m \leftarrow a_{m+1}, \ldots, a_{n}, \neg
+a_{n+1}, \ldots, \neg a_\ell.
+%
+\)
+%\hfill
+%\smallskip
+%
+%\end{align*}
+%
+%
+% \noindent Intuitively this requires at least one atom of
+% $a_1, \ldots, a_\ell$ to be true if all atoms
+% $a_{\ell+1}, \ldots, a_m$ are true and there is no evidence that any
+% atoms of $a_{m+1}, \ldots, a_n$ are true. The set of
+% \emph{well-defined programs} among atoms~$X$ is given by~$prog(X)$.
+%
+%
+%
+%Let $\at(\Pi) \eqdef \SB
+%\at(r) \SM r \in \Pi \SE$ be the atoms occuring in a program~$\Pi$,
+%
+%Therefore, let $\choice(\Pi), \disj(\Pi),
+%\opt(\Pi)$ and $\weight(\Pi)$ denote the set of all choice, disjunctive,
+%optimization and weight rules in a program~$\Pi$, respectively.
+%
+%
+%\noindent
+For a rule~$r$, we let $H_r = \{a_1, \ldots, a_m\}$,
+$B^+_r = \{a_{m+1}, \ldots, a_{n}\}$, and
+$B^-_r = \{a_{n+1}, \ldots, a_\ell\}$.
+%
+% We call $H_r$ the \emph{head}, $B^+_r$ the \emph{positive body}, and
+% $B^-(r)$ the \emph{negative body} of~$r$.
+%
+% , and $B_r \eqdef B^+_r \cup \SB \neg b \SM b \in B^-_r \SE$ the
+% \emph{body} of~$r$.\nb{Do we really need the body?}
+%
+We denote the sets of \emph{atoms} occurring in a rule~$r$ or in a
+program~$\Pi$ by $\text{at}(r) = H_r \cup B^+_r \cup B^-_r$ and
+$\text{at}(\Pi)= \bigcup_{r\in\Pi} \text{at}(r)$.
+%
+%For a set~$X\subseteq\at(\Pi)$ of atoms, we let~$\overline{X}\eqdef \{\neg x\mid x\in X\}$.
+%
+%Let $\Pi$ be a program.
+%
+%A program~$\Pi'$ is a \emph{sub-program of~$\Pi$} if~$\Pi'\subseteq\Pi$.
+%A program~$\Pi'$ is a \emph{sub-program of~$\Pi$}, if symbols
+%$\Pi' \subseteq \Pi$, if for each rule~$r' \in P'$ there is
+%%exactly one
+%a rule~$r \in \Pi$ with $H_{r'} \subseteq H_r$,
+%$B^+_{r'} \subseteq B^+_r$, and $B^-_{r'} \subseteq B^-_r$. \nb{why so complicated sub-programs?}
+%
+%Program~$\Pi$ is \emph{normal}, if $\Card{H_r} \leq 1$ for
+%every~$r \in \Pi$.
+%
+%The \emph{positive dependency digraph}~$D_\Pi$ of $\Pi$ is the
+%directed graph defined on the set~$\bigcup_{r\in \Pi}H_r \cup B^+_r$ of atoms, where there is a directed edge from vertex~$a$ to~$b$ iff there is a rule~$r \in \Pi$ with $a\in B^+_r$ and~$b\in H_r$.
+%
+%
+% The class~\HCF contains all head-cycle-free programs.\nb{do we need
+% the class?}
+
+An \emph{interpretation} $I$ is a set of atoms. $I$ \emph{satisfies} a
+rule~$r$ if $(H_r\,\cup\, B^-_r) \,\cap\, I \neq \emptyset$ or
+$B^+_r \setminus I \neq \emptyset$.  $I$ is a \emph{model} of $\Pi$
+if it satisfies all rules of~$\Pi$, in symbols $I \models \Pi$. %, if $I$ satisfies every rule~$r \in \Pi$.
+%
+%For brevity, we view propositional formulas
+%as sets of clauses that need to be satisfied, and
+%use the notion of interpretations, models, and satisfiability analogously. %and
+%satisfiability
+%also in the context of satisfiability of
+%propositional formulas.
+%\nb{only used once}
+%
+The \emph{Gelfond-Lifschitz
+  (GL) reduct} of~$\Pi$ under~$I$ is the program~$\Pi^I$ obtained
+from $\Pi$ by first removing all rules~$r$ with
+$B^-_r\cap I\neq \emptyset$ and then removing all~$\neg z$ where
+$z \in B^-_r$ from every remaining
+rule~$r$~\cite{GelfondLifschitz91}. %
+%
+$I$ is an \emph{answer set} of a program~$\Pi$ if $I$ is a minimal
+model of~$\Pi^I$. %
+%
+%Deciding whether a disjunctive program has an answer set is
+%\SIGMA{2}{P}-complete~\cite{EiterGottlob95}.
+The problem of deciding whether an ASP program has an answer set is called
+\emph{consistency}, which is $\Sigma_2^P$-complete~\cite{EiterGottlob95}.
+%
+If no rule uses disjunction, the complexity drops to
+\text{NP}-complete~\cite{BidoitFroidevaux91,MarekTruszczynski91}.
+
+%The problem~$\asp$ asks for a given program~$\Pi$ to compute the number of
+%answer sets of~$\Pi$.
+%In general we have that problem~$\asp$ is
+%$\cntc\coNP$-complete~\cite{FichteEtAl17}.
+
+\begin{example}
+Assume a graph~$G$ consisting of vertices~$V=a,b,c,d$
+and edges~$E=\{\{a,b\}, \{a,c\}, \{b,c\}, \{c,d\}\}$.
+Then, the \emph{vertex cover problem} asks for a set~$S\subseteq V$ of vertices
+such that for each edge~$e\in E$ we have that~$S\cap e\neq \emptyset$.
+An extension is the \emph{subset-minimal vertex cover problem}, where we ask
+only for sets~$S$, where no subset~$S'\subsetneq S$ is a vertex cover of~$G$.
+We elegantly encode the computation of subset-minimal vertex covers into an ASP program~$\Pi$ as follows:
+For each edge~$\{u,v\}\in E$, program~$\Pi$ contains the rules~$u \vee v \leftarrow$.
+Observe that the resulting program~$\Pi$ indeed precisly characterizes the subset-minimal vertex covers of~$G$, which are~$\{a,c\}$, $\{b,c\}$, and $\{a,b,d\}$.
+\end{example}
+
+\noindent\textbf{Answer Set Counting (\asp).}
+The problem~$\asp$ asks for a given program~$\Pi$ to compute the number of
+answer sets of~$\Pi$.
+In general we have that problem~$\asp$ is
+$\cntc\coNP$-complete~\cite{FichteEtAl17}.
+If we restrict the problem~$\asp$ to normal programs without disjunction,
+the complexity drops to~$\cntc\P$-completeness,
+which is easy to see via standard reductions
+that preserve the number of solutions from and to propositional satisfiability (\SAT), see, e.g.,~\cite{Janhunen06}.
+
+\begin{example}
+Recall the previous example, graph~$G$ and example program~$\Pi$.
+Since~$G$ has~$3$ subset-minimal vertix covers, the solution to problem~$\asp$
+for given program~$\Pi$ is~$3$.
+\end{example}
+
+
+\section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:parity}
+
+Towards the definition of parity aggregates, let $\true$ and $\false$
+stand for the Boolean constants \emph{true} and \emph{false},
+respectively, and a literal is an atom $a$ and its negation $\neg a$.
+\footnote{Recall that in the context of ASP, we understand the negation $\neg$ as the default negation.}
+%
+Given atoms $a_1$ and $a_2$, the \emph{exclusive or}
+(\XOR{} for short) of $a_1$ and $a_2$ is denoted by $a_1\xor a_2$ and
+it is satisfied if \emph{either} $a_1$ \emph{or} $a_2$ is true (but
+not both).
+Generalizing the idea for $n$ distinct atoms
+$\rg{a_1}{,}{a_n}$, we obtain an $n$-ary \XOR{} constraint
+$\rg{(((a_1\xor a_2}{)}{\xor\,a_n)}$ by multiple applications of
+$\xor$. Since it is satisfied iff an odd number of atoms among
+$\rg{a_1}{,}{a_n}$ are true,
+we can simply refer it to as an \emph{odd parity constraint}
+and it can be written simply as
+$\rg{a_1}{\xor}{a_n}$ due to associativity.
+%
+Analogously, an \emph{even parity} (or \XOR{}) \emph{constraint} is defined by
+$\rg{a_1}{\xor}{a_n}\xor\true$ as it is satisfied iff an even number
+of atoms among $\rg{a_1}{,}{a_n}$ hold. Then, e.g.,
+%
+$a_1\xor a_2\xor\true$
+%
+is satisfied iff none or both of $a_1$ and $a_2$ hold.
+%
+Similarly, an \emph{even parity constraint} can be represented in terms of the \emph{odd} parity by an uneven
+number of negated literals.
+For instance, $\neg a_1\xor a_2$ is equivalent to $a_1\xor a_2\xor\true$ and pairs of negated literals cancel parity inversion, for example $\neg a_1\xor \neg a_2$ is equivalent to $a_1\xor a_2$
+%Following~\cite{hanjia12a,laitinen14a} a \emph{parity constraint} is in a \emph{normal(or standard)-form} if all of its literals
+%are positive and (pairs of) duplicates are removed.
+%For example, the parity constraint $a_1\xor a_2\xor \neg a_3\xor a_2$ equals to $a_1\xor a_3\xor\true$.
+Finally, \XOR{} constraints of forms $a\xor\false$ and $a\xor\true$
+are called \emph{unary}.
+
+To accommodate parity constraints in ASP's input language,
+we rely on \clingo’s theory language extension~\cite{DBLP:conf/iclp/GebserKKOSW16}
+following the common syntax of \emph{aggregates}~\cite{DBLP:journals/tplp/GebserHKLS15}:
+
+\begin{verbatim}
+&even{1:p(1);4: not p(4);5:p(5)}.
+&odd{2:not p(2);5: not p(5);6:p(6)}.
+&odd{X:p(X), X > 2}.
+&even{X:p(X), X < 3}.
+&odd{5:p(5)}.
+\end{verbatim}
+
+%
+That is, \xorro{} extends the input language of \clingo{} by
+aggregate names \texttt{\&even} and \texttt{\&odd} that are followed
+by a set, whose elements are \emph{terms} conditioned by
+conjunctions of literals separated by commas.%
+%
+\footnote{In turn, multiple conditional terms within an aggregate are
+	separated by semicolons.}
+%
+From a search space of 64 answer sets in the context of the choice rule \texttt{\set{p(1..6)}.}, the parity constraints shown above
+amounts to the \XOR{} operations:
+$p(1) \xor p(4) \xor p(5)$, $p(2) \xor p(5) \xor p(6)$, $p(3) \xor p(4) \xor p(5) \xor p(6)$, $p(1) \xor p(2) \xor \top$, and $p(1) \xor \bot$
+%(where $\bot$ and $\top$ stand for the Boolean constants true and false, respectively)
+yield the answer sets~\texttt{\set{p(5)}} and \texttt{\set{p(1),p(2),p(4),p(5),p(6)}}.
+This means that each parity constraint divides the search space (roughly) by half, and for this symmetric search space example with five parity constraints ($m=5$),
+we have $2^m$ clusters, each with two answer sets.
+
+
+%The semantics of aggregates formed with keywords \texttt{\&even} and
+%\texttt{\&odd} is defined by \emph{even} and \emph{odd} parity constraints,
+%respectively.
+%In this implementation,
+Currently, these constraints are interpreted as directives,
+filtering answer sets that do not satisfy the parity constraint in question.
+\footnote{XOR constraints cannot occur either in the bodies or heads of rules.}
+%
+Hence, the first two
+constraints hold for any combination of an uneven number of literals from \texttt{p(1), p(4), p(5)} and \texttt{p(2), p(5), p(6)} respectively.
+The third constraint holds if an odd number of literals from \texttt{p(3)} to \texttt{p(6)} are true, while the fourth constraint requires that either none or both of
+the atoms \texttt{p(1)} and \texttt{p(2)} are included.
+The last parity constraint discards any answer set not containing the atom \texttt{p(5)}.
+
+The solver \xorro{} handles parity constraints in six different ways,
+switching between ASP encodings of parity constraints (eager approaches), and the use of theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
+%as shown in Table~\ref{table:xorro_approaches},
+%where the first three corresponds to ASP encodings of parity constraints (eager approaches), and the last three to theory propagators within \clingo{}'s Python interface (lazy approaches).~\footnote{The distinction of eager and lazy approaches follows the methodology in Satisfiability modulo theories~\cite{baseseti09a}.}
+
+%As mentioned, \xorro{} handles parity constraints in six ways as shown in Table \ref{table:xorro_approaches},
+%implements different means to handle parity constraints as shown in Table \ref{table:xorro_approaches},
+%where the first three corresponds to the eager, and the last three to the lazy approaches.
+%Table~ \ref{table:xorro_approaches}, shows the six implementations to handle parity constraints.
+%The first three corresponds to the eager, and the last three to the lazy approaches.
+
+
+
+%\begin{table*}[t]
+%	% 	\centering
+%	\caption{\xorro{} approaches to handle parity constraints}\label{table:xorro_approaches}
+%	%\vspace{-5mm}
+%	\begin{tabular}{ l|l }
+%		Approach  & Description  \\
+%		\hline\hline
+%		count     & Add count aggregates with a modulo 2 operation  \\
+%		list,tree & Translate binary \XOR{} operators into rules forming list and tree structures \\
+%		%            & (binary operators are arranged in list/tree)\\
+%		countp    & Propagator simply counting truth literals on total assignments\\
+%		up        & Propagator implementing unit propagation\\
+%		gje       & Propagator implementing (non-incremental) Gauss-Jordan Elimination
+
+%	\end{tabular}
+%	%	\vspace{-7mm}
+%\end{table*}
+%
 
 \section{Universal hashing and XOR's} \label{sec:hashing}
-XXX
+Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program \fff.
+%
+One approach is to count all the solutions by enumeration (almost), known as exact counting.
+%
+We focus on the problem of approximate model counting. 
+%The exact counting gives precise results but the complexity of exact solution count for large problem instances hinders the application of exact model counting.
+%
+%There are ongoing works \cite{FichteEtAl17} in improving exact model counters, but a broad set of practical applications has remained beyond the reach. 
+%
+
+
+In applications of model counting like probabilistic reasoning, planning with uncertainty etc, it may be sufficient to approximate the solution count and avoid the overhead of exact model counting.
+%
+An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(\fff, \epsilon, \delta)$.
+%
+The algorithm takes a program $\fff$ with a tolerance $\epsilon > 0$ and a confidence $0 < \delta \leq 1$ as an input.
+%
+The output is an estimate \mc based on the parameter \ep and \del.
+%
+Proving theoretical bounds and adapting the algorithm for the same is an ongoing work.
+
+The central idea of the approximate model counting approach is the use of hash functions to partition the \sol for a program $\fff$, into roughly equal small cells.
+%
+Then pick a random cell and scale it by the number of cells to obtain an \ep-approximate estimate of the model count.
+%
+Note that apriori we do not know the distribution of the solution set, \sol.
+%
+We have to perform a good hashing without the knowledge of the distribution of solutions. i.e., partition the $Sol(\Pi)$ into cells with a roughly equal number of solutions.
+%
+%This difficulty is handled by the use of \textbf{universal hashing}~\cite{DBLP:conf/stoc/CarterW77}.
+%
+%%
+%%To partition the $Sol(\phi)$ into roughly equal small cells without knowing the distribution of the solution we use universal hashing.
+%The key idea of universal hashing is to select a hash function randomly from a family of hash functions with low probability of collision between any two keys. 
+%%
+%By choosing a random hash function from a family, we randomize over arbitrary input distribution. This guarantees a low number of collisions in expectation irrespective of how data is chosen.
+%
+The difficulty is resolved by the use of \textbf{universal hashing}~\cite{DBLP:conf/stoc/CarterW77}.
+
+The universal hashing selects a hash function randomly from a family of hash functions with a low probability of collision between any two keys. 
+%
+By choosing a random hash function from a family, we randomize over arbitrary input distribution. This guarantees a low number of collisions in expectation irrespective of how data is chosen.
+
+\begin{definition}
+A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal family if,
+\[ \forall x,y\in U,~x\neq y:~~\Pr _{h\in H}[h(x)=h(y)]\leq {\frac {1}{m}} \]
+\end{definition}
+
+if the hash function $h$ is drawn randomly from \hash, the probability at which any two keys of the universe $U$ will collide is at most $1/m$.
+%
+This probability of collision is what we generally expect if the hash function assigned truly random hash codes $h(x)$ to every key $x \in U$.
+
+For model counting with high guarantees this is not enough, we not only need every input to be hash uniformly but also hashed independently. We need a family of $k$-wise independent hash functions~\cite{DBLP:conf/focs/WegmanC79}.
+%
+%$H(n, m, k)$:
+%Need Family of $k$-wise independent hash functions mapping $\{0, 1\}^{U}$
+% $\to$ $\{0, 1\}^{m}$ such that every $k$ elements are mapped independently.
+%Technical definition generally used for the $k$-wise independent:
+% i.e.,  
+A random hash function $h$ is $k$-independent if for all choices of distinct $x_1$,…,$x_k$ the values $h(x_1)$,…,$h(x_k)$ are independent.
+\begin{definition}
+	Let $\mathcal{H}=\{h: U \to [m]\}$ be a family of hash functions. For any distinct $x_1$, . . . , $x_k \in U$ and any $y_1$, ..., $y_k \in [m]$ we have the following guarantee.
+
+	$~~\Pr_{h\in H}
+	[h(x_1) = y_1 \land ... \land h(x_k) = y_k] = \frac {1}
+	{m^
+		k}$
+\end{definition}
+
+Intuitively a family $\mathcal{H} = {h : U \to [m]}$ of hash functions
+is $k$-wise independent if for any distinct keys $x_1, ..., x_k \in U$, the hash codes $h(x_1), ..., h(x_k)$ are independent random variables and for any fixed $x$, $h(x)$ is uniformly distributed in $[m]$.
+%\end{itemize}
+
+The canonical construction of a $k$-wise independent family is based on polynomials
+of degree $k$ - $1$. Let $p \geq |U|$ be prime. Picking random $a_0,...,a_{k - 1} \in \{0, . . . , p$-$ 1\}$,
+the hash function is defined by:
+\[ h(x) = ( ( a_{k-1} x^ {k - 1} + ... + a_1 x + a_0) \,\, mod \,\, p) \,\, mod \,\,  m\]
+
+
+For $p \gg	 m$, the hash function is statistically close to $k$-wise independent. The 2-wise independent hash function is:
+\[ h(x) = (((a_1 x + a_0) \,\, mod \,\, p) \,\, mod \,\, m ) \]
+
+%XXX Example for the propositional case XXX \\
+
+Higher the $k$, stronger will be the guarantee on a range of the size of cells. 
+%
+To encode $k$-wise independence we will require polynomial of degree $k$ - $1$.
+%
+But higher the $k$, harder it will be to solve the formula with these constraints. 
+%
+To balance this trade-off we use 3-wise independent hash functions.
+%
+If we use $k$-wise independence, all cells will be small and we will get a \textbf{uniform generation}. 
+%
+Using $3$-wise independence we achieve \emph{a random cell is small with high probability}, known as \textbf{almost-uniform generation}.
 
 \section{Algorithm} \label{approxasp}
-XXX
+We use the already evolved algorithm from the case of propositional satisfiability~\cite{ChakrabortyMV13} and lift it to ASP.
+%
+We use 3-wise independent hashing functions to partition the set of models of an input formula into ``small" cells.
+%
+Our resulting system extends \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} and is called \xampler\footnote{The system \xampler\ is open-source and available at~\url{https://github.com/flavioeverardo/xampler/}.}.
 
-\section{Experiments} \label{sec:experiments}
-XXX
+%The approximate model counting algorithm 
+
+We assume that \xampler\ has access to \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} that takes an input an ASP program $\fff^{\prime}$ possibly in conjunction with \XOR\ constraints, as well as a bound $b\geq0$.
+%
+The function \xorro $(\fff^{\prime},b)$ returns set of models $S$ of $\fff^{\prime}$ such that $|S| = min(b, \#\fff^{\prime})$.
+%
+%In order to test whether the generated cells are indeed small, we choose a random cell and check if it is non-empty and has no more than pivot elements, where the pivot is a threshold that depends only on the tolerance bound \ep. 
+%%
+%If the chosen cell is not small, we randomly partition the set of models into twice as many cells as before by choosing a random hashing function from the family Hxor(n, m + 1, 3).
+%%
+%The above procedure is repeated until either a randomly chosen cell is found to be non-empty and small, or the number of cells exceeds 2
+%n+1 pivot.
+%%
+%If all cells that were randomly chosen during the above process were either empty or not small, we report a counting failure and return $\bot$.
+%%
+%Otherwise, the size of the cell last chosen is scaled by the number of cells to obtain an \ep-approximate estimate of the model count.
+
+The system \xampler\ implements algorithm \appasp, which takes as input ASP program $\fff$, a tolerance \ep $(0 < \epsilon \leq 1)$ and a confidence \del $(0 < \delta \leq 1)$ as an input.
+%
+It computes a threshold pivot that depends on \ep to determine the chosen value of the size of a small cell.
+%
+Then it checks if the input program $\fff$ has at least a pivot number of solutions.
+%
+It uses \xorro\ to check if the input program has at least $b \, (b = pivots+ 1)$ solutions.
+%
+If the total number of solutions $S$ of $\fff$ is less than or equals to $b$ the algorithm returns the answer set count $|S|$. 
+%
+Otherwise, the algorithm continues and calculates a parameter $iter (\geq 1)$ determines the number of times \countas is invoked.
+%
+Note that $iter$ depends only on \del.
+%
+Next, there are at most $iter$ number of calls are made to \countas.
+%
+The resulted in non-$\bot$ estimates of the ASP model count $c$ returned by \countas are appended to the list $C$. 
+%
+The final estimate of the model count returned by \appasp is the mean of the estimates stored in $C$, computed using FindMean(C).
+
+\begin{algorithm}[t]
+	\textbf{ApproxASP}($\fff$, \ep, \del) \;
+	\SetAlgoLined
+	\KwResult{Approximate number of answer sets or $\bot$}
+	$counter = 0$ ; $C = [\,]$ \;
+%	$$\;
+	$pivot =  2 \, \times \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$ \;
+	$S = \xorro(\fff, pivot + 1)$ \;
+	\eIf{ $|S| \leq pivot$}
+	{ % Open If
+		\textbf{return} $|S|$
+	} % Close If
+	{ % Open Else
+		$iter= \lceil 27 \log_2 (3/\delta) \rceil$\;
+		\While{$counter < iter$}{
+			$c = $ \textbf{CountAS($\fff, pivot$)} \;
+			$counter = counter + 1$ \;
+			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
+		} % Close While
+	} % Close else
+	\textbf{return} \textbf{FindMean($C$)} \;
+	
+	\caption{ApproxASP}
+\end{algorithm}
+%
+%\begin{algorithm}[h]
+%	\textbf{ApproxASP}(\fff, \ep, \del) \;
+%	\SetAlgoLined
+%	\KwResult{Approximate number of answer sets or $\bot$}
+%	$counter \= 0$ ; $C \= emptyList$\;
+%	$threshold = \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$\;
+%	$iterations = \lceil 27 \log_2 (3/\delta) \rceil$\;
+%	$pivot \=  2 \, \times $ \textbf{ComputeThreshold($\epsilon$)} \;
+%	$S \= \xorro(\fff, pivot + 1)$ // {Solve pivot+1 AS}  \;
+%	\eIf{ $|S| \leq pivot$}
+%	{ % Open If
+%		\textbf{return} $|S|$
+%	} % Close If
+%	{ % Open Else
+%		$t \= $ \textbf{ComputeIterCount($\delta$)}
+%
+%		\While{$counter < t$}{
+%			$c \= $ \textbf{ApproxASPCore($\fff, pivot$)} \;
+%			$counter \= counter + 1$ \;
+%			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
+%		} % Close While
+%	} % Close else
+%	$finalCount \= $ \textbf{FindMean($C$)} \;
+%	\textbf{return} $finalCount$
+%
+%	\caption{ApproxASP}
+%\end{algorithm}
+
+
+%\begin{algorithm}
+%	\textbf{return} $\lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$
+%	\caption{ComputeThreshold($\epsilon$)}
+%\end{algorithm}
+%
+%\begin{algorithm}
+%	\textbf{return} $\lceil 27 \log_2 (3/\delta) \rceil$
+%	\caption{ComputeIterCount($\delta$)}
+%\end{algorithm}
+
+\begin{algorithm}[t]
+	/* Assume $z_1 , ..., z_n $ are the atoms of \fff */ \\
+	$ i, l = \lfloor \log_2 (pivot) - 1 \rfloor$ \\
+%	$ i \= l - 1$ \\
+	
+%	$ l \= \lfloor \log_2 (pivot) - 1 \rfloor$ \\
+%	$ i \= l - 1$ \\
+
+	\While{($1 \leq |S| \leq pivot $) $\lor (i = n)$}{
+		$ i = i + 1$ \\
+		$h \gets H_{xor}(n, i - l, 3)$ \\
+		$\alpha \gets \{0,1\}^{i-l}$ \\
+		$S = \xorro(\fff \land (h(z_1, ..., z_n)=\alpha, pivot + 1)$ %\Comment*[r]{Solve $P \land XOR$}
+	}
+
+	\eIf{ $|S|$ $> pivot$ or $|S|$ = 0}
+	{\textbf{return} $\bot$}
+	{\textbf{return} $|S|$ $\cdot 2^{i-l}$}
+
+
+
+	\caption{CountAS($\fff, pivot$)}
+\end{algorithm}
+	%\vspace{-1em}	
+
+Algorithm \countas takes as input an ASP program $\fff$ and a
+pivot.
+%
+It returns an \ep-approximate estimate of the model count of the program $\fff$.
+%
+The algorithm uses random hash functions from $H_{xor}(n, i-l, 3)$ to partition the model space of the program $\fff$.
+%
+This is done by choosing a random hash function $h$ (on line 5) and choosing randomly with probability half ($\alpha$, line 6) bits to set.
+%
+Then it conjuncts the chosen XOR with the program \fff and uses \xorro\ to check whether it has at most $pivot +1$ models.
+% 
+This process repeats (lines 5-7) and the loop terminates if either a randomly chosen cell is found to be small ($|S| \leq pivot$) and non-empty, or if the number of cells generated $> 2^n+1/pivot$.
+
+We scale the size of $S$ by the number of cells generated by the corresponding hashing function to compute an estimate of the model count.
+If all randomly chosen cells were either empty or not small, we return $\bot$ and report a counting error.
+
+\input{experiments}
 
 \section{Conclusion and Future work} \label{sec:conclusion}
-XXX
+This paper discusses an extension of the ASP solver \xorro{}
+towards approximate answer set counting. This is established by lifting ideas from existing techniques for SAT to the formalism of ASP.
+While our preliminary results are promising and show that
+indeed approximate counting works for ASP, there is still potential for future works.
+On the one hand, we highly recommend studying and showing
+proper guarantees that prove our results are guaranteed to be accurate with high probability and do not deviate far from the actual result.
+Further, we highly encourage further tuning and improvements of our preliminary implementation.
+We hope that this work fosters applications and further research on quantitative reasoning like, e.g.,~\cite{KimmigDRCR11,TsamouraGK20}, for ASP.
+
+%% The file kr.bst is a bibliography style file for BibTeX 0.99c
+\bibliographystyle{splncs03}
+\bibliography{procs,NMR2020}
+
+
 
 \end{document}

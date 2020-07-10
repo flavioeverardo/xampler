@@ -1,0 +1,105 @@
+\section{Experiments} \label{sec:experiments}
+
+\begin{table*}[]
+	\centering
+	\input{tables/graph_color}
+	\caption{Approximate answer set count over random instances of the Graph Coloring problem.}\label{table:graph_color}
+\end{table*}
+
+
+\begin{table*}[]
+	\centering
+	\input{tables/schur}
+	\caption{Approximate answer set count over random instances of the Schur decision problem.}\label{table:schur}
+\end{table*}
+
+
+\begin{table*}[]
+	\centering
+	\input{tables/hampath}
+	\caption{Approximate answer set count over random instances of the Hamiltonian Path problem.}\label{table:hampath}
+\end{table*}
+
+\begin{table*}[]
+	\centering
+	\input{tables/vertex_cover}
+	\caption{Approximate answer set count over random instances of the Subset-Minimal Vertex Cover problem.}\label{table:min_vertex_cover}
+\end{table*}
+
+
+\begin{table*}[]
+	\centering
+	\input{tables/subset_minimal_dom_set}
+	\caption{Approximate answer set count over random instances of the Subset-Minimal Independent Dominating Set problem.}\label{table:smds}
+\end{table*}
+
+\begin{table*}[]
+	\centering
+	\input{tables/qbf}
+	\caption{Approximate answer set count over random instances on Projected Model Counting on 2-QBFs.}\label{table:qbf}
+\end{table*}
+
+
+To test the algorithms above, we benchmarked our resulting approximate counter \xampler, which extends \xorro\, by these algorithms.
+For now, we focus only on the quality of the counting, leaving the scalability and performance for further work.
+%
+To test the quality of the counting,
+we generated ten random instances from different ASP problem classes, where we aim for counting \emph{graph colorings}, \emph{subset-minimal vertex covers}, solutions (witnesses) to the \emph{schur decision problem}, \emph{hamiltonian paths}, \emph{subset-minimal independent dominating sets} as well as solving \emph{projected model counting} on 2-QBFs~\cite{DurandHermannKolaitis05,KleineBuningLettman99}.~\footnote{The encodings and instances can be found at: \url{https://tinyurl.com/approx-asp}}
+Note that projected model counting on 2-QBFs is proven to be $\cntc\coNP$-complete~\cite{DurandHermannKolaitis05}. Further, we also suspect that both problems of counting all the subset-minimal vertex covers as well as counting subset-minimal independent dominating set are hard for this complexity class. At least there are no known polynomial encodings for \SAT that precisely capture the solutions to these problems. Hence, it is unlikely that one can easily approximate the number of solutions by means of approximate SAT counting.
+Also, to track the counting, we cared that these instances were ``easy to solve'' for \clingo{},
+meaning that \clingo{} must enumerate all answer sets within 600 seconds timeout (without printing).
+
+To get the feeling for our initial counting experiments, we tried different values for both the tolerance and the confidence, seeking to different size of clusters and number of iterations,
+as shown in lines 3 and 8 from Algorithm 1, respectively.
+As part of the setup of the experiments and for comparison, we asked \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}  to estimate the count also by calculating the median, taken from the original ApproxMC Algorithm in~\cite{ChakrabortyMV13}.
+
+The experiments were run sequentially under the Ubuntu-based Elementary OS on a 16 GB memory with a 2.60 GHz Dual-Core Intel Core i7 processor laptop using Python 3.7.6.
+Each benchmark instance (in smodels output format, generated offline with the grounder \gringo{} that is part of \clingo{}~\cite{DBLP:conf/iclp/GebserKKOSW16}) was run five times without any time restriction. 
+As shown in Algorithm 1, a run is finished with one of two possible situations, either \xorro{} returns the approximate answer sets count or unsatisfiability.
+
+Our experiments' results are summarized in Tables~\ref{table:graph_color}-\ref{table:qbf} listing for each problem class instances, the number of answer sets in the first two columns.
+The remainder of the table is divided into the best and worst runs from the five. 
+%
+For both, the median and the mean counts, we add a quality factor (Q) estimating the closeness to the total number of answer sets.
+The last row of each table displays the average Q for each count.
+
+
+% comment results
+In the first three tables, we can see the pattern that the mean count got better results even in their worst case.
+On the other hand, the medians under approximate the counts. For instance, in the Schur problem, the last three instances where almost 50\% under approximated, lowering the average on the bottom line.
+%
+However, for the subset-minimal vertex covers, we see that both counts were almost exactly on average. In this example, also the worst cases are close to an exact count.
+%
+For the most complex problems shown in Tables~\ref{table:smds} and~\ref{table:qbf}, the average counts over approximate the number of solutions.
+However, the margin for the median's best case is close to an exact count. A proof for this is in Table~\ref{table:qbf} where a Q of 1 was gotten in six instances out of ten.
+In these problems, the mean count over approximates the number of answer sets giving no proper estimations. The best-case scenario goes 60 percent over the desired number.
+%
+It is also noticeable that in most of the cases, the median count under approximate the number of answer sets, and the opposite happened with the mean (over approximate).
+
+
+
+%%%%
+
+
+The large deviations between the best and the worst cases correspond to one of two possible scenarios.
+%
+If the count is under approximating,
+it means the partition was not well distributed, and some clusters had too few or too many answer sets. 
+%
+On the opposite case, where there is an over-approximation count,
+our set of \XOR{}s contains linear combinations or linearly dependent equations,
+meaning that the partitioning is not performed concerning the number of \XOR{}s.
+% 
+For instance, the conjunction of the \XOR{} constraints $a \xor \top \land b \xor \top \land a \xor b \xor \top$ can be equivalently reduced to $a \xor \top \land b \xor \top$. 
+%
+Back to our example in Section~\ref{sec:parity}, instead of counting $|S|$ $\cdot 2^5$ being $S=2$,
+one linear combination causes the double of answer sets from the resulting cluster, so for this case, $S=4$, and the approximate count is 1024 instead of 64. 
+
+
+
+As we mentioned above, the performance was not examined for this paper,
+meaning that it is worth considering for further experiments by testing all the different approaches from \xorro{}.
+For the experiments above, we ran \xorro{} with the lazy counting approach,
+which got the highest overall performance score from all the six implementations.
+However, the random parity constraints generated during each counting iteration were quite small,
+meaning that other approaches would benefit more for these \XOR{}s densities, like the Unit Propagation approach~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
