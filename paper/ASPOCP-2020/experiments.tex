@@ -1,5 +1,15 @@
 \section{Experiments} \label{sec:experiments}
 
+To test the algorithms above, we benchmarked our resulting approximate counter \xampler, which extends \xorro\, by these algorithms.
+For now, we focus only on the quality of the counting, leaving the scalability and performance for further work.
+%
+To test the quality of the counting,
+we generated ten random instances from different ASP problem classes, where we aim for counting \emph{graph colorings}, \emph{subset-minimal vertex covers}, solutions (witnesses) to the \emph{schur decision problem}, \emph{hamiltonian paths}, \emph{subset-minimal independent dominating sets} as well as solving \emph{projected model counting} on 2-QBFs~\cite{DurandHermannKolaitis05,KleineBuningLettman99}.~\footnote{The encodings and instances can be found at: \url{https://tinyurl.com/approx-asp}}
+Note that projected model counting on 2-QBFs is proven to be $\cntc\coNP$-complete~\cite{DurandHermannKolaitis05}. Further, we also suspect that both problems of counting all the subset-minimal vertex covers as well as counting subset-minimal independent dominating set are hard for this complexity class. At least there are no known polynomial encodings for \SAT that precisely capture the solutions to these problems. Hence, it is unlikely that one can easily approximate the number of solutions by means of approximate SAT counting.
+Also, to track the counting, we cared that these instances were ``easy to solve'' for \clingo{},
+meaning that \clingo{} must enumerate all answer sets within 600 seconds timeout (without printing).
+
+
 \begin{table*}[]
 	\centering
 	\input{tables/graph_color}
@@ -39,15 +49,6 @@
 	\caption{Approximate answer set count over random instances on Projected Model Counting on 2-QBFs.}\label{table:qbf}
 \end{table*}
 
-
-To test the algorithms above, we benchmarked our resulting approximate counter \xampler, which extends \xorro\, by these algorithms.
-For now, we focus only on the quality of the counting, leaving the scalability and performance for further work.
-%
-To test the quality of the counting,
-we generated ten random instances from different ASP problem classes, where we aim for counting \emph{graph colorings}, \emph{subset-minimal vertex covers}, solutions (witnesses) to the \emph{schur decision problem}, \emph{hamiltonian paths}, \emph{subset-minimal independent dominating sets} as well as solving \emph{projected model counting} on 2-QBFs~\cite{DurandHermannKolaitis05,KleineBuningLettman99}.~\footnote{The encodings and instances can be found at: \url{https://tinyurl.com/approx-asp}}
-Note that projected model counting on 2-QBFs is proven to be $\cntc\coNP$-complete~\cite{DurandHermannKolaitis05}. Further, we also suspect that both problems of counting all the subset-minimal vertex covers as well as counting subset-minimal independent dominating set are hard for this complexity class. At least there are no known polynomial encodings for \SAT that precisely capture the solutions to these problems. Hence, it is unlikely that one can easily approximate the number of solutions by means of approximate SAT counting.
-Also, to track the counting, we cared that these instances were ``easy to solve'' for \clingo{},
-meaning that \clingo{} must enumerate all answer sets within 600 seconds timeout (without printing).
 
 To get the feeling for our initial counting experiments, we tried different values for both the tolerance and the confidence, seeking to different size of clusters and number of iterations,
 as shown in lines 3 and 8 from Algorithm 1, respectively.
