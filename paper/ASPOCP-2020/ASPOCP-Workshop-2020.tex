@@ -701,9 +701,8 @@ Given an input ASP program \fff, the ASP counting problem (\asp) computes the to
 %
 %There are ongoing works \cite{FichteEtAl17} in improving exact model counters, but a broad set of practical applications has remained beyond the reach. 
 %
-
-
-In applications of model counting like probabilistic reasoning, planning with uncertainty etc, it may be sufficient to approximate the solution count and avoid the overhead of exact model counting.
+%
+In applications of model counting like probabilistic reasoning, planning with uncertainty etc, it may be sufficient to approximate the solution count and avoid the overhead of exactly counting the solutions (exact model counting).
 %
 An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(\fff, \epsilon, \delta)$.
 %
@@ -761,8 +760,7 @@ A random hash function $h$ is $k$-independent if for all choices of distinct $x_
 		k}$
 \end{definition}
 
-Intuitively a family $\mathcal{H} = {h : U \to [m]}$ of hash functions
-is $k$-wise independent if for any distinct keys $x_1, ..., x_k \in U$, the hash codes $h(x_1), ..., h(x_k)$ are independent random variables and for any fixed $x$, $h(x)$ is uniformly distributed in $[m]$.
+%Intuitively a family $\mathcal{H} = {h : U \to [m]}$ of hash functions is $k$-wise independent if for any distinct keys $x_1, ..., x_k \in U$, the hash codes $h(x_1), ..., h(x_k)$ are independent random variables and for any fixed $x$, $h(x)$ is uniformly distributed in $[m]$.
 %\end{itemize}
 
 The canonical construction of a $k$-wise independent family is based on polynomials
