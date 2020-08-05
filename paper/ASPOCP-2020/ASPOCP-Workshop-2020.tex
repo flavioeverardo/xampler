@@ -220,16 +220,18 @@
 \begin{document}
 \mainmatter              % start of a contribution
 %
-\title{Extending \xorro{} with Approximate Model Counting}
+\title{Extending \xorro{} with Approximate Model Counting\thanks{The work has been supported by the Austrian Science Fund
+    (FWF), Grants Y698 and P32830, 
+and the Vienna Science and Technology Fund, Grant WWTF ICT19-065. It is also accepted for presentation at the NMR'20 workshop~\protect\cite{EverardoHecherShukla20}.}}
 %
-\titlerunning{Extending XORO with Approximate Model Counting}  % abbreviated title (for running head)
+\titlerunning{Extending \xorro{}  with Approximate Model Counting}  % abbreviated title (for running head)
 %                                     also used for the TOC unless
 %                                     \toctitle is used
 %
 %
 \author{
 	Flavio Everardo\inst{1,2}\and
-	Markus Hecher\inst{3}\and
+	Markus Hecher\inst{1,3}\and
 	Ankit Shukla\inst{4}
 }
 %
@@ -248,7 +250,7 @@
 \maketitle              % typeset the title of the contribution
 
 \begin{abstract}
-Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI, and other areas as well as plenty of practical applications, in both the academy and in the industry.
+Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI, and other areas as well as plenty of practical applications, in both academia and industry.
 While modern ASP solvers not only compute one solution (answer set), but actually support different reasoning modes, the problem of counting answer sets has not been subject to intense studies yet.
 %
 This is in contrast to the neighboring area of propositional satisfiability (SAT), where several applications and problems related to quantitative reasoning trace back to model counting. However, due to high computational complexity and depending on the actual application, approximate counting might be sufficient. Indeed, there are plenty of applications, where approximate counting for SAT is well-suited.
@@ -270,7 +272,7 @@ Answer Set Programming (ASP)~\cite{Lifschitz99,BrewkaEiterTruszczynski11,GebserK
 problem modeling and solving framework that is well-known in the area
 of knowledge representation and reasoning and artificial intelligence.
 %
-This framework has been practically applied to several
+This framework has been practically applied for several
 problems\footnote{An incomplete list of ASP applications:\\ https://www.dropbox.com/s/pe261e4qi6bcyyh/aspAppTable.pdf} in both academic and industry~\cite{BalducciniGelfondNogueira06a,NiemelaSimonsSoininen99,NogueiraBalducciniGelfond01a,GuziolowskiEtAl13a,SchaubWoltran18}.
 %
 
@@ -335,10 +337,10 @@ the results look promising and we hope that this will foster further research in
 \smallskip\noindent\textbf{Computational Complexity.}
 %
 %
+%
 We assume familiarity with standard notions in
-  computational complexity~\cite{Papadimitriou94} and use counting complexity classes
-  as defined by Durand, Hermann and
-  Kolaitis~\cite{DurandHermannKolaitis05}.
+  computational complexity~\cite{Papadimitriou94} and use counting complexity classes of the form~$\cntc\mtext{C}$
+  as defined in the literature~\cite{TodaWatanabe92,DurandHermannKolaitis05,HemaspaandraVollmer95a}.
 %
 %}
 %
@@ -400,9 +402,9 @@ function~$f: \Nat_0 \rightarrow \Nat_0$ such that for every
 instance~$I \in \Sigma^*$ and every $W \in \WWW(I)$ we have
 $\Card{W} \leq f(\CCard{I})$ and $f$ is computable in
 time~$\bigO{\CCard{I}^c}$ for some constant~$c$ and (ii)~for every
-instance~$I \in \Sigma^*$ decision problem~$\WWW(I)$ is in the complexity class~$\mtext{C}$.
+instance~$I \in \Sigma^*$ and every candidate witness $W \in {\Sigma'}^*$, the problem of deciding whether~$W\in\WWW(I)$ indeed holds, is in the complexity class~$\mtext{C}$.
 % ``given~$x$ and~$y$, is $y \in w(x)$?''
-Then, $\cntc\P$ is the complexity class consisting of all counting
+As a result, $\cntc\P$ is the complexity class consisting of all counting
 problems associated with decision problems in \NP.
 %
 % unused
@@ -534,6 +536,7 @@ rule~$r$~\cite{GelfondLifschitz91}. %
 %
 $I$ is an \emph{answer set} of a program~$\Pi$ if $I$ is a minimal
 model of~$\Pi^I$. %
+We denoted the set of all answer sets of program~$\Pi$ by \sol.
 %
 %Deciding whether a disjunctive program has an answer set is
 %\SIGMA{2}{P}-complete~\cite{EiterGottlob95}.
@@ -568,11 +571,11 @@ $\cntc\coNP$-complete~\cite{FichteEtAl17}.
 If we restrict the problem~$\asp$ to normal programs without disjunction,
 the complexity drops to~$\cntc\P$-completeness,
 which is easy to see via standard reductions
-that preserve the number of solutions from and to propositional satisfiability (\SAT), see, e.g.,~\cite{Janhunen06}.
+that preserve the number of answer sets from and to propositional satisfiability (\SAT), see, e.g.,~\cite{Janhunen06}.
 
 \begin{example}
 Recall the previous example, graph~$G$ and example program~$\Pi$.
-Since~$G$ has~$3$ subset-minimal vertix covers, the solution to problem~$\asp$
+Since~$G$ has~$3$ subset-minimal vertex covers, the solution to problem~$\asp$
 for given program~$\Pi$ is~$3$.
 \end{example}
 
@@ -581,8 +584,8 @@ for given program~$\Pi$ is~$3$.
 
 Towards the definition of parity constraints, let $\true$ and $\false$
 stand for the Boolean constants \emph{true} and \emph{false},
-respectively, and a literal is an atom $a$ and its negation $\neg a$.
-\footnote{Recall that in the context of ASP, we understand the negation $\neg$ as the default negation.}
+respectively. %, and a literal is an atom $a$ and its negation $\neg a$.
+%\footnote{Recall that in the context of ASP, we understand the negation $\neg$ as the default negation.}
 %
 Given atoms $a_1$ and $a_2$, the \emph{exclusive or}
 (\XOR{} for short) of $a_1$ and $a_2$ is denoted by $a_1\xor a_2$ and
@@ -690,7 +693,7 @@ switching between ASP encodings of parity constraints (eager approaches), and th
 %
 
 \section{Universal hashing and XOR's} \label{sec:hashing}
-Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program \fff.
+%Given an input ASP program \fff, the ASP counting problem (\asp) computes the total number of solutions, denoted by \sol of the program \fff.
 %
 %Rather than exact counting
 
@@ -704,7 +707,7 @@ Given an input ASP program \fff, the ASP counting problem (\asp) computes the to
 %
 In applications of model counting like probabilistic reasoning, planning with uncertainty etc, it may be sufficient to approximate the solution count and avoid the overhead of exactly counting the solutions (exact model counting).
 %
-An approximate counting tries to approximately compute the number of solutions by using a probabilistic algorithm $\appasp(\fff, \epsilon, \delta)$.
+An approximate counting tries to approximately compute the number of answer sets by using a probabilistic algorithm $\appasp(\fff, \epsilon, \delta)$.
 %
 The algorithm takes a program $\fff$ with a tolerance $\epsilon > 0$ and a confidence $0 < \delta \leq 1$ as an input.
 %
@@ -712,13 +715,13 @@ The output is an estimate \mc based on the parameter \ep and \del.
 %
 Proving theoretical bounds and adapting the algorithm for the same is an ongoing work.
 
-The central idea of the approximate model counting approach is the use of hash functions to partition the \sol for a program $\fff$, into roughly equal small cells.
+The central idea of the approximate model counting approach is the use of hash functions to partition the set \sol of answer sets for a program $\fff$, into roughly equal small cells.
 %
 Then pick a random cell and scale it by the number of cells to obtain an \ep-approximate estimate of the model count.
 %
-Note that apriori we do not know the distribution of the solution set, \sol.
+Note that apriori we do not know the distribution of the set \sol of answer sets.
 %
-We have to perform a good hashing without the knowledge of the distribution of solutions. i.e., partition the $Sol(\Pi)$ into cells with a roughly equal number of solutions.
+We have to perform good hashing without the knowledge of the distribution of answer sets, i.e., partition the set $Sol(\Pi)$ into cells with a roughly equal number of answer sets.
 %
 %This difficulty is handled by the use of \textbf{universal hashing}~\cite{DBLP:conf/stoc/CarterW77}.
 %
@@ -736,14 +739,14 @@ By choosing a random hash function from a family, we randomize over arbitrary in
 
 \begin{definition}
 A family of functions $\mathcal{H}=\{h: U \to [m]\}$  is called a universal family if,
-\[ \forall x,y\in U,~x\neq y:~~\Pr _{h\in H}[h(x)=h(y)]\leq {\frac {1}{m}} \]
+\[ \forall x,y\in U,~x\neq y:~~\Pr _{h\in \mathcal{H}}[h(x)=h(y)]\leq {\frac {1}{m}} \]
 \end{definition}
 
 if the hash function $h$ is drawn randomly from \hash, the probability at which any two keys of the universe $U$ will collide is at most $1/m$.
 %
 This probability of collision is what we generally expect if the hash function assigned truly random hash codes $h(x)$ to every key $x \in U$.
 
-For model counting with high guarantees this is not enough, we not only need every input to be hash uniformly but also hashed independently. We need a family of $k$-wise independent hash functions~\cite{DBLP:conf/focs/WegmanC79}.
+For model counting with high guarantees this is not enough, we not only need every input to be hashed uniformly but also to be hashed independently. We need a family of $k$-wise independent hash functions~\cite{DBLP:conf/focs/WegmanC79}.
 %
 %$H(n, m, k)$:
 %Need Family of $k$-wise independent hash functions mapping $\{0, 1\}^{U}$
@@ -752,9 +755,9 @@ For model counting with high guarantees this is not enough, we not only need eve
 % i.e.,  
 A random hash function $h$ is $k$-independent if for all choices of distinct $x_1$,…,$x_k$ the values $h(x_1)$,…,$h(x_k)$ are independent.
 \begin{definition}
-	Let $\mathcal{H}=\{h: U \to [m]\}$ be a family of hash functions. For any distinct $x_1$, . . . , $x_k \in U$ and any $y_1$, ..., $y_k \in [m]$ we have the following guarantee.
+	Let $\mathcal{H}=\{h: U \to [m]\}$ be a family of hash functions. We call~$\mathcal{H}$ \emph{$k$-wise independent} if for any distinct $x_1$, . . . , $x_k \in U$ and any $y_1$, ..., $y_k \in [m]$ we have the following guarantee.
 
-	$~~\Pr_{h\in H}
+	$~~\Pr_{h\in \mathcal{H}}
 	[h(x_1) = y_1 \land ... \land h(x_k) = y_k] = \frac {1}
 	{m^
 		k}$
@@ -774,11 +777,11 @@ For $p \gg	 m$, the hash function is statistically close to $k$-wise independent
 
 %XXX Example for the propositional case XXX \\
 
-Higher the $k$, stronger will be the guarantee on a range of the size of cells. 
+The higher the $k$, the stronger will be the guarantee on a range of the size of cells. 
 %
 To encode $k$-wise independence we will require polynomial of degree $k$ - $1$.
 %
-But higher the $k$, harder it will be to solve the formula with these constraints. 
+But the higher the $k$, the harder it will be to solve the formula with these constraints. 
 %
 To balance this trade-off we use 3-wise independent hash functions.
 %
@@ -795,9 +798,9 @@ Our resulting system extends \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} and is 
 
 %The approximate model counting algorithm 
 
-We assume that \xampler\ has access to \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} that takes an input an ASP program $\fff^{\prime}$ possibly in conjunction with \XOR\ constraints, as well as a bound $b\geq0$.
+We assume that \xampler\ has access to \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} that takes as input an ASP program $\fff^{\prime}$ possibly in conjunction with \XOR\ constraints, as well as a bound $b\geq0$.
 %
-The function \xorro $(\fff^{\prime},b)$ returns set of models $S$ of $\fff^{\prime}$ such that $|S| = min(b, \#\fff^{\prime})$.
+The function \xorro $(\fff^{\prime},b)$ returns a set of models $S$ of $\fff^{\prime}$ such that $|S| = min(b, \#\fff^{\prime})$.
 %
 %In order to test whether the generated cells are indeed small, we choose a random cell and check if it is non-empty and has no more than pivot elements, where the pivot is a threshold that depends only on the tolerance bound \ep. 
 %%
@@ -814,17 +817,17 @@ The system \xampler\ implements algorithm \appasp, which takes as input ASP prog
 %
 It computes a threshold pivot that depends on \ep to determine the chosen value of the size of a small cell.
 %
-Then it checks if the input program $\fff$ has at least a pivot number of solutions.
+Then it checks if the input program $\fff$ has at least a pivot number of answer sets.
 %
-It uses \xorro\ to check if the input program has at least $b \, (b = pivots+ 1)$ solutions.
+It uses \xorro\ to check if the input program has at least $b \, (b = pivots+ 1)$ answer sets.
 %
-If the total number of solutions $S$ of $\fff$ is less than or equals to $b$ the algorithm returns the answer set count $|S|$. 
+If the total number of answer sets $S$ of $\fff$ is less than or equals to $b$ the algorithm returns the answer set count $|S|$. 
 %
-Otherwise, the algorithm continues and calculates a parameter $iter (\geq 1)$ determines the number of times \countas is invoked.
+Otherwise, the algorithm continues and calculates a parameter $iter (\geq 1)$ that determines the number of times \countas is invoked.
 %
 Note that $iter$ depends only on \del.
 %
-Next, there are at most $iter$ number of calls are made to \countas.
+Next, there are at most $iter$ number of calls that are made to \countas.
 %
 The resulted in non-$\bot$ estimates of the ASP model count $c$ returned by \countas are appended to the list $C$. 
 %
@@ -845,7 +848,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 	{ % Open Else
 		$iter= \lceil 27 \log_2 (3/\delta) \rceil$\;
 		\While{$counter < iter$}{
-			$c = $ \textbf{CountAS($\fff, pivot$)} \;
+			$c = $ \textbf{CountAS($\fff, S, pivot$)} \;
 			$counter = counter + 1$ \;
 			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
 		} % Close While
@@ -915,7 +918,7 @@ The final estimate of the model count returned by \appasp is the mean of the est
 
 
 
-	\caption{CountAS($\fff, pivot$)}
+	\caption{CountAS($\fff,  S, pivot$)}
 \end{algorithm}
 	%\vspace{-1em}	
 

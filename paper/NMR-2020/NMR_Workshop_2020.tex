@@ -233,7 +233,7 @@
 
 \title{An Approximate Model Counter for ASP\thanks{The work has been supported by the Austrian Science Fund
     (FWF), Grants Y698 and P32830, 
-and the Vienna Science and Technology Fund, Grant WWTF ICT19-065. It is also accepted for presentation at the NMR'20 workshop~\protect\cite{EverardoHecherShukla20}.}}
+and the Vienna Science and Technology Fund, Grant WWTF ICT19-065. It is also accepted for presentation at the ASPOCP'20 workshop~\protect\cite{EverardoHecherShukla20}.}}
 
 % Single author syntax
 \iffalse % (remove the multiple-author syntax below and \iffalse ... \fi here)
@@ -734,9 +734,9 @@ The central idea of the approximate model counting approach is the use of hash f
 %
 Then pick a random cell and scale it by the number of cells to obtain an \ep-approximate estimate of the model count.
 %
-Note that apriori we do not know the distribution of the solution set, \sol.
+Note that apriori we do not know the distribution of the solution set \sol of answer sets.
 %
-We have to perform a good hashing without the knowledge of the distribution of answer sets. i.e., partition the $Sol(\Pi)$ into cells with a roughly equal number of answer sets.
+We have to perform good hashing without the knowledge of the distribution of answer sets, i.e., partition the $Sol(\Pi)$ into cells with a roughly equal number of answer sets.
 %
 %This difficulty is handled by the use of \textbf{universal hashing}~\cite{DBLP:conf/stoc/CarterW77}.
 %
@@ -797,7 +797,7 @@ The higher the $k$, the stronger will be the guarantee on a range of the size of
 %
 To encode $k$-wise independence we will require polynomial of degree $k$ - $1$.
 %
-The higher the $k$, the harder it will be to solve the formula with these constraints. 
+But the higher the $k$, the harder it will be to solve the formula with these constraints. 
 %
 To balance this trade-off we use 3-wise independent hash functions.
 %
