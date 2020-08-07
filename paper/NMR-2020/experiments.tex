@@ -51,7 +51,8 @@ meaning that \clingo{} must enumerate all answer sets within 600 seconds timeout
 
 To get the feeling for our initial counting experiments, we tried different values for both the tolerance and the confidence, seeking for different size of clusters and number of iterations,
 as shown in lines 3 and 8 from Algorithm 1, respectively.
-As part of the setup of the experiments and for comparison, we asked \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}  to estimate the count also by calculating the median, taken from the original ApproxMC Algorithm in~\cite{ChakrabortyMV13}.
+It is worth reminding that these parameters directly affect the density of the parity constraints (lines 5 and 6 from Algorithm 2). These constraints follow the syntax and principles discussed in Sections~\ref{sec:parity} and~\ref{sec:hashing}, respectively.
+As part of the setup of the experiments and for comparison, we asked \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19} to estimate the count also by calculating the median, taken from the original ApproxMC Algorithm in~\cite{ChakrabortyMV13}.
 
 The experiments were run sequentially under the Ubuntu-based Elementary OS on a 16 GB memory with a 2.60 GHz Dual-Core Intel Core i7 processor laptop using Python 3.7.6.
 Each benchmark instance (in smodels output format, generated offline with the grounder \gringo{} that is part of \clingo{}~\cite{DBLP:conf/iclp/GebserKKOSW16}) was run five times without any time restriction. 
