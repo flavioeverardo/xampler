@@ -247,13 +247,14 @@ and the Vienna Science and Technology Fund, Grant WWTF ICT19-065. It is also acc
 \fi
 % Multiple author syntax
 \author{%
-Flavio Everardo$^1$\and
-Markus Hecher$^{1,2}$\and
-Ankit Shukla$^{3}$
+Flavio Everardo$^{1,2}$\and
+Markus Hecher$^{1,3}$\and
+Ankit Shukla$^{4}$
 \affiliations
 $^1$ University of Potsdam, Germany\\
-$^2$ TU Wien, Vienna, Austria\\
-$^3$ JKU, Linz, Austria\\
+$^2$ Tecnol\'ogico de Monterrey Puebla Campus, Mexico\\
+$^3$ TU Wien, Vienna, Austria\\
+$^4$ JKU, Linz, Austria\\
 \emails
 flavio.everardo@cs.uni-potsdam.de,
 mhecher@gmail.com,
@@ -267,9 +268,11 @@ ankit.shukla@jku.at
 \begin{abstract}
 %Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI and other areas as well as plenty of practical applications.
 %While modern ASP solvers not only compute one solution (answer set), but actually support different reasoning modes, the problem of counting answer sets has not been subject to intense studies yet.
-Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI, and other areas with plenty of practical applications.
+Answer Set Programming (ASP) is a declarative framework that is well-suited for problems in KR, AI, and other areas with plenty of practical applications, in both the academy and in the industry.
 While modern ASP solvers not only compute one solution (answer set) but support different (reasoning) problems, the problem of counting answer sets has not been subject to intense studies.
-This is in contrast to propositional satisfiability (SAT), where several applications and problems related to quantitative reasoning trace back to model counting. However, due to high computational complexity and depending on the actual application, approximate counting might be sufficient. Indeed, there are plenty of applications where approximate counting for SAT is well-suited. This work deals with lifting \xorro{}, which builds on top of an ASP solver and allows XOR constraints, towards approximate model counting for ASP. We present preliminary experiments using the resulting approximate counter for ASP. % and also show preliminary experiments for several problems.
+This is in contrast to the neighboring area of propositional satisfiability (SAT), where several applications and problems related to quantitative reasoning trace back to model counting. However, due to high computational complexity and depending on the actual application, approximate counting might be sufficient. Indeed, there are plenty of applications, where approximate counting for SAT is well-suited.
+This work deals with establishing approximate model counting for ASP, thereby lifting ideas from SAT to ASP.
+We present the first approximate counter for ASP by extending the \clingo{}-based system \xorro{} and also show preliminary experiments for several problems.
 While we do not have specific guarantees in terms of accuracy, our preliminary results look promising.
 \end{abstract}
 
@@ -289,10 +292,10 @@ problem modeling and solving framework that is well-known in the area
 of knowledge representation and reasoning and artificial intelligence.
 %
 This framework has been practically applied to several
-problems~\cite{BalducciniGelfondNogueira06a,NiemelaSimonsSoininen99,NogueiraBalducciniGelfond01a,GuziolowskiEtAl13a,SchaubWoltran18}.
+problems in both academic and industry~\cite{BalducciniGelfondNogueira06a,NiemelaSimonsSoininen99,NogueiraBalducciniGelfond01a,GuziolowskiEtAl13a,SchaubWoltran18}.,~\footnote{An incomplete but vast list of ASP applications:\\ https://www.dropbox.com/s/pe261e4qi6bcyyh/aspAppTable.pdf}
 %
 
-Recently, there has been growing interest for counting solutions of problems.
+Recently, there has been growing interest in counting solutions to problems.
 %
 Indeed, counting solutions is a well-known task not only in mathematics and computer
 science, but also in other
@@ -300,7 +303,7 @@ areas~\cite{ChakrabortyMeelVardi16a,DomshlakHoffmann07a,GomesKautzSabharwalSelma
 %
 %
 %
-Examples cover also applications in machine learning and probabilistic inference~\cite{ChaviraDarwiche08a}.
+Examples of these cover also applications in machine learning and probabilistic inference~\cite{ChaviraDarwiche08a}.
 %
 %
 In terms of computational complexity, counting has been well-studied since the
@@ -308,10 +311,9 @@ late
 70s~\cite{DurandHermannKolaitis05,HemaspaandraVollmer95a,Valiant79,Valiant79b}.
 %
 There are also results for counting involving projection, where one wants to
-count only with respect to a given set of projection atoms,
+count only with respect to a given set of projected atoms,
 which has been established for logic~\cite{AzizChuMuise15a,CapelliMengel19,FichteEtAl18,LagniezMarquis19a,GuptaSharmaRoy19a,SharmaRoySoos19a},
-reliability estimation~\cite{MeelEtAl17a} as well as
-answer set programming~\cite{GebserKaufmannSchaub09a,Aziz15a,FichteHecher19}.
+reliability estimation~\cite{MeelEtAl17a} as well as in ASP~\cite{GebserKaufmannSchaub09a,Aziz15a,FichteHecher19}.
 %
 
 Given that in general counting answer sets is rather hard, namely ${\#\cdot\text{coNP}}$-complete~\cite{FichteEtAl17,DurandHermannKolaitis05}, which further increases
@@ -322,13 +324,13 @@ Indeed, such approaches were successful for propositional logic (SAT), which is~
 or (approximate) model counting~\cite{gosase07a,chmeva13a,ChakrabortyMV13,SharmaRoySoos19a}
 were studied.
 %
-For this purpose, so-called parity constraints  (\XOR{} constraints) are used specifically to partition the search space in parts that preferably are of roughly the same size.
+For this purpose, so-called parity (\XOR{}) constraints are used specifically to partition the search space in parts that preferably are of roughly the same size.
 
 Parity constraints have been recently accommodated in ASP
-as the fundamental part of the system \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
+as the fundamental part of the \clingo{}-based system \xorro{}~\cite{DBLP:conf/lpnmr/EverardoJKS19}.
 %
 With different solving approaches over parity constraints in \xorro{}, these constraints amount to the classical \XOR{} operator following the aggregates-like syntax using theory atoms.
-They are interpreted as directives, solved on top of an ASP program acting as answer set filters that do not satisfy the parity constraint in question.
+These constraints are interpreted as directives, solved on top of an ASP program acting as answer set filters that do not satisfy the parity constraint in question.
 %
 %Currently, these parity constraints may not occur in the bodies nor the heads of rules.
 
@@ -340,7 +342,7 @@ With most of the applications of \XOR{} constraints in the neighboring area of S
 only a few attention has been paid to treat parity constraints as well as reasoning modes like sampling or approximate model counting for ASP. %~\cite{kalepesc16a}.
 %
 To this end, we present an extension of \xorro{} towards approximate answer set counting following the work from~\cite{ChakrabortyMV13}
-benefiting from the advanced interfaces of ASP solver \clingo{}~\cite{DBLP:conf/iclp/GebserKKOSW16},
+benefiting from the advanced interfaces of the ASP solver \clingo{}~\cite{DBLP:conf/iclp/GebserKKOSW16},
 and the sophisticated solving techniques developed in SAT~(e.g. the award-winning solver \cryptominisat~\cite{DBLP:conf/sat/SoosNC09}).
 %
 While we do not yet have theoretical guarantees in terms of the accuracy of our approach in general,
@@ -599,7 +601,7 @@ for given program~$\Pi$ is~$3$.
 
 \section{Parity Constraints, \emph{xorro}, and Search Space Partition} \label{sec:parity}
 
-Towards the definition of parity aggregates, let $\true$ and $\false$
+Towards the definition of parity constraints, let $\true$ and $\false$
 stand for the Boolean constants \emph{true} and \emph{false},
 respectively. %, and a literal is an atom $a$ and its negation $\neg a$.
 %\footnote{Recall that in the context of ASP, we understand the negation $\neg$ as the default negation.}
@@ -659,7 +661,7 @@ From a search space of 64 answer sets in the context of the choice rule \texttt{
 amounts to the \XOR{} operations:
 $p(1) \xor p(4) \xor p(5)$, $p(2) \xor p(5) \xor p(6)$, $p(3) \xor p(4) \xor p(5) \xor p(6)$, $p(1) \xor p(2) \xor \top$, and $p(1) \xor \bot$
 %(where $\bot$ and $\top$ stand for the Boolean constants true and false, respectively)
-yield the answer sets~\texttt{\set{p(5)}} and \texttt{\set{p(1),p(2),p(4),p(5),p(6)}}.
+yielding the answer sets~\texttt{\set{p(5)}} and \texttt{\set{p(1),p(2),p(4),p(5),p(6)}}.
 This means that each parity constraint divides the search space (roughly) by half, and for this symmetric search space example with five parity constraints ($m=5$),
 we have $2^m$ clusters, each with two answer sets.
 
@@ -959,14 +961,14 @@ If all randomly chosen cells were either empty or not small, we return $\bot$ an
 \input{experiments}
 
 \section{Conclusion and Future work} \label{sec:conclusion}
-This paper discusses an extension of the ASP solver \xorro{}
-towards approximate answer set counting. This is established by lifting ideas from existing techniques for SAT to the formalism of ASP.
+This paper discusses an extension of the ASP system \xorro{} towards approximate answer set counting.
+This is established by lifting ideas from existing techniques for SAT to the formalism of ASP.
 While our preliminary results are promising and show that
 indeed approximate counting works for ASP, there is still potential for future works.
-On the one hand, we highly recommend studying and showing
-proper guarantees that prove our results are guaranteed to be accurate with high probability and do not deviate far from the actual result.
-Further, we highly encourage further tuning and improvements of our preliminary implementation.
-We hope that this work fosters applications and further research on quantitative reasoning like, e.g.,~\cite{KimmigDRCR11,TsamouraGK20}, for ASP.
+On the one hand, we highly recommend studying and showing proper guarantees that prove our results are guaranteed to be accurate with high probability and do not deviate far from the actual result.
+Further, we highly encourage additional tuning and improvements to our preliminary implementation concerning several aspects such as the parity constraints solving, scalability, and the abolition of linear combinations.
+Talking about scalability, we need to perform more experiments and algorithm revisions in order to perform better than \clingo{}'s (\clasp{}'s) enumeration.
+We hope that this work fosters applications and further research on quantitative reasoning like e.g.,~\cite{KimmigDRCR11,TsamouraGK20}, for ASP.
 
 %% The file kr.bst is a bibliography style file for BibTeX 0.99c
 \bibliographystyle{kr}
