@@ -785,6 +785,8 @@ A random hash function $h$ is $k$-wise independent if for all choices of distinc
 Intuitively a family $\mathcal{H} = \{h : U \to [m]\}$ of hash functions
 is $k$-wise independent if for any distinct keys $x_1, ..., x_k \in U$, the hash codes $h(x_1), ..., h(x_k)$ are independent random variables and for any fixed $x$, $h(x)$ is uniformly distributed in $[m]$.
 %\end{itemize}
+%
+Let $n$, $m$ and $k$ be positive integers, we use $H(n, m, k)$ to denote a family of $k$-wise independent hash functions mapping $\{0, 1\}^n$ to $\{0, 1\}^n$.
 
 The canonical construction of a $k$-wise independent family is based on polynomials
 of degree $k$ - $1$. Let $p \geq |U|$ be prime. Picking random $a_0,...,a_{k - 1} \in \{0, . . . , p$-$ 1\}$,
@@ -809,10 +811,21 @@ If we use $k$-wise independence, all cells will be small and we will get a \text
 %
 Using $3$-wise independence we achieve \emph{a random cell is small with high probability}, known as \textbf{almost-uniform generation}.
 
+
 \section{Algorithm} \label{approxasp}
-We use the already evolved algorithm from the case of propositional satisfiability~\cite{ChakrabortyMV13} and lift it to ASP.
+
+We use an already evolved algorithm from the case of propositional satisfiability~\cite{ChakrabortyMV13} and lift it to ASP.
 %
-We use 3-wise independent hashing functions to partition the set of models of an input formula into ``small" cells.
+For our work we use a specific family of hash functions denoted by $H_{xor}(n, m, 3)$, 
+%it randomly choosing bits from $y \in \{0, 1\}^n$, and xor them. 
+%
+%$H_{xor}(n, m, 3)$ 
+to partition the set of models of an input formula into ``small" cells.
+%
+This family of hash functions has been used in \cite{gomes2006model,ChakrabortyMV13}, and is shown to be 3-wise independent in \cite{gomes2007near}.
+%
+Please refer to \cite{gomes2006model,gomes2007near,ChakrabortyMV13} for details.
+%We use 3-wise independent hashing functions to partition the set of models of an input formula into ``small" cells.
 %
 Our resulting system extends \xorro~\cite{DBLP:conf/lpnmr/EverardoJKS19} and is called \xampler\footnote{The system \xampler\ is open-source and available at~\url{https://github.com/flavioeverardo/xampler/}.}.
 
@@ -832,6 +845,32 @@ The function \xorro $(\fff^{\prime},b)$ returns a set of models $S$ of $\fff^{\p
 %If all cells that were randomly chosen during the above process were either empty or not small, we report a counting failure and return $\bot$.
 %%
 %Otherwise, the size of the cell last chosen is scaled by the number of cells to obtain an \ep-approximate estimate of the model count.
+
+
+\begin{algorithm}[t]
+	\textbf{ApproxASP}($\fff$, \ep, \del) \;
+	\SetAlgoLined
+	\KwResult{Approximate number of answer sets or $\bot$}
+	$counter = 0$ ; $C = [\,]$ \;
+	%	$$\;
+	$pivot =  2 \, \times \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$ \;
+	$S = \xorro(\fff, pivot + 1)$ \;
+	\eIf{ $|S| \leq pivot$}
+	{ % Open If
+		\textbf{return} $|S|$
+	} % Close If
+	{ % Open Else
+		$iter= \lceil 27 \log_2 (3/\delta) \rceil$\;
+		\While{$counter < iter$}{
+			$c = $ \textbf{CountAS($\fff, S, pivot$)} \;
+			$counter = counter + 1$ \;
+			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
+		} % Close While
+	} % Close else
+	\textbf{return} \textbf{FindMean($C$)} \;
+	
+	\caption{ApproxASP}
+\end{algorithm}
 
 The system \xampler\ implements algorithm \appasp, which takes as input ASP program $\fff$, a tolerance \ep $(0 < \epsilon \leq 1)$ and a confidence \del $(0 < \delta \leq 1)$ as an input.
 %
@@ -853,30 +892,6 @@ The resulted in non-$\bot$ estimates of the ASP model count $c$ returned by \cou
 %
 The final estimate of the model count returned by \appasp is the mean of the estimates stored in $C$, computed using FindMean(C).
 
-\begin{algorithm}[t]
-	\textbf{ApproxASP}($\fff$, \ep, \del) \;
-	\SetAlgoLined
-	\KwResult{Approximate number of answer sets or $\bot$}
-	$counter = 0$ ; $C = [\,]$ \;
-%	$$\;
-	$pivot =  2 \, \times \lceil 3 e^{1/2} (1 + \frac{1}{\epsilon})^2 \rceil$ \;
-	$S = \xorro(\fff, pivot + 1)$ \;
-	\eIf{ $|S| \leq pivot$}
-	{ % Open If
-		\textbf{return} $|S|$
-	} % Close If
-	{ % Open Else
-		$iter= \lceil 27 \log_2 (3/\delta) \rceil$\;
-		\While{$counter < iter$}{
-			$c = $ \textbf{CountAS($\fff, S, pivot$)} \;
-			$counter = counter + 1$ \;
-			\If{$c \neq \bot$}{\textbf{AddToList($C,c$)}}
-		} % Close While
-	} % Close else
-	\textbf{return} \textbf{FindMean($C$)} \;
-	
-	\caption{ApproxASP}
-\end{algorithm}
 %
 %\begin{algorithm}[h]
 %	\textbf{ApproxASP}(\fff, \ep, \del) \;
