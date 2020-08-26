@@ -1,12 +1,12 @@
 # xampler
-An Answer Set Programming Sampler tool based on [xorro](https://github.com/potassco/xorro) oriented to Approximate Counting.
+An Answer Set-based Counting system based on [xorro](https://github.com/potassco/xorro).
 
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/flavioeverardo/xampler)
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
 
 
-> A tool for approximante answer set counting with parity (XOR) constraints.
+> A tool for approximate answer set counting with parity (XOR) constraints.
 > A light version of `xorro` is presented using `clingo` 5 infrastructure with Python support.
 
 ## Description
@@ -23,7 +23,7 @@ This consist of calculating a few answer sets representative for all the search 
 This is particularly useful if the computation of all answers is practically infeasible.<br/>
 
 `xampler` is based on the work from [2013 by Chakraborty et al.](https://link.springer.com/chapter/10.1007/978-3-642-40627-0_18)<br/>
-Supratik Chakraborty, Kuldeep S. Meel, and Moshe Y. Vardi. A Scalable Approximate Model Counter
+Supratik Chakraborty, Kuldeep S. Meel, and Moshe Y. Vardi. **A Scalable Approximate Model Counter**
 
 
 ## Table of Contents
@@ -89,10 +89,10 @@ xampler examples/test.lp --approach=countp
 
 To enable the approximate counting features of `xampler` with the unit propagation approach, run the full command:
 ```
-xampler examples/test.lp --approach=up --approxmc --tolerance=<n> --confidence<n>
+xampler examples/test.lp --approach=up --approxmc --tolerance=<n> --confidence<n> --outf=3
 ```
 
-The sampling options of `xampler` are shown next:
+The `xampler` options for approximate counting are shown next:
 
 | command | description |
 |---|---|
@@ -103,11 +103,37 @@ The sampling options of `xampler` are shown next:
 
 ## Examples
 
-To sample answer sets, lets consider an example program `examples/test.lp`. 
+To solve parity constraints on top of an ASP program, lets consider an example program `examples/basic.lp`. 
 ```
-$ cat examples/test.lp 
-{ p(1;2;3) }.
-{ q(1,(2;3)); q(2,1); q(3,1) }.
+$ cat examples/basic.lp 
+{a;b;c;d;e;f}.
+
+&odd{a:a;d:d;e:e}.
+&odd{b:b;e:e;f:f}.
+&odd{c:c;d:d;e:e;f:f}.
+&even{a:a;b:b}.
+```
+
+We call `xampler` from the command line, asking for all the answer sets. By solving the unrestricted choice rule with four parity constraints, we end with only four solutions.
+```
+$ python -m xampler examples/basic.lp 0
+xampler version 1.0
+Reading from examples/basic.lp
+Solving...
+Answer: 1
+e
+Answer: 2
+c d f
+Answer: 3
+a b d e f
+Answer: 4
+a b c
+SATISFIABLE
+
+Models       : 4
+Calls        : 1
+Time         : 0.005s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.005s
 ```
 
 The approximate counting features allows `xampler` follows the work from [2013 by Chakraborty et al.](https://link.springer.com/chapter/10.1007/978-3-642-40627-0_18).
