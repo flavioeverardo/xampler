@@ -205,7 +205,7 @@ CPU Time     : 0.006s
 
 ## Contributors
 
-* Flavio Everardo, Johannes Fichte, Markus Hecher, Roland Kaminski - Get help/report bugs via the [issue tracker] </br>
+* Flavio Everardo, Markus Hecher, Ankit Shukla - Get help/report bugs via the [issue tracker] </br>
 
 ## License
 
