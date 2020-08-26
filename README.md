@@ -41,7 +41,7 @@ Supratik Chakraborty, Kuldeep S. Meel, and Moshe Y. Vardi. **A Scalable Approxim
 
 `xampler` works with `clingo` version 5.4
 and is tested under Unix systems using Travis for Linux and Mac with Python 2.7 and 3.6. </br>
-The easiest way to obtain Python enabled clingo packages is using Anaconda.
+The easiest way to obtain Python enabled `clingo` packages is using Anaconda.
 Packages are available in the Potassco channel.
 First install either Anaconda or Miniconda and then run: `conda install -c potassco clingo`.
 
@@ -78,7 +78,7 @@ and thus act as meta statements instructing the ASP system to eliminate stable m
 ## Usage
 
 To use `xampler` directly from source run `python -m xampler` from the project's root directory and
-follow the standard-like clingo call:
+follow the standard-like `clingo` call:
 `usage: xampler [number] [options] [files]`
 
  
@@ -138,13 +138,15 @@ CPU Time     : 0.005s
 
 The approximate counting features allows `xampler` follows the work from [2013 by Chakraborty et al.](https://link.springer.com/chapter/10.1007/978-3-642-40627-0_18).
 An example is shown below:
-From an unrestricted choice from p(1) to p(10), we call xampler using the command below.
-We use the clingo flag `--outf=3` to supress the standard clingo output.
+```
+$ cat examples/test.lp
+#const n = 10.
+{ p(1..n) }.
+#show p/1.
+```
+From an unrestricted choice from p(1) to p(10), we call `xampler` using the command below.
+We use the `clingo` flag `--outf=3` to supress the standard `clingo` output.
 For this simple example, the approximate count results to be the exact count.
-```
-{ p(1..10) }.
-```
-
 ```
 Number of variables (symbols): 10
 pivot: 52
