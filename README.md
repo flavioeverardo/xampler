@@ -22,8 +22,9 @@ to cut through the search space towards near-uniformity solutions. <br/>
 This consist of calculating a few answer sets representative for all the search space.
 This is particularly useful if the computation of all answers is practically infeasible.<br/>
 
-`xampler` is based on the work from [2007 by Gomes et al.](http://www.cs.cornell.edu/~sabhar/publications/xorSamplingNIPS06.pdf)<br/>
-Gomes, C. P., Sabharwal, A., & Selman, B. (2007). Near-uniform sampling of combinatorial spaces using XOR constraints. In Advances In Neural Information Processing Systems (pp. 481-488).
+`xampler` is based on the work from [2013 by Chakraborty et al.](https://link.springer.com/chapter/10.1007/978-3-642-40627-0_18)<br/>
+Supratik Chakraborty, Kuldeep S. Meel, and Moshe Y. Vardi. A Scalable Approximate Model Counter
+
 
 ## Table of Contents
 
