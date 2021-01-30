@@ -201,57 +201,85 @@ class Application:
             """
             ApproxMC algorithm
             """
+            ## Clingo = Gringo + Clasp
+            ## Gringo is the grounder. Is the language specific parser. Substitutes all the variables to domain specific values. In other words converts you ASP encoding into a propositional formula
+            ## Clasp is the solver. Like a SAT solver, takes the formula and get the models.
 
-            models = []
+            models = [] ## Write all the answer sets
             counter = 0
-            C = []
-            display = self.__display.value
-            pivot = int(round(2 * util.compute_threshold(self.__tolerance)))
+            C = [] ## Append the partial counts
+            display = self.__display.value  ## Flag for displaying or printing
+            pivot = int(round(2 * util.compute_threshold(self.__tolerance))) ## Pivot
             """
             Standard xorro workflow asking for pivot + 1 answer sets
             """
-            clingo_args = ["--warn=none"]  ## Disable Warnings and other clingo options
-            prg_ = _clingo.Control(clingo_args)
-            prg_.configuration.solve.models = pivot + 1
-            transform(prg_,files)
-            prg_.ground([("base", [])])
-            ## Get the number of variables
+            clingo_args = ["--warn=none"]  ## Disable Warnings and other clingo options. We could add this flag from the command line. Dont worry
+            prg_ = _clingo.Control(clingo_args) ## Create clingo object. We might need this or not. Depends on How it is implemented
+            prg_.configuration.solve.models = pivot + 1 ## Ask for a pivot + 1 answer sets. Setting clasp parameters
+            transform(prg_,files) ## Tranforms input parity constraints from the language to facts. We might not need this.
+            ## &odd{a} -> __partiy(ID, odd, a). or __parity(ID,even,a)
+            ## At this time there is no parity constraint involved.
+            ## Here we also process any input ASP encoding. For grounding.
+            
+            prg_.ground([("base", [])]) ## Call gringo and ground
+            ## ASP encodings have variables and gringo instantiate all variables to a propositional formula
+            ## atom(X) -> instantiated with the domain for example atom(1) or atom("a").
+            
+            ## Get the number of variables or unnasigned atoms. An atom could be set to True, False, or Undefined.
+            ## We build parity constraints from undefined atoms. Or atoms that clasp will allocate in its partial assignments
             variables = [atom.symbol for atom in prg_.symbolic_atoms if atom.is_fact is False and "__parity" not in str(atom.symbol)]
+
+            
             print("Number of variables (symbols): %s"%len(variables))
             print("pivot: %s"%pivot)
+            ## Select the approach to solve and parse the __parity atoms to the specific xampler/xorro approach.
             translate(self.__approach, prg_)
+            
             print("Solving...")
+            ## Solving call. We append all the pivot+1 models into models
+            ## The ret object, tell us if it is SAT, UNSAT, UNKOWNW
+            ## Plain clasp solving without parity constraints
             ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
-
+            
+            ## We check if the search space is exhausted. It means clasp has ennumerated ALL the models from the encoding.
+            ## It means that the encoding has less anweer sets than Pivot, it means that clasp knows all the models and we can count all
             if len(models) <= pivot and ret.exhausted:
                 print("Exact count: %s answer sets"%len(models))
             else:
                 print("NOT Exact count... There are more than %s answer sets"%(len(models)))
-                
-                n = len(variables)
-                t = int(util.compute_itercount(self.__confidence))
-                
+
+                ## variables from the algorithm 
+                n = len(variables) ## The number of variables. Unassinged atoms. Related to line 230
+                t = int(util.compute_itercount(self.__confidence)) ## Compute the itercount
+
+                ## Main loop
                 while True:
                     ## Solve with XORs
                     counter +=1
                     if display:
                         print("\nIter: %s"%counter)
-                    l = util.get_l(pivot)## Consider to move this out. This is constant
+                    ## l and i are symbols from the ApproxMC algorithm
+                    l = util.get_l(pivot)## Get l
                     i = l# -1 ## Consider to move this out. This is constant
-                    xor = ""
-                    binary_lists = []
-                    while True:                        
-                        i += 1
+                    xor = "" ## Here is where we append the xors as theory atoms. If we do only propagator-based solutions, we dont need this. 
+                    binary_lists = [] ## Some list to build the XORs
+
+                    ## Inner loop
+                    while True:                     
+                        i += 1 ## Increase i
                         
-                        models = []
-                        ## Create new clingo control object
+                        models = [] ## We clear the models list
+                        
+                        ## Create new clingo control object with no previous knowledge. Clean slate
                         prg_ = _clingo.Control(clingo_args)
-                        ## Ask for pivot + 1 answer sets
+                        ## Ask for pivot + 1 answer sets. Pivot is the size of the cell. 
                         prg_.configuration.solve.models = pivot + 1
 
-                        ## Build xor
-                        xor_, binary_lists = util.get_xor(variables, binary_lists, int(i-l))
-                        xor += xor_
+                        ## Build xor as theory atoms. &odd{..} or &even{..}. If Mahi is building XORs inside the propagator, we dont need to do this.
+                        ## We write all the xors in a temporal file.
+                        ## These xors are clingo-specific language XORs. We parsed them below
+                        xor_, binary_lists = util.get_xor(variables, binary_lists, int(i-l)) ## We build random XORs from unassinged variables of size i-l. We need Kuldeep to improve the XOR generation. 
+                        xor += xor_ ## Appending new xor for each solving step
                         filename = "examples/approx_mc_xors.lp"
                         f = open(filename, "w") ## append?
                         f.write(xor)
@@ -260,32 +288,43 @@ class Application:
                         """
                         Standard xampler workflow
                         """
+                        ## Transform again parity constraints that gringo understands and thus clasp understands
+                        ## &odd{a} -> __partiy(ID, odd, a). or __parity(ID,even,a)
                         transform(prg_,files+[filename])
+                        ## Grounding as usual. This is gringo
                         prg_.ground([("base", [])])
-                        translate(self.__approach, prg_)
+                        translate(self.__approach, prg_) ## Selecting the approach again from the ones from xorro
+                        ## Another solving call with parity constraints
+                        ## the XOR module depends on the partial assignment from clasp. We just check that this partial assignment satisfies the XORs
+                        ## Appending the models to the models list
                         ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
 
                         ## SAT, UNSAT or number of modesl greater than pivot
-                        if len(models) == 0 or len(models) > pivot:
+                        ## Discarded runs. 
+                        if len(models) == 0 or len(models) > pivot: ## Line 8 from algorithm 2
                             if str(ret) == "UNSAT":
                                 if display:
                                     print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... "%(i,l, i-l,len(xor.splitlines()), ret))
-                                break
+                                break ## Break
                             elif str(ret) == "SAT":
                                 if display:
                                     print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Discarding solution... there are more answer sets than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,pivot))
-                        
+
+                        ## Here it is SAT
+                        ## If we are in the small cluster
                         elif (len(models)>=1 and len(models) <= pivot) or (i == n):
                             if display:
                                 print("  i: %s, l: %s, m: %s | Solving with %s xors, %s Storing solution... there are less answer sets (%s) than pivot value (%s)"%(i,l, i-l,len(xor.splitlines()),ret,len(models),pivot))
-                            if display:
                                 print("  Partial Count = |S| * 2^(i-l) : %s"%int(len(models) * 2**(i-l)))
+                                ## Do the partial count
                             C.append(int(len(models) * (2**(i-l))))
                             break
-                    
+
+                    ## This is the outer break line condition.
                     if counter == t:
                         break
 
+                ## We do the approximate count
                 print("")
                 print("Number of calls: %s, SAT: %s, UNSAT: %s"%(counter,len(C), counter-len(C)))
                 print("")
