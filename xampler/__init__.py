@@ -324,7 +324,7 @@ class Application:
                     if counter == t:
                         break
 
-                ## We do the approximate count
+                ## We do the approximate count from the list C
                 print("")
                 print("Number of calls: %s, SAT: %s, UNSAT: %s"%(counter,len(C), counter-len(C)))
                 print("")
