@@ -18,6 +18,8 @@ import sys as _sys
 import os as _os
 import clingo as _clingo
 from textwrap import dedent as _dedent
+import datetime
+from dateutil import relativedelta
 
 def translate_binary_xor(backend, lhs, rhs):
     aux = backend.add_atom()
@@ -204,7 +206,12 @@ class Application:
             ## Clingo = Gringo + Clasp
             ## Gringo is the grounder. Is the language specific parser. Substitutes all the variables to domain specific values. In other words converts you ASP encoding into a propositional formula
             ## Clasp is the solver. Like a SAT solver, takes the formula and get the models.
+            # Start
+            startExTime  = datetime.datetime.now()      
 
+            start  = datetime.datetime.now()
+            end  = datetime.datetime.now()
+            total_solving_time = relativedelta.relativedelta(end, start)
             models = [] ## Write all the answer sets
             counter = 0
             C = [] ## Append the partial counts
@@ -228,7 +235,6 @@ class Application:
             ## Get the number of variables or unnasigned atoms. An atom could be set to True, False, or Undefined.
             ## We build parity constraints from undefined atoms. Or atoms that clasp will allocate in its partial assignments
             variables = [atom.symbol for atom in prg_.symbolic_atoms if atom.is_fact is False and "__parity" not in str(atom.symbol)]
-
             
             print("Number of variables (symbols): %s"%len(variables))
             print("pivot: %s"%pivot)
@@ -239,8 +245,20 @@ class Application:
             ## Solving call. We append all the pivot+1 models into models
             ## The ret object, tell us if it is SAT, UNSAT, UNKOWNW
             ## Plain clasp solving without parity constraints
+            # Start
+            start  = datetime.datetime.now()
             ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
-            
+            # End
+            end  = datetime.datetime.now()
+            # Elapsed
+            difference = relativedelta.relativedelta(end, start)
+            total_solving_time += difference
+            hours   = difference.hours
+            minutes = difference.minutes
+            seconds = difference.seconds
+            milliseconds = difference.microseconds/1000000
+            print("Elapsed time: %s hours, %s minutes %s seconds %s milliseconds " %(hours, minutes, seconds, milliseconds))
+    
             ## We check if the search space is exhausted. It means clasp has ennumerated ALL the models from the encoding.
             ## It means that the encoding has less anweer sets than Pivot, it means that clasp knows all the models and we can count all
             if len(models) <= pivot and ret.exhausted:
@@ -257,15 +275,18 @@ class Application:
                     ## Solve with XORs
                     counter +=1
                     if display:
-                        print("\nIter: %s"%counter)
+                        print("\nIter: %s/%s"%(counter,t))
+                    #print("Iter: %s/%s"%(counter,t))
                     ## l and i are symbols from the ApproxMC algorithm
                     l = util.get_l(pivot)## Get l
                     i = l# -1 ## Consider to move this out. This is constant
                     xor = "" ## Here is where we append the xors as theory atoms. If we do only propagator-based solutions, we dont need this. 
-                    binary_lists = [] ## Some list to build the XORs
 
                     ## Inner loop
-                    while True:                     
+                    while True:
+                        # Start
+                        start  = datetime.datetime.now()
+                        
                         i += 1 ## Increase i
                         
                         models = [] ## We clear the models list
@@ -275,12 +296,13 @@ class Application:
                         ## Ask for pivot + 1 answer sets. Pivot is the size of the cell. 
                         prg_.configuration.solve.models = pivot + 1
 
-                        ## Build xor as theory atoms. &odd{..} or &even{..}. If Mahi is building XORs inside the propagator, we dont need to do this.
+                        ## Build xor as theory atoms. &odd{..} or &even{..}.
                         ## We write all the xors in a temporal file.
                         ## These xors are clingo-specific language XORs. We parsed them below
-                        xor_, binary_lists = util.get_xor(variables, binary_lists, int(i-l)) ## We build random XORs from unassinged variables of size i-l. We need Kuldeep to improve the XOR generation. 
-                        xor += xor_ ## Appending new xor for each solving step
-                        filename = "examples/approx_mc_xors.lp"
+                        ## We build random XORs from unassinged variables of size i-l. 
+                        xor_ = util.get_xor(variables, int(i-l), display) 
+                        xor = xor_ ## Appending new xor for each solving step
+                        filename = "__approx_mc_xors.lp"
                         f = open(filename, "w") ## append?
                         f.write(xor)
                         f.close()
@@ -297,7 +319,23 @@ class Application:
                         ## Another solving call with parity constraints
                         ## the XOR module depends on the partial assignment from clasp. We just check that this partial assignment satisfies the XORs
                         ## Appending the models to the models list
+
+                        ## Remove the temporal xor file
+                        _os.remove(filename)
+
+                        #print("Solving...")
                         ret = prg_.solve(None, lambda model: models.append(model.symbols(shown=True)))
+                        # End
+                        end  = datetime.datetime.now()
+                        # Elapsed
+                        difference = relativedelta.relativedelta(end, start)
+                        total_solving_time += difference
+                        hours   = difference.hours
+                        minutes = difference.minutes
+                        seconds = difference.seconds
+                        milliseconds = difference.microseconds/1000000
+                        #print("Elapsed time: %s hours, %s minutes %s seconds %s milliseconds " %(hours, minutes, seconds, milliseconds))
+                        #print("%s" %(milliseconds))
 
                         ## SAT, UNSAT or number of modesl greater than pivot
                         ## Discarded runs. 
@@ -326,15 +364,31 @@ class Application:
 
                 ## We do the approximate count from the list C
                 print("")
-                print("Number of calls: %s, SAT: %s, UNSAT: %s"%(counter,len(C), counter-len(C)))
-                print("")
-                print("List of all partial counts: %s"%C)
-                print("")
-                print("List of all sorted partial counts: %s"%sorted(C))
+                print("Number of calls/iterations: %s, SAT: %s, UNSAT: %s"%(counter,len(C), counter-len(C)))
+                if display:
+                    print("")
+                    print("List of all partial counts: %s"%C)
+                    print("")
+                    print("List of all sorted partial counts: %s"%sorted(C))
                 median, average = util.get_median(C)
                 print("")
                 print("Approximate answer sets count (median)  : %s"%int(median))
-                print("Approximate answer sets count (average) : %s"%int(average))
+                #print("Approximate answer sets count (average) : %s"%int(average))                
+                # End
+            endExTime  = datetime.datetime.now()
+            # Elapsed
+            differenceExTime = relativedelta.relativedelta(endExTime, startExTime)
+            hours   = differenceExTime.hours
+            minutes = differenceExTime.minutes
+            seconds = differenceExTime.seconds
+            milliseconds = differenceExTime.microseconds/1000000
+            print("xampler Execution Time: %s hours, %s minutes %s seconds %s milliseconds " %(hours, minutes, seconds, milliseconds))
+            # Elapsed            
+            hours   = total_solving_time.hours
+            minutes = total_solving_time.minutes
+            seconds = total_solving_time.seconds
+            milliseconds = total_solving_time.microseconds/1000000
+            print("xampler Solving Time: %s hours, %s minutes %s seconds %s milliseconds " %(hours, minutes, seconds, milliseconds))
 
         else:
             """

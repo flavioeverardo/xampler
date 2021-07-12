@@ -151,28 +151,22 @@ def get_l(pivot):
 def build_theory_atom(constraint, parity):
     terms = " ; ".join(str(x)+":"+str(x) for x in sorted(constraint))
     out_str  = "&%s{ %s }.\n"%(get_str_parity(parity), terms)
+    #print("constraint %s"%constraint)
+    #print(out_str)
     return out_str
 
-def get_xor(variables, binary, m):
-    n = len(variables)
-    a_list = np.zeros(n, dtype=int)
-    a_list[:m] = 1
-    np.random.shuffle(a_list)
-    while True:
-        if a_list.tolist() not in binary:
-            binary.append(a_list.tolist())
-            #for a in binary:
-            #    print(a)
-            break
-        else:
-            print("repeated hash")
-    selected_vars = []
-    for i in range(n):
-        if a_list[i] == 1:
-            selected_vars.append(variables[i])
+def get_xor(variables, m, display):
+    if display:
+        print("The number of XOR constraints: %s"%m)
     xors = ""
-    xors = build_theory_atom(sorted(selected_vars), randint(0,1))
-    return xors, binary
+    for _m in range(m):
+        literals = []
+        for lit in variables:
+            if (randint(0,1)):
+                literals.append(lit)
+
+        xors += build_theory_atom(sorted(literals), randint(0,1))
+    return xors
 
 def get_median(l):
     if l:
